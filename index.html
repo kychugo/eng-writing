@@ -445,6 +445,12 @@
 
     footer span { color: var(--gold); }
 
+    .footer-copyright {
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
     /* ── Info section below form ──────────────────────────────── */
     .info-strip {
       display: flex;
@@ -623,12 +629,7 @@
             </button>
           </div>
 
-          <!-- Info strip -->
-          <div class="info-strip" aria-label="How it works">
-            <span class="info-chip"><span class="info-chip-icon">📚</span> Draws from 99 past exam questions</span>
-            <span class="info-chip"><span class="info-chip-icon">🤖</span> AI-crafted, always original</span>
-            <span class="info-chip"><span class="info-chip-icon">🎲</span> Different each time</span>
-          </div>
+
 
         </form><!-- /#generatorForm -->
 
@@ -678,6 +679,7 @@
     <!-- ── Footer ─────────────────────────────────────────────── -->
     <footer>
       <p>Woven with care for students &middot; Questions sourced from HKDSE past papers &middot; <span>Powered by AI</span></p>
+      <p class="footer-copyright">Copyright &copy; 2026 Hugo Wong. All rights reserved.</p>
     </footer>
 
   </div><!-- /.page-wrap -->
@@ -787,6 +789,7 @@ Write ONE original, engaging writing prompt of the type "${textType}".
             messages,
             temperature: 0.9,
             max_tokens: 600,
+            seed: Math.floor(Math.random() * 2147483647),
           }),
         });
 
