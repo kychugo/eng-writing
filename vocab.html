@@ -1010,6 +1010,37 @@
       font-size: 1.4rem;
     }
 
+    .auth-guard-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0 0 0.4rem;
+    }
+
+    .auth-guard-sub {
+      color: var(--ink-faint);
+      font-size: 0.9rem;
+      margin: 0 0 1.5rem;
+      font-style: italic;
+    }
+
+    .auth-guard-btn {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--parchment);
+      text-decoration: none;
+      padding: 0.65rem 1.75rem;
+      border-radius: var(--r);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      transition: background var(--t);
+    }
+
+    .auth-guard-btn:hover { background: var(--ink-light); }
+
     /* ── Vocab History Panel ──────────────────────────────────── */
     #vocabHistoryBackdrop {
       display: none;
@@ -1160,16 +1191,16 @@
   <div id="auth-guard-overlay">
     <div class="auth-guard-card">
       <div class="auth-guard-icon">🔒</div>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--ink);margin:0 0 .4rem;">Sign In Required</p>
-      <p style="color:var(--ink-faint);font-size:.9rem;margin:0 0 1.5rem;font-style:italic;">Please sign in to use this tool.</p>
-      <a href="./index.html" style="display:inline-block;background:var(--ink);color:var(--parchment);text-decoration:none;padding:.65rem 1.75rem;border-radius:var(--r);font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;letter-spacing:.12em;">Go to Sign In</a>
+      <p class="auth-guard-title">Sign In Required</p>
+      <p class="auth-guard-sub">Please sign in to use this tool.</p>
+      <a href="./index.html" class="auth-guard-btn">Go to Sign In</a>
     </div>
   </div>
 
   <!-- ===== Header ===== -->
   <header class="site-header">
     <div class="header-inner">
-      <a id="back-btn-link" href="./index.html" class="btn-back">← Back to Writer's Desk</a>
+      <a id="back-btn-link" href="./index.html" class="btn-back">← Back to The Writer's Desk</a>
       <div class="header-center">
         <span class="header-ornament">✦ &nbsp; Vocabulary Tools &nbsp; ✦</span>
       </div>
@@ -1721,8 +1752,8 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             const stats = `
                 <div class="srs-stats">
                     <div class="srs-stat"><div class="srs-stat-num">${all.length}</div><div class="srs-stat-label">Total Words</div></div>
-                    <div class="srs-stat"><div class="srs-stat-num" style="color:#ef4444">${due.length}</div><div class="srs-stat-label">Due Today</div></div>
-                    <div class="srs-stat"><div class="srs-stat-num" style="color:#10b981">${all.length - due.length}</div><div class="srs-stat-label">Reviewed</div></div>
+                    <div class="srs-stat"><div class="srs-stat-num" style="color:var(--rust)">${due.length}</div><div class="srs-stat-label">Due Today</div></div>
+                    <div class="srs-stat"><div class="srs-stat-num" style="color:var(--moss)">${all.length - due.length}</div><div class="srs-stat-label">Reviewed</div></div>
                 </div>`;
 
             if (!due.length) {
@@ -2108,8 +2139,8 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
                 if (!genOut) return;
 
                 const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const historyBanner = `<div style="background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.22);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#4f46e5;display:flex;align-items:center;gap:.5rem">
-                    📜 <span>Restored from history &mdash; ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
+                const historyBanner = `<div style="background:rgba(184,150,90,.08);border:1px solid rgba(184,150,90,.3);border-radius:4px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#b8965a;display:flex;align-items:center;gap:.5rem;font-style:italic;">
+                    📜 <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
                 </div>`;
 
                 if (words.length && window.renderVocabCards) {
@@ -2175,7 +2206,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             });
             _voh = { all:[], lastDoc:null, loading:false };
             const listEl = document.getElementById('vohList');
-            listEl.innerHTML = `<div style="text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin" style="color:var(--primary);font-size:1.5rem"></i></div>`;
+            listEl.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--ink-faint);font-style:italic;font-size:.9rem">Loading history…</div>`;
             document.getElementById('vohLoadMoreWrap').style.display = 'none';
             try {
                 const user = window._fbUser;
@@ -2189,7 +2220,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
                 document.getElementById('vohLoadMoreWrap').style.display = _voh.lastDoc ? 'block' : 'none';
             } catch(e) {
                 console.error(e);
-                listEl.innerHTML = '<p style="text-align:center;color:#ef4444;font-size:.85rem;padding:2rem">Failed to load history.</p>';
+                listEl.innerHTML = '<p style="text-align:center;color:var(--rust);font-size:.85rem;padding:2rem;font-style:italic;">Failed to load history.</p>';
             }
         };
 
@@ -2205,7 +2236,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             if (_voh.loading || !_voh.lastDoc) return;
             _voh.loading = true;
             const btn = document.getElementById('vohLoadMoreBtn');
-            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading…'; }
+            if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Loading…'; }
             try {
                 const user = window._fbUser;
                 if (!user) return;
@@ -2220,7 +2251,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             } catch(e) { console.error(e); }
             finally {
                 _voh.loading = false;
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More'; }
+                if (btn) { btn.disabled = false; btn.innerHTML = '▾ Load More'; }
             }
         };
 
@@ -2265,18 +2296,18 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             return `<div class="voh-card" id="voh-card-${s.id}">
                 <div class="voh-card-header" onclick="_vohToggle('${s.id}')" role="button" tabindex="0"
                      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();_vohToggle('${s.id}')}">
-                    <div style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#7c3aed);flex-shrink:0;font-size:1.1rem">📚</div>
+                    <div style="width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:var(--parchment3);flex-shrink:0;font-size:1.1rem">📚</div>
                     <div style="flex:1;min-width:0">
                         <p style="font-weight:700;font-size:.8rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${_vohEsc(topic.substring(0,60))}${level ? ' · '+_vohEsc(level) : ''}</p>
                         <p style="font-size:.7rem;color:var(--text-muted);margin-top:.1rem">${_vohEsc(time)}</p>
                     </div>
                     <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">
                         <button onclick="event.stopPropagation();deleteVOHSession('${s.id}')"
-                                style="width:28px;height:28px;border-radius:7px;border:none;cursor:pointer;background:rgba(239,68,68,.12);color:#ef4444;font-size:.7rem;display:flex;align-items:center;justify-content:center"
+                                style="width:28px;height:28px;border-radius:var(--r);border:none;cursor:pointer;background:rgba(139,74,47,.1);color:var(--rust);font-size:.75rem;display:flex;align-items:center;justify-content:center"
                                 title="Delete" aria-label="Delete">
-                            <i class="fas fa-trash-alt"></i>
+                            ✕
                         </button>
-                        <i class="fas fa-chevron-down" id="voh-chev-${s.id}" style="font-size:.65rem;color:var(--text-muted);transition:transform .3s"></i>
+                        <span id="voh-chev-${s.id}" style="font-size:.65rem;color:var(--ink-faint);transition:transform .3s">▾</span>
                     </div>
                 </div>
                 <div class="voh-card-body" id="voh-body-${s.id}">
@@ -2285,8 +2316,8 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
                     ${preview ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Vocabulary Preview</span><p style="font-size:.78rem;color:var(--text);margin-top:.1rem;white-space:pre-wrap;max-height:160px;overflow-y:auto">${_vohEsc(preview)}</p></div>` : ''}
                     <div style="padding-bottom:.5rem">
                         <a href="./vocab.html?session=${s.id}" title="Restore this session"
-                           style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);overflow:hidden;border:none;text-decoration:none">
-                            <img src="https://i.ibb.co/gMQh9L2S/Edu-Genius-AI.png" alt="Restore session" style="width:100%;height:100%;object-fit:cover">
+                           style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--gold);overflow:hidden;border:none;text-decoration:none;color:var(--parchment);font-size:.75rem;font-family:'Lato',sans-serif">
+                            ↩ Load
                         </a>
                     </div>
                 </div>
@@ -2297,7 +2328,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             const list = document.getElementById('vohList');
             if (!sessions.length) {
                 list.innerHTML = `<div style="text-align:center;padding:3rem 1rem">
-                    <div style="width:48px;height:48px;border-radius:14px;background:rgba(79,70,229,.10);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.4rem">📚</div>
+                    <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--parchment3);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.4rem">📚</div>
                     <p style="font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">No history yet</p>
                     <p style="font-size:.78rem;color:var(--text-muted)">Generate vocabulary lists to start building history.</p>
                 </div>`;
