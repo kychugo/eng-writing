@@ -974,73 +974,6 @@
       z-index: 1;
     }
 
-    /* ── Auth guard overlay ───────────────────────────────────── */
-    #auth-guard-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(44, 36, 22, 0.92);
-      backdrop-filter: blur(8px);
-    }
-
-    .auth-guard-card {
-      background: #faf7f2;
-      border: 1px solid var(--parchment3);
-      border-radius: var(--r-lg);
-      padding: 2.5rem 2rem;
-      max-width: 360px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 24px 72px rgba(44, 36, 22, 0.4);
-    }
-
-    .auth-guard-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-size: 1.4rem;
-    }
-
-    .auth-guard-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--ink);
-      margin: 0 0 0.4rem;
-    }
-
-    .auth-guard-sub {
-      color: var(--ink-faint);
-      font-size: 0.9rem;
-      margin: 0 0 1.5rem;
-      font-style: italic;
-    }
-
-    .auth-guard-btn {
-      display: inline-block;
-      background: var(--ink);
-      color: var(--parchment);
-      text-decoration: none;
-      padding: 0.65rem 1.75rem;
-      border-radius: var(--r);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      transition: background var(--t);
-    }
-
-    .auth-guard-btn:hover { background: var(--ink-light); }
-
     /* ── Vocab History Panel ──────────────────────────────────── */
     #vocabHistoryBackdrop {
       display: none;
@@ -1186,16 +1119,6 @@
   <!-- Decorative ink splashes -->
   <div class="ink-deco ink-deco-tl" aria-hidden="true"></div>
   <div class="ink-deco ink-deco-br" aria-hidden="true"></div>
-
-  <!-- Auth guard overlay -->
-  <div id="auth-guard-overlay">
-    <div class="auth-guard-card">
-      <div class="auth-guard-icon">🔒</div>
-      <p class="auth-guard-title">Sign In Required</p>
-      <p class="auth-guard-sub">Please sign in to use this tool.</p>
-      <a href="./index.html" class="auth-guard-btn">Go to Sign In</a>
-    </div>
-  </div>
 
   <!-- ===== Header ===== -->
   <header class="site-header">
@@ -1550,10 +1473,8 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
                     ${renderVocabCards(generatedWords)}
                 </div>`;
 
-            // Save to Firestore history (non-blocking)
-            if (window.saveHistoryRecord) {
-                window.saveHistoryRecord('Vocabulary Generator', topic, level, raw.substring(0, 3000));
-            }
+            // Save to local history
+            saveHistoryLocal(topic, level, raw.substring(0, 3000));
 
             setLoading(genBtn, false);
             genBtn.innerHTML = '💡 Generate Vocabulary';
@@ -2082,217 +2003,62 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             renderQuestion(0);
         });
     </script>
-  <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, getDoc, getDocs, deleteDoc, query, orderBy, limit, startAfter, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-        const app = initializeApp({
-            apiKey: "AIzaSyAXCSDsibC9yTJed3cbRjmWmOIMv1A2cr8",
-            authDomain: "login-system-9c566.firebaseapp.com",
-            projectId: "login-system-9c566",
-            storageBucket: "login-system-9c566.firebasestorage.app",
-            messagingSenderId: "547074181663",
-            appId: "1:547074181663:web:6e3afd6c7c1ec6ae43232a"
-        });
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const overlay = document.getElementById('auth-guard-overlay');
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                if (overlay) overlay.style.display = 'none';
-                window._fbUser = user;
-                // Restore from history if session ID is in URL
-                const sessionId = new URLSearchParams(window.location.search).get('session');
-                if (sessionId) await _loadVocabSession(db, user, sessionId);
-            } else {
-                window.location.replace('./index.html');
-            }
-        });
-
-        async function _loadVocabSession(db, user, sessionId) {
-            try {
-                const snap = await getDoc(doc(db, 'users', user.uid, 'history', sessionId));
-                if (!snap.exists()) return;
-                const data = snap.data();
-                const msgs = data.messages || [];
-                const userMsg = msgs.find(m => m.role === 'user');
-                const aiMsg   = msgs.find(m => m.role === 'assistant');
-                if (!aiMsg) return;
-
-                const raw = aiMsg.content || '';
-                // Parse topic/level from stored user message
-                const uc = userMsg ? (userMsg.content || '') : '';
-                const topicMatch = uc.match(/Topic:\s*(.+)/);
-                const levelMatch = uc.match(/Level:\s*(.+)/);
-                const topic = topicMatch ? topicMatch[1].trim() : (data.summary || 'Unknown');
-                const level = levelMatch ? levelMatch[1].trim() : '';
-
-                // Restore form fields
-                const topicEl = document.getElementById('genTopic');
-                const levelEl = document.getElementById('genLevel');
-                if (topicEl) topicEl.value = topic;
-                if (levelEl && level) levelEl.value = level;
-
-                // Parse and render vocab
-                const words = window.parseVocabList ? window.parseVocabList(raw) : [];
-                const genOut = document.getElementById('genOutput');
-                if (!genOut) return;
-
-                const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const historyBanner = `<div style="background:rgba(184,150,90,.08);border:1px solid rgba(184,150,90,.3);border-radius:4px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#b8965a;display:flex;align-items:center;gap:.5rem;font-style:italic;">
-                    📜 <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
-                </div>`;
-
-                if (words.length && window.renderVocabCards) {
-                    genOut.innerHTML = historyBanner + `<div class="card">
-                        <div class="card-header">
-                            <div class="card-icon icon-yellow">📚</div>
-                            <div>
-                                <div class="card-title">${words.length} Words: ${esc(topic)}</div>
-                                <div class="card-hint">${esc(level)} level — restored from history</div>
-                            </div>
-                        </div>
-                        ${window.renderVocabCards(words)}
-                    </div>`;
-                    // Set generatedWords so Quiz These Words button works
-                    if (window.setGeneratedWords) window.setGeneratedWords(words);
-                } else {
-                    // Fallback: show raw content
-                    genOut.innerHTML = historyBanner + `<div class="card"><pre style="white-space:pre-wrap;font-size:.82rem;color:var(--text)">${esc(raw.substring(0, 3000))}</pre></div>`;
-                }
-
-                // Show quiz button
-                const quizBtn = document.getElementById('startQuizFromGenBtn');
-                if (quizBtn) quizBtn.classList.remove('hidden');
-
-                genOut.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) {
-                console.warn('Failed to load vocab history session:', e);
-            }
-        }
-
-        window.saveHistoryRecord = async function(tool, topic, level, content) {
-            const user = window._fbUser;
-            if (!user) return;
-            try {
-                await addDoc(collection(db, 'users', user.uid, 'history'), {
-                    tool: tool,
-                    subject: 'English',
-                    page: 'vocab',
-                    summary: `${tool}: ${topic} (${level})`.substring(0, 100),
-                    messages: [
-                        { role: 'user', content: `Topic: ${topic}\nLevel: ${level}`, timestamp: new Date().toISOString() },
-                        { role: 'assistant', content: content, timestamp: new Date().toISOString() }
-                    ],
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp()
-                });
-            } catch (e) {
-                console.warn('History save failed:', e);
-            }
-        };
-
-        // ── Vocabulary History Panel ────────────────────────────────
-        let _voh = { all:[], lastDoc:null, loading:false };
-        const VOH_PAGE_SIZE = 15;
-
-        window.openVocabHistory = async function() {
-            const backdrop = document.getElementById('vocabHistoryBackdrop');
-            const panel = document.getElementById('vocabHistoryPanel');
-            backdrop.style.display = 'block';
-            requestAnimationFrame(() => {
-                backdrop.classList.add('open');
-                panel.classList.add('open');
-            });
-            _voh = { all:[], lastDoc:null, loading:false };
-            const listEl = document.getElementById('vohList');
-            listEl.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--ink-faint);font-style:italic;font-size:.9rem">Loading history…</div>`;
-            document.getElementById('vohLoadMoreWrap').style.display = 'none';
-            try {
-                const user = window._fbUser;
-                if (!user) { listEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:2rem">Please sign in to view history.</p>'; return; }
-                const ref = collection(db, 'users', user.uid, 'history');
-                const q = query(ref, where('tool','==','Vocabulary Generator'), orderBy('updatedAt','desc'), limit(VOH_PAGE_SIZE));
-                const snap = await getDocs(q);
-                _voh.all = snap.docs.map(d => ({id:d.id,...d.data()}));
-                _voh.lastDoc = snap.docs[snap.docs.length-1] || null;
-                _vohRender(_voh.all);
-                document.getElementById('vohLoadMoreWrap').style.display = _voh.lastDoc ? 'block' : 'none';
-            } catch(e) {
-                console.error(e);
-                listEl.innerHTML = '<p style="text-align:center;color:var(--rust);font-size:.85rem;padding:2rem;font-style:italic;">Failed to load history.</p>';
-            }
-        };
-
-        window.closeVocabHistory = function() {
-            const backdrop = document.getElementById('vocabHistoryBackdrop');
-            const panel = document.getElementById('vocabHistoryPanel');
-            backdrop.classList.remove('open');
-            panel.classList.remove('open');
-            setTimeout(() => { backdrop.style.display = 'none'; }, 380);
-        };
-
-        window.loadMoreVOH = async function() {
-            if (_voh.loading || !_voh.lastDoc) return;
-            _voh.loading = true;
-            const btn = document.getElementById('vohLoadMoreBtn');
-            if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Loading…'; }
-            try {
-                const user = window._fbUser;
-                if (!user) return;
-                const ref = collection(db, 'users', user.uid, 'history');
-                const q = query(ref, where('tool','==','Vocabulary Generator'), orderBy('updatedAt','desc'), startAfter(_voh.lastDoc), limit(VOH_PAGE_SIZE));
-                const snap = await getDocs(q);
-                const more = snap.docs.map(d => ({id:d.id,...d.data()}));
-                _voh.lastDoc = snap.docs[snap.docs.length-1] || null;
-                _voh.all = [..._voh.all, ...more];
-                _vohRender(_voh.all);
-                document.getElementById('vohLoadMoreWrap').style.display = _voh.lastDoc ? 'block' : 'none';
-            } catch(e) { console.error(e); }
-            finally {
-                _voh.loading = false;
-                if (btn) { btn.disabled = false; btn.innerHTML = '▾ Load More'; }
-            }
-        };
-
-        window.deleteVOHSession = async function(id) {
-            if (!confirm('Delete this history entry?')) return;
-            const user = window._fbUser;
-            if (!user) return;
-            try {
-                await deleteDoc(doc(db, 'users', user.uid, 'history', id));
-                _voh.all = _voh.all.filter(s => s.id !== id);
-                _vohRender(_voh.all);
-            } catch(e) { alert('Failed to delete. Please try again.'); }
-        };
+  <script>
+        // ============================================================
+        // Local History — no Firebase, no login required
+        // ============================================================
+        const VOCAB_HISTORY_KEY = 'vocab_history_v1';
+        const VOCAB_HISTORY_MAX = 50;
 
         function _vohEsc(s) {
             return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
+
         function _vohFmtTime(ts) {
             if (!ts) return '';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            return d.toLocaleString('en-HK',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+            const d = new Date(ts);
+            return d.toLocaleString('en-HK', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
         }
+
+        function vohLoad() {
+            try { return JSON.parse(localStorage.getItem(VOCAB_HISTORY_KEY)) || []; } catch { return []; }
+        }
+
+        function vohSave(entries) {
+            try { localStorage.setItem(VOCAB_HISTORY_KEY, JSON.stringify(entries)); } catch {}
+        }
+
+        function saveHistoryLocal(topic, level, content) {
+            const entries = vohLoad();
+            const entry = {
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+                topic, level, content,
+                timestamp: new Date().toISOString()
+            };
+            entries.unshift(entry);
+            if (entries.length > VOCAB_HISTORY_MAX) entries.splice(VOCAB_HISTORY_MAX); // trim oldest
+            vohSave(entries);
+        }
+
         window._vohToggle = function(id) {
-            const body = document.getElementById('voh-body-'+id);
-            const chev = document.getElementById('voh-chev-'+id);
+            const body = document.getElementById('voh-body-' + id);
+            const chev = document.getElementById('voh-chev-' + id);
             if (!body) return;
             const open = body.classList.toggle('open');
             if (chev) chev.style.transform = open ? 'rotate(180deg)' : '';
         };
 
+        window.deleteVOHSession = function(id) {
+            if (!confirm('Delete this history entry?')) return;
+            vohSave(vohLoad().filter(e => e.id !== id));
+            _vohRender(vohLoad());
+        };
+
         function _vohRenderCard(s) {
-            const msgs = s.messages || [];
-            const userMsg = msgs.find(m => m.role === 'user');
-            const aiMsg   = msgs.find(m => m.role === 'assistant');
-            const uc = userMsg ? userMsg.content || '' : '';
-            const topicMatch = uc.match(/Topic:\s*(.+)/);
-            const levelMatch = uc.match(/Level:\s*(.+)/);
-            const topic = topicMatch ? topicMatch[1].trim() : (s.summary || '');
-            const level = levelMatch ? levelMatch[1].trim() : '';
-            const preview = aiMsg ? (aiMsg.content||'').substring(0,300) : '';
-            const time = _vohFmtTime(s.updatedAt);
+            const topic   = s.topic || '';
+            const level   = s.level || '';
+            const preview = (s.content || '').substring(0, 300);
+            const time    = _vohFmtTime(s.timestamp);
             return `<div class="voh-card" id="voh-card-${s.id}">
                 <div class="voh-card-header" onclick="_vohToggle('${s.id}')" role="button" tabindex="0"
                      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();_vohToggle('${s.id}')}">
@@ -2311,14 +2077,15 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
                     </div>
                 </div>
                 <div class="voh-card-body" id="voh-body-${s.id}">
-                    ${topic ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Topic</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(topic)}</p></div>` : ''}
-                    ${level ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Level</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(level)}</p></div>` : ''}
+                    ${topic   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Topic</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(topic)}</p></div>` : ''}
+                    ${level   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Level</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(level)}</p></div>` : ''}
                     ${preview ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Vocabulary Preview</span><p style="font-size:.78rem;color:var(--text);margin-top:.1rem;white-space:pre-wrap;max-height:160px;overflow-y:auto">${_vohEsc(preview)}</p></div>` : ''}
                     <div style="padding-bottom:.5rem">
-                        <a href="./vocab.html?session=${s.id}" title="Restore this session"
-                           style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--gold);overflow:hidden;border:none;text-decoration:none;color:var(--parchment);font-size:.75rem;font-family:'Lato',sans-serif">
+                        <button onclick="restoreVocabSession('${s.id}')"
+                                style="display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .9rem;border-radius:var(--r);background:var(--gold);color:var(--parchment);border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.78rem;transition:background var(--t)"
+                                title="Restore this session">
                             ↩ Load
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>`;
@@ -2336,6 +2103,94 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             }
             list.innerHTML = sessions.map(s => _vohRenderCard(s)).join('');
         }
+
+        window.openVocabHistory = function() {
+            const backdrop = document.getElementById('vocabHistoryBackdrop');
+            const panel    = document.getElementById('vocabHistoryPanel');
+            backdrop.style.display = 'block';
+            requestAnimationFrame(() => {
+                backdrop.classList.add('open');
+                panel.classList.add('open');
+            });
+            _vohRender(vohLoad());
+        };
+
+        window.closeVocabHistory = function() {
+            const backdrop = document.getElementById('vocabHistoryBackdrop');
+            const panel    = document.getElementById('vocabHistoryPanel');
+            backdrop.classList.remove('open');
+            panel.classList.remove('open');
+            setTimeout(() => { backdrop.style.display = 'none'; }, 380);
+        };
+
+        // Restore a saved session by ID
+        window.restoreVocabSession = function(id) {
+            const entry = vohLoad().find(e => e.id === id);
+            if (!entry) return;
+            _applyVocabSession(entry);
+            window.closeVocabHistory();
+        };
+
+        function _applyVocabSession(entry) {
+            const esc   = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const topic = entry.topic   || '';
+            const level = entry.level   || '';
+            const raw   = entry.content || '';
+
+            // Restore form fields
+            const topicEl = document.getElementById('genTopic');
+            const levelEl = document.getElementById('genLevel');
+            if (topicEl) topicEl.value = topic;
+            if (levelEl && level) levelEl.value = level;
+
+            // Switch to generator tab
+            switchTab('generator');
+
+            // Parse and render vocab
+            const words  = parseVocabList(raw);
+            const genOut = document.getElementById('genOutput');
+            if (!genOut) return;
+
+            const historyBanner = `<div style="background:rgba(184,150,90,.08);border:1px solid rgba(184,150,90,.3);border-radius:4px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#b8965a;display:flex;align-items:center;gap:.5rem;font-style:italic;">
+                📜 <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
+            </div>`;
+
+            if (words.length) {
+                genOut.innerHTML = historyBanner + `<div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-yellow">📚</div>
+                        <div>
+                            <div class="card-title">${words.length} Words: ${esc(topic)}</div>
+                            <div class="card-hint">${esc(level)} level — restored from history</div>
+                        </div>
+                    </div>
+                    ${renderVocabCards(words)}
+                </div>`;
+                generatedWords = words;
+            } else {
+                genOut.innerHTML = historyBanner + `<div class="card"><pre style="white-space:pre-wrap;font-size:.82rem;color:var(--text)">${esc(raw.substring(0, 3000))}</pre></div>`;
+            }
+
+            const quizBtn = document.getElementById('startQuizFromGenBtn');
+            if (quizBtn) quizBtn.classList.remove('hidden');
+            genOut.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Session restore via URL ?session=ID
+        (function() {
+            const sessionId = new URLSearchParams(window.location.search).get('session');
+            // Validate: only allow alphanumeric session IDs generated by our code
+            if (sessionId && /^[a-z0-9]{8,20}$/.test(sessionId)) {
+                const entry = vohLoad().find(e => e.id === sessionId);
+                if (entry) {
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', () => _applyVocabSession(entry), { once: true });
+                    } else {
+                        _applyVocabSession(entry);
+                    }
+                }
+            }
+        })();
     </script>
 
   <!-- Vocab History Panel -->
@@ -2350,12 +2205,6 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
     </div>
     <div id="vocabHistoryPanelBody">
       <div id="vohList"></div>
-      <div id="vohLoadMoreWrap" style="display:none;text-align:center;padding:.75rem 0">
-        <button id="vohLoadMoreBtn" onclick="loadMoreVOH()"
-                class="btn btn-ghost" style="font-size:.8rem;padding:.4rem 1.25rem;">
-          ▾ Load More
-        </button>
-      </div>
     </div>
   </div>
 
