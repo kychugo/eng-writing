@@ -511,6 +511,59 @@
       margin: 2.8rem 0 1.5rem;
     }
 
+    /* Sentence Patterns */
+    .patterns-section {
+      margin-top: 3rem;
+      border-top: 1px solid var(--parchment3);
+      padding-top: 2rem;
+    }
+    .patterns-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+    }
+    .patterns-heading::before, .patterns-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--parchment3);
+    }
+    .patterns-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .patterns-item {
+      background: var(--parchment2);
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r);
+      padding: 1rem 1.3rem;
+    }
+    .patterns-formula {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--gold);
+      margin-bottom: 0.45rem;
+    }
+    .patterns-example {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink-light);
+      line-height: 1.65;
+    }
+
     /* Reference questions */
     .ref-toggle {
       font-family: 'Lato', sans-serif;
@@ -1022,6 +1075,10 @@
       <div class="result-content" id="resultContent">
         <p class="result-label" id="resultLabel"></p>
         <div class="result-box" id="resultBox" tabindex="0"></div>
+        <section class="patterns-section" id="patternsSection" aria-label="Sentence Patterns" hidden>
+          <h2 class="patterns-heading">Sentence Patterns</h2>
+          <ul class="patterns-list" id="patternsList"></ul>
+        </section>
       </div>
     </div>
 
@@ -1169,6 +1226,32 @@
     const historyBackdrop    = document.getElementById('historyBackdrop');
     const historyList        = document.getElementById('historyList');
     const historyCount       = document.getElementById('historyCount');
+    const patternsSection    = document.getElementById('patternsSection');
+    const patternsList       = document.getElementById('patternsList');
+
+    /* ── Sentence patterns data ─────────────────────────────── */
+    const SENTENCE_PATTERNS = [
+      { formula: '…. be (not) + worth + ger / N', example: 'This documentary is worth watching at least once.' },
+      { formula: '…. aim + to-inf ….', example: 'The new policy aims to improve air quality in urban areas.' },
+      { formula: 'Ger (as a subject) + V (singular)', example: 'Reading widely broadens your understanding of the world.' },
+      { formula: 'So + be / have / do + S', example: 'She cares about the environment, and so do her classmates.' },
+      { formula: 'Neither + be / have / do + S', example: 'He did not attend the meeting, and neither did his partner.' },
+      { formula: '…. used to + inf ….', example: 'People used to rely on letters before the internet existed.' },
+      { formula: '…. be / get + used to + ger ….', example: 'After several months abroad, she got used to cooking for herself.' },
+      { formula: 'What-clause + be + N', example: 'What surprised everyone was the speed of the recovery.' },
+      { formula: 'It is high time + S + V (past tense)', example: 'It is high time governments invested seriously in renewable energy.' },
+      { formula: 'clause + on condition that / provided that / as long as + clause', example: 'You may join the programme provided that you meet the entry requirements.' },
+      { formula: '…. with a view to + ger / N', example: 'She studied abroad with a view to gaining international experience.' },
+      { formula: 'Thanks to + N / phrase, + clause', example: 'Thanks to advances in medicine, the average lifespan has increased significantly.' },
+      { formula: 'When it comes to + ger / N', example: 'When it comes to solving complex problems, teamwork is invaluable.' },
+      { formula: 'out of + N', example: 'He volunteered out of a genuine desire to help his community.' },
+      { formula: 'owing to / due to / because of + phrase / N', example: 'Due to heavy traffic, many participants arrived late to the conference.' },
+      { formula: 'Unless + clause, + clause', example: 'Unless we reduce plastic waste now, marine ecosystems will suffer greatly.' },
+      { formula: 'clause + instead of + ger / N', example: 'She decided to cycle to work instead of driving every day.' },
+      { formula: 'No matter + wh-clause, + clause', example: 'No matter how difficult the task, she always found a way to succeed.' },
+      { formula: 'In spite of / Despite + phrase, + clause', example: 'Despite the challenges, the team delivered the project ahead of schedule.' },
+      { formula: 'Not only …, but also ….', example: 'Not only did he finish first, but he also broke the national record.' },
+    ];
 
     /* ── Load question bank ─────────────────────────────────── */
     fetch(JSON_URL)
@@ -1576,6 +1659,23 @@ Write ONE original, engaging writing prompt of the type "${textType}".
       } else {
         refBtn.style.display = 'none';
       }
+
+      // Sentence patterns — pick 5 at random (Fisher-Yates shuffle)
+      const shuffled = [...SENTENCE_PATTERNS];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const picked   = shuffled.slice(0, 5);
+      patternsList.innerHTML = '';
+      picked.forEach(p => {
+        const li = document.createElement('li');
+        li.className = 'patterns-item';
+        li.innerHTML = `<div class="patterns-formula">${escapeHtml(p.formula)}</div><div class="patterns-example">${escapeHtml(p.example)}</div>`;
+        patternsList.appendChild(li);
+      });
+      patternsSection.removeAttribute('hidden');
+
       showResultView();
     }
 
