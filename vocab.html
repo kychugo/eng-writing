@@ -1,1065 +1,1299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGenius – Vocabulary Tools</title>
-    <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <style>
-           Self-contained styles – no external dependencies
-           ============================================================ */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #eef2ff;
-            --secondary: #7c3aed;
-            --secondary-light: #f5f3ff;
-            --yellow: #d97706;
-            --yellow-light: #fffbeb;
-            --red: #dc2626;
-            --red-light: #fef2f2;
-            --green: #059669;
-            --green-light: #ecfdf5;
-            --card-bg: #ffffff;
-            --text: #1f2937;
-            --text-muted: #6b7280;
-            --text-secondary: #374151;
-            --border: #e5e7eb;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-            --radius: 14px;
-            --radius-sm: 8px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf4ff 100%);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* ---- Header ---- */
-        .site-header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0.875rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            text-decoration: none;
-            color: var(--text);
-            flex-shrink: 0;
-        }
-
-        .brand-icon {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
-        }
-
-        .brand-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--yellow-light);
-            border: 1px solid #fde68a;
-            padding: 0.2rem 0.75rem;
-            border-radius: 9999px;
-            font-weight: 500;
-            flex-shrink: 0;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 1rem;
-            background: var(--primary-light);
-            color: var(--primary);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.15s;
-            flex-shrink: 0;
-        }
-
-        .back-btn:hover {
-            background: #e0e7ff;
-            transform: translateX(-2px);
-        }
-
-        /* ---- Container ---- */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 3rem;
-        }
-
-        /* ---- Hero ---- */
-        .hero {
-            text-align: center;
-            padding: 2.5rem 1rem 2rem;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 1rem;
-            background: var(--yellow-light);
-            color: var(--yellow);
-            border: 1px solid #fde68a;
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            margin-bottom: 1.25rem;
-        }
-
-        .hero h1 {
-            font-size: clamp(1.75rem, 5vw, 2.5rem);
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 0.75rem;
-            line-height: 1.2;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--yellow), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            max-width: 560px;
-            margin: 0 auto;
-        }
-
-        /* ---- Tabs ---- */
-        .tab-bar {
-            display: flex;
-            gap: 0.5rem;
-            background: white;
-            border-radius: var(--radius);
-            padding: 0.4rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .tab-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            padding: 0.625rem 1rem;
-            border: none;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-muted);
-            background: transparent;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.25);
-        }
-
-        .tab-btn:not(.active):hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        /* ---- Tab panels ---- */
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* ---- Card ---- */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 1.75rem;
-            transition: box-shadow 0.25s;
-            margin-bottom: 1.5rem;
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1.5px solid var(--border);
-        }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-
-        .icon-yellow { background: var(--yellow-light); }
-        .icon-red { background: var(--red-light); }
-        .icon-green { background: var(--green-light); }
-
-        .card-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .card-hint {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
-        }
-
-        /* ---- Form ---- */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        @media (min-width: 640px) {
-            .form-row {
-                grid-template-columns: 1fr 1fr;
-            }
-            .form-row-3 {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-
-        .form-group { }
-
-        label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 0.375rem;
-        }
-
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.9375rem;
-            color: var(--text);
-            background: #fafafa;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.875rem center;
-            padding-right: 2.5rem;
-            cursor: pointer;
-        }
-
-        input[type="text"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
-        }
-
-        /* ---- Buttons ---- */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.675rem 1.25rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: linear-gradient(135deg, var(--primary-hover), #6d28d9);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
-        }
-
-        .btn-yellow {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
-        }
-
-        .btn-yellow:hover:not(:disabled) {
-            background: linear-gradient(135deg, #d97706, #b45309);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
-        }
-
-        .btn-red {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
-        }
-
-        .btn-red:hover:not(:disabled) {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            transform: translateY(-1px);
-        }
-
-        .btn-ghost {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: 1.5px solid #c7d2fe;
-        }
-
-        .btn-ghost:hover:not(:disabled) {
-            background: #e0e7ff;
-        }
-
-        .btn:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        .btn-full { width: 100%; }
-        .btn-mt { margin-top: 1rem; }
-
-        /* ---- Loading ---- */
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 2.5px solid rgba(255,255,255,0.4);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-            flex-shrink: 0;
-        }
-
-        .spinner-dark {
-            border-color: rgba(79, 70, 229, 0.2);
-            border-top-color: var(--primary);
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .loading-text {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            padding: 1rem 0;
-        }
-
-        /* ---- Vocab card grid ---- */
-        .vocab-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
-
-        @media (min-width: 640px) {
-            .vocab-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (min-width: 900px) {
-            .vocab-grid { grid-template-columns: 1fr 1fr 1fr; }
-        }
-
-        .vocab-card {
-            background: linear-gradient(135deg, #f8faff, #f5f3ff);
-            border: 1.5px solid #c7d2fe;
-            border-radius: 10px;
-            padding: 1rem 1.125rem;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-
-        .vocab-card:hover {
-            box-shadow: 0 4px 12px rgba(79,70,229,0.12);
-            transform: translateY(-2px);
-        }
-
-        .vocab-word {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.2rem;
-        }
-
-        .vocab-pos {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-
-        .vocab-def {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.4rem;
-            line-height: 1.5;
-        }
-
-        .vocab-example {
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-            font-style: italic;
-            border-left: 2px solid #c7d2fe;
-            padding-left: 0.5rem;
-            margin-bottom: 0.4rem;
-            line-height: 1.45;
-        }
-
-        .vocab-cn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--secondary);
-            background: var(--secondary-light);
-            padding: 0.1rem 0.5rem;
-            border-radius: 4px;
-        }
-
-        /* ---- Quiz section ---- */
-        .quiz-progress {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .progress-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .progress-bar-wrap {
-            flex: 1;
-            height: 8px;
-            background: var(--border);
-            border-radius: 9999px;
-            margin: 0 1rem;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 9999px;
-            transition: width 0.4s ease;
-        }
-
-        .quiz-question-card {
-            background: var(--card-bg);
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .quiz-q-number {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .quiz-q-text {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 1.25rem;
-            line-height: 1.5;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.625rem;
-        }
-
-        @media (min-width: 640px) {
-            .quiz-options { grid-template-columns: 1fr 1fr; }
-        }
-
-        .quiz-option {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.625rem;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: #fafafa;
-            cursor: pointer;
-            transition: all 0.18s;
-            font-size: 0.9375rem;
-            color: var(--text);
-            text-align: left;
-            font-family: inherit;
-            width: 100%;
-        }
-
-        .quiz-option:hover:not(:disabled) {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--green);
-            background: var(--green-light);
-            color: #065f46;
-        }
-
-        .quiz-option.wrong {
-            border-color: var(--red);
-            background: var(--red-light);
-            color: #991b1b;
-        }
-
-        .quiz-option:disabled {
-            cursor: default;
-        }
-
-        .option-letter {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            min-width: 24px;
-            border-radius: 50%;
-            background: var(--border);
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            transition: all 0.18s;
-        }
-
-        .quiz-option:hover:not(:disabled) .option-letter {
-            background: var(--primary);
-            color: white;
-        }
-
-        .quiz-option.correct .option-letter {
-            background: var(--green);
-            color: white;
-        }
-
-        .quiz-option.wrong .option-letter {
-            background: var(--red);
-            color: white;
-        }
-
-        .quiz-explanation {
-            margin-top: 0.75rem;
-            padding: 0.75rem 1rem;
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            color: #92400e;
-            display: none;
-        }
-
-        .quiz-explanation.show { display: block; }
-
-        /* ---- Score card ---- */
-        .score-card {
-            text-align: center;
-            padding: 2rem 1.5rem;
-        }
-
-        .score-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .score-great { background: var(--green-light); color: var(--green); }
-        .score-good  { background: var(--yellow-light); color: var(--yellow); }
-        .score-low   { background: var(--red-light); color: var(--red); }
-
-        .score-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-
-        .score-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        /* ---- Utility ---- */
-        .hidden { display: none !important; }
-        .mt-1 { margin-top: 0.25rem; }
-        .mt-4 { margin-top: 1rem; }
-
-        /* ---- Action row ---- */
-        .action-row {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        /* ---- Empty state ---- */
-        .empty-state {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-
-        /* ---- Footer ---- */
-        footer {
-            text-align: center;
-            padding: 2rem 1.5rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border);
-            margin-top: 2rem;
-        }
-
-        footer strong {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* ---- Responsive ---- */
-        @media (max-width: 640px) {
-            .header-inner { padding: 0.75rem 1rem; }
-            .header-subtitle { display: none; }
-            .container { padding: 1.5rem 1rem 2rem; }
-            .hero { padding: 1.75rem 0.5rem 1.5rem; }
-            .card { padding: 1.25rem; }
-            .tab-bar { margin: 0 0 1.5rem; }
-            .action-row { flex-direction: column; }
-            .action-row .btn { width: 100%; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* ---- SRS ---- */
-        .srs-card { border: 1.5px solid #c7d2fe; border-radius: 12px; padding: 1.25rem; background: linear-gradient(135deg,#f8faff,#f5f3ff); margin-bottom: 1rem; }
-        .srs-word { font-size: 1.5rem; font-weight: 800; color: var(--primary); text-align:center; margin-bottom:0.5rem; }
-        .srs-mask { min-height: 3rem; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; }
-        .srs-blur { filter: blur(8px); transition: filter 0.3s; }
-        .srs-revealed { filter: none; }
-        .srs-def { font-size:0.95rem; color:var(--text-secondary); text-align:center; line-height:1.5; }
-        .srs-rating { display:flex; gap:0.5rem; justify-content:center; margin-top:0.75rem; flex-wrap:wrap; }
-        .srs-btn { padding:0.5rem 1rem; border-radius:8px; border:none; font-family:inherit; font-weight:700; font-size:0.875rem; cursor:pointer; transition:all 0.18s; }
-        .srs-btn-fail { background:#fee2e2; color:#b91c1c; } .srs-btn-fail:hover { background:#fca5a5; }
-        .srs-btn-hard { background:#fef3c7; color:#92400e; } .srs-btn-hard:hover { background:#fde68a; }
-        .srs-btn-ok   { background:#d1fae5; color:#065f46; } .srs-btn-ok:hover { background:#6ee7b7; }
-        .srs-btn-easy { background:#dbeafe; color:#1d4ed8; } .srs-btn-easy:hover { background:#93c5fd; }
-        .srs-progress { text-align:center; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem; }
-        .srs-stats { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.25rem; }
-        .srs-stat { text-align:center; }
-        .srs-stat-num { font-size:1.5rem; font-weight:800; color:var(--primary); }
-        .srs-stat-label { font-size:0.75rem; color:var(--text-muted); }
-        .add-srs-btn { display:block; font-size:0.72rem; padding:0.2rem 0.55rem; border-radius:6px; border:1px solid #c7d2fe; background:var(--primary-light); color:var(--primary); cursor:pointer; font-family:inherit; font-weight:600; margin-top:0.5rem; transition:all 0.18s; }
-        .add-srs-btn:hover { background:#e0e7ff; }
-        .add-srs-btn.added { background:var(--green-light); color:var(--green); border-color:var(--green); }
-        /* ---- Quiz type selector ---- */
-        .quiz-type-row { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; }
-        .quiz-type-btn { padding:0.4rem 0.9rem; border-radius:8px; border:1.5px solid var(--border); background:#fafafa; color:var(--text-muted); font-family:inherit; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.18s; }
-        .quiz-type-btn.active { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
-        /* Sentence completion */
-        .sc-input { width:100%; padding:0.625rem 0.875rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-family:inherit; font-size:1rem; margin-top:0.75rem; transition:border-color 0.2s; }
-        .sc-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(79,70,229,.12); }
-        .sc-submit { margin-top:0.625rem; }
-        /* Matching */
-        .match-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-top:0.75rem; }
-        .match-col { display:flex; flex-direction:column; gap:0.5rem; }
-        .match-item { padding:0.625rem 0.875rem; border-radius:8px; border:1.5px solid var(--border); background:#fafafa; cursor:pointer; font-family:inherit; font-size:0.875rem; transition:all 0.18s; text-align:left; word-break:break-word; }
-        .match-item:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-light); }
-        .match-item.selected { border-color:var(--primary); background:var(--primary-light); color:var(--primary); font-weight:700; }
-        .match-item.matched-correct { border-color:var(--green); background:var(--green-light); color:#065f46; }
-        .match-item.matched-wrong { border-color:var(--red); background:var(--red-light); color:#991b1b; }
-/* ---- Dark mode ---- */
-.dark body { background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d1a2e 100%); color: #e2e8f0; }
-.dark .card { background: rgba(15,15,40,0.85); border: 1px solid rgba(255,255,255,0.08); color: #e2e8f0; }
-.dark .site-header { background: rgba(15,15,40,0.95); }
-.dark .tab-bar { background: rgba(15,15,40,0.9); }
-.dark .tab-btn { color: #94a3b8; }
-.dark .tab-btn.active { background: linear-gradient(135deg, #7c3aed, #06b6d4); color: white; }
-.dark .vocab-card { background: rgba(30,20,60,.8); border-color: rgba(124,58,237,.3); }
-.dark .vocab-word { color: #a78bfa; }
-.dark .quiz-question-card { background: rgba(15,15,40,0.9); border-color: rgba(255,255,255,.1); color: #e2e8f0; }
-.dark .quiz-q-text { color: #e2e8f0; }
-.dark .quiz-option { background: rgba(15,15,40,.8); border-color: rgba(255,255,255,.1); color: #e2e8f0; }
-.dark .quiz-option:hover:not(:disabled) { background: rgba(124,58,237,.2); border-color: #7c3aed; color: #a78bfa; }
-.dark .score-panel { background: rgba(15,15,40,.8); border-color: rgba(124,58,237,.3); }
-.dark .score-item { background: rgba(30,20,60,.8); border-color: rgba(124,58,237,.2); }
-.dark input[type="text"], .dark select { background: rgba(15,15,40,.8); border-color: rgba(255,255,255,.15); color: #e2e8f0; }
-.dark footer { color: #94a3b8; border-top-color: rgba(255,255,255,.08); }
-.dark .back-btn { background: rgba(124,58,237,.2); color: #a78bfa; }
-.dark .hero h1 { color: #e2e8f0; }
-.dark .card-title { color: #e2e8f0; }
-.dark .brand { color: #e2e8f0; }
-.dark label { color: #e2e8f0; }
-.dark .srs-card { background: rgba(30,20,60,.8); border-color: rgba(124,58,237,.3); }
-.dark .srs-word { color: #a78bfa; }
-.dark .quiz-type-btn { background: rgba(15,15,40,.8); border-color: rgba(255,255,255,.15); color: #94a3b8; }
-.dark .quiz-type-btn.active { border-color: #7c3aed; background: rgba(124,58,237,.2); color: #a78bfa; }
-.dark .match-item { background: rgba(15,15,40,.8); border-color: rgba(255,255,255,.15); color: #e2e8f0; }
-.dark .sc-input { background: rgba(15,15,40,.8); border-color: rgba(255,255,255,.15); color: #e2e8f0; }
-/* Micro-interactions */
-button:not(:disabled):active { transform: scale(0.97); }
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
-/* Focus ring */
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-    outline: 3px solid rgba(124,58,237,.5);
-    outline-offset: 2px;
-}
-/* Vocab History Panel */
-#vocabHistoryBackdrop {
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:900;
-    backdrop-filter:blur(2px); transition:opacity .3s;
-}
-#vocabHistoryBackdrop.open { opacity:1; }
-#vocabHistoryPanel {
-    position:fixed; top:0; right:0; bottom:0; z-index:901;
-    width:min(500px,100vw); background:var(--card-bg);
-    border-left:1px solid var(--border);
-    box-shadow:-8px 0 32px rgba(0,0,0,.18);
-    display:flex; flex-direction:column;
-    transform:translateX(100%);
-    transition:transform .35s cubic-bezier(.16,1,.3,1);
-    overflow:hidden;
-}
-#vocabHistoryPanel.open { transform:translateX(0); }
-#vocabHistoryPanelHeader {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:1rem 1.25rem; background:rgba(255,255,255,.95);
-    border-bottom:1px solid var(--border); flex-shrink:0;
-}
-#vocabHistoryPanelBody { flex:1; overflow-y:auto; padding:1rem; }
-#vocabHistoryPanelBody::-webkit-scrollbar { width:4px; }
-#vocabHistoryPanelBody::-webkit-scrollbar-thumb { background:var(--primary); border-radius:99px; }
-.voh-card {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:12px; margin-bottom:.75rem; overflow:hidden;
-}
-.voh-card-header {
-    display:flex; align-items:center; gap:.75rem;
-    padding:.85rem 1rem; cursor:pointer; transition:background .2s;
-}
-.voh-card-header:hover { background:rgba(79,70,229,.06); }
-.voh-card-body {
-    max-height:0; overflow:hidden;
-    transition:max-height .35s ease, padding .2s; padding:0 1rem;
-}
-.voh-card-body.open { max-height:600px; overflow-y:auto; padding:.75rem 1rem; }
-.voh-card-body::-webkit-scrollbar { width:3px; }
-.voh-card-body::-webkit-scrollbar-thumb { background:var(--primary); border-radius:99px; }
-.dark #vocabHistoryPanel { background:rgba(15,15,40,.95); border-left-color:rgba(255,255,255,.08); }
-.dark #vocabHistoryPanelHeader { background:rgba(15,15,40,.85); border-bottom-color:rgba(255,255,255,.08); }
-.dark .voh-card { background:rgba(30,20,60,.8); border-color:rgba(255,255,255,.08); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabulary Tools — The Writer's Desk</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ────────────────────────────────────────── */
+    :root {
+      --ink:        #2c2416;
+      --ink-light:  #5a4e3a;
+      --ink-faint:  #8c7f6a;
+      --parchment:  #f5f0e8;
+      --parchment2: #ede7d9;
+      --parchment3: #e0d9cc;
+      --gold:       #b8965a;
+      --gold-light: #d4b07a;
+      --rust:       #8b4a2f;
+      --moss:       #5a6b4a;
+      --shadow:     rgba(44, 36, 22, 0.12);
+      --shadow2:    rgba(44, 36, 22, 0.06);
+      --r:          4px;
+      --r-lg:       10px;
+      --t:          0.3s ease;
+      --t-slide:    0.55s cubic-bezier(0.22, 1, 0.36, 1);
+
+      /* Compat aliases so JS-generated HTML (which references these vars) still renders correctly */
+      --primary:        #b8965a;
+      --primary-hover:  #9a7a42;
+      --primary-light:  #faf6ec;
+      --secondary:      #8b4a2f;
+      --secondary-light: #fdf0eb;
+      --yellow:         #b8965a;
+      --yellow-light:   #faf6ec;
+      --red:            #8b4a2f;
+      --red-light:      #fdf0eb;
+      --green:          #5a6b4a;
+      --green-light:    #eef5ea;
+      --card-bg:        #faf7f2;
+      --text:           #2c2416;
+      --text-muted:     #8c7f6a;
+      --text-secondary: #5a4e3a;
+      --border:         #e0d9cc;
+      --radius:         10px;
+      --radius-sm:      4px;
+    }
+
+    /* ── Reset ────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--parchment);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    /* ── Paper grain texture ──────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+
+    /* ── Decorative ink splashes ──────────────────────────────── */
+    .ink-deco {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.025;
+    }
+    .ink-deco-tl { top: -60px; left: -60px; width: 280px; height: 280px; background: radial-gradient(circle, var(--ink) 0%, transparent 70%); }
+    .ink-deco-br { bottom: -80px; right: -80px; width: 380px; height: 380px; background: radial-gradient(circle, var(--gold) 0%, transparent 70%); }
+
+    /* ── Site header ──────────────────────────────────────────── */
+    .site-header {
+      background: rgba(245, 240, 232, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--parchment3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .header-center {
+      flex: 1;
+      text-align: center;
+    }
+
+    .header-ornament {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      opacity: 0.8;
+    }
+
+    /* ── Back button ──────────────────────────────────────────── */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      background: none;
+      border: 1px solid var(--parchment3);
+      border-radius: 99px;
+      padding: 0.28em 0.95em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--t), border-color var(--t);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-back:hover { background: var(--parchment2); border-color: var(--ink-faint); }
+
+    /* ── History button ───────────────────────────────────────── */
+    .btn-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      background: none;
+      border: 1px solid var(--parchment3);
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t), color var(--t);
+      padding: 0.35em 1em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-history:hover { background: var(--parchment2); border-color: var(--ink-faint); color: var(--ink); }
+
+    /* ── Container ────────────────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 2rem 1rem 1.8rem;
+    }
+
+    .site-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      margin: 0.5rem 0 0.4rem;
+    }
+    .site-title em { font-style: italic; color: var(--gold); }
+
+    .site-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Tab bar ──────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 0.4rem;
+      background: #faf7f2;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-lg);
+      padding: 0.35rem;
+      box-shadow: 0 2px 12px var(--shadow2);
+      margin-bottom: 2rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1rem;
+      border: none;
+      border-radius: var(--r);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all var(--t);
+      color: var(--ink-faint);
+      background: transparent;
+    }
+
+    .tab-btn.active {
+      background: var(--ink);
+      color: var(--parchment);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .tab-btn:not(.active):hover {
+      background: var(--parchment2);
+      color: var(--ink);
+    }
+
+    /* ── Tab panels ───────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .hidden { display: none !important; }
+
+    /* ── Card ─────────────────────────────────────────────────── */
+    .card {
+      background: #faf7f2;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-lg);
+      padding: 1.75rem;
+      box-shadow: 0 4px 28px var(--shadow), 0 1px 4px var(--shadow2);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--parchment3);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .icon-yellow { background: var(--parchment2); }
+    .icon-red    { background: #fdf0eb; }
+    .icon-green  { background: #eef5ea; }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    .card-hint {
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      font-weight: 300;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Form ─────────────────────────────────────────────────── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .form-row { grid-template-columns: 1fr 1fr; }
+      .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.32rem; }
+
+    label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 0.62rem 0.9rem;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r);
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      transition: border-color var(--t), box-shadow var(--t);
+      -webkit-appearance: none;
+      appearance: none;
+      outline: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c7f6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      padding-right: 2.2rem;
+      cursor: pointer;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.14);
+    }
+    select option { color: var(--ink); }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: var(--r);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background var(--t), transform var(--t), box-shadow var(--t);
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--parchment);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--ink-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .btn-yellow {
+      background: var(--gold);
+      color: var(--parchment);
+      box-shadow: 0 2px 8px rgba(184, 150, 90, 0.25);
+    }
+    .btn-yellow:hover:not(:disabled) {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(184, 150, 90, 0.35);
+    }
+
+    .btn-red {
+      background: var(--rust);
+      color: var(--parchment);
+      box-shadow: 0 2px 8px rgba(139, 74, 47, 0.25);
+    }
+    .btn-red:hover:not(:disabled) {
+      background: #a35a38;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(139, 74, 47, 0.35);
+    }
+
+    .btn-ghost {
+      background: var(--parchment2);
+      color: var(--ink-light);
+      border: 1px solid var(--parchment3);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--parchment3);
+      color: var(--ink);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-full { width: 100%; }
+    .btn-mt { margin-top: 1rem; }
+
+    /* ── Spinner ──────────────────────────────────────────────── */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(245, 240, 232, 0.4);
+      border-top-color: var(--parchment);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .spinner-dark {
+      border-color: rgba(184, 150, 90, 0.2);
+      border-top-color: var(--gold);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--ink-faint);
+      font-size: 0.9rem;
+      padding: 1rem 0;
+      font-style: italic;
+    }
+
+    /* ── Action row ───────────────────────────────────────────── */
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    /* ── Empty state ──────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--ink-faint);
+      font-size: 0.9rem;
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Vocab grid & cards ───────────────────────────────────── */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (min-width: 640px) { .vocab-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .vocab-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+    .vocab-card {
+      background: var(--parchment2);
+      border: 1px solid var(--parchment3);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--r);
+      padding: 1rem 1.1rem;
+      transition: box-shadow var(--t), transform var(--t);
+    }
+
+    .vocab-card:hover {
+      box-shadow: 0 4px 16px var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .vocab-word {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .vocab-pos {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      font-style: italic;
+      margin-bottom: 0.4rem;
+    }
+
+    .vocab-def {
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      margin-bottom: 0.35rem;
+      line-height: 1.55;
+    }
+
+    .vocab-example {
+      font-size: 0.82rem;
+      color: var(--ink-faint);
+      font-style: italic;
+      border-left: 2px solid var(--parchment3);
+      padding-left: 0.5rem;
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+
+    .vocab-cn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--rust);
+      background: #fdf0eb;
+      padding: 0.1rem 0.5rem;
+      border-radius: var(--r);
+    }
+
+    /* ── Add to SRS button ────────────────────────────────────── */
+    .add-srs-btn {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--r);
+      border: 1px solid var(--parchment3);
+      background: var(--parchment);
+      color: var(--ink-light);
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      margin-top: 0.5rem;
+      transition: all var(--t);
+      letter-spacing: 0.02em;
+    }
+    .add-srs-btn:hover { background: var(--parchment2); border-color: var(--gold); color: var(--gold); }
+    .add-srs-btn.added { background: #eef5ea; color: var(--moss); border-color: var(--moss); }
+
+    /* ── Quiz progress ────────────────────────────────────────── */
+    .quiz-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .progress-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      height: 5px;
+      background: var(--parchment3);
+      border-radius: 99px;
+      margin: 0 1rem;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Quiz question card ───────────────────────────────────── */
+    .quiz-question-card {
+      background: #faf7f2;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 12px var(--shadow2);
+    }
+
+    .quiz-q-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    /* ── Quiz options ─────────────────────────────────────────── */
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+
+    @media (min-width: 640px) { .quiz-options { grid-template-columns: 1fr 1fr; } }
+
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r);
+      background: var(--parchment);
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      text-align: left;
+      width: 100%;
+      font-weight: 300;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--gold);
+      background: var(--parchment2);
+      color: var(--ink);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--moss);
+      background: #eef5ea;
+      color: #2d4a20;
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--rust);
+      background: #fdf0eb;
+      color: var(--rust);
+    }
+
+    .quiz-option:disabled { cursor: default; }
+
+    .option-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      background: var(--parchment3);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-faint);
+      transition: all 0.18s;
+    }
+
+    .quiz-option:hover:not(:disabled) .option-letter {
+      background: var(--gold);
+      color: var(--parchment);
+    }
+
+    .quiz-option.correct .option-letter {
+      background: var(--moss);
+      color: var(--parchment);
+    }
+
+    .quiz-option.wrong .option-letter {
+      background: var(--rust);
+      color: var(--parchment);
+    }
+
+    /* ── Quiz explanation ─────────────────────────────────────── */
+    .quiz-explanation {
+      margin-top: 0.75rem;
+      padding: 0.7rem 1rem;
+      background: var(--parchment2);
+      border: 1px solid var(--parchment3);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--r) var(--r) 0;
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      font-style: italic;
+      display: none;
+    }
+
+    .quiz-explanation.show { display: block; }
+
+    /* ── Score card ───────────────────────────────────────────── */
+    .score-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .score-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .score-great { background: #eef5ea; color: var(--moss); border: 2px solid var(--moss); }
+    .score-good  { background: var(--parchment2); color: var(--gold); border: 2px solid var(--gold); }
+    .score-low   { background: #fdf0eb; color: var(--rust); border: 2px solid var(--rust); }
+
+    .score-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .score-subtitle {
+      color: var(--ink-faint);
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    /* ── Quiz type selector ───────────────────────────────────── */
+    .quiz-type-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-type-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 99px;
+      border: 1px solid var(--parchment3);
+      background: var(--parchment);
+      color: var(--ink-faint);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.02em;
+    }
+
+    .quiz-type-btn.active {
+      border-color: var(--gold);
+      background: var(--parchment2);
+      color: var(--ink);
+    }
+
+    .quiz-type-btn:not(.active):hover {
+      background: var(--parchment2);
+      color: var(--ink);
+    }
+
+    /* ── Sentence completion ──────────────────────────────────── */
+    .sc-input {
+      width: 100%;
+      padding: 0.62rem 0.9rem;
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--ink);
+      background: var(--parchment);
+      margin-top: 0.75rem;
+      transition: border-color var(--t), box-shadow var(--t);
+      outline: none;
+    }
+    .sc-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.14);
+    }
+
+    .sc-submit { margin-top: 0.6rem; }
+
+    /* ── Matching quiz ────────────────────────────────────────── */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .match-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .match-item {
+      padding: 0.6rem 0.85rem;
+      border-radius: var(--r);
+      border: 1px solid var(--parchment3);
+      background: var(--parchment);
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--ink-light);
+      transition: all 0.18s;
+      text-align: left;
+      word-break: break-word;
+    }
+
+    .match-item:hover:not(:disabled) {
+      border-color: var(--gold);
+      background: var(--parchment2);
+      color: var(--ink);
+    }
+
+    .match-item.selected {
+      border-color: var(--gold);
+      background: var(--parchment2);
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .match-item.matched-correct {
+      border-color: var(--moss);
+      background: #eef5ea;
+      color: #2d4a20;
+    }
+
+    .match-item.matched-wrong {
+      border-color: var(--rust);
+      background: #fdf0eb;
+      color: var(--rust);
+    }
+
+    /* ── SRS ──────────────────────────────────────────────────── */
+    .srs-card {
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-lg);
+      padding: 1.5rem;
+      background: var(--parchment2);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .srs-word {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .srs-mask {
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .srs-blur { filter: blur(8px); transition: filter 0.3s; }
+    .srs-revealed { filter: none; }
+
+    .srs-def {
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .srs-rating {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .srs-btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--r);
+      border: 1px solid transparent;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .srs-btn-fail { background: #fdf0eb; color: var(--rust); border-color: #f0c9b8; }
+    .srs-btn-fail:hover { background: #f8ddd0; }
+    .srs-btn-hard { background: var(--parchment2); color: var(--ink-light); border-color: var(--parchment3); }
+    .srs-btn-hard:hover { background: var(--parchment3); }
+    .srs-btn-ok   { background: #eef5ea; color: var(--moss); border-color: #c8dfc0; }
+    .srs-btn-ok:hover { background: #daefd4; }
+    .srs-btn-easy { background: var(--parchment2); color: var(--gold); border-color: #e8d8b8; }
+    .srs-btn-easy:hover { background: var(--parchment3); }
+
+    .srs-progress {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--ink-faint);
+      margin-bottom: 0.75rem;
+    }
+
+    .srs-stats {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .srs-stat { text-align: center; }
+
+    .srs-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .srs-stat-label {
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--ink-faint);
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      border-top: 1px solid var(--parchment3);
+      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Vocab History Panel ──────────────────────────────────── */
+    #vocabHistoryBackdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 36, 22, 0.45);
+      z-index: 900;
+      backdrop-filter: blur(2px);
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    #vocabHistoryBackdrop.open { opacity: 1; }
+
+    #vocabHistoryPanel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      z-index: 901;
+      width: min(500px, 100vw);
+      background: #faf7f2;
+      border-left: 1px solid var(--parchment3);
+      box-shadow: -8px 0 48px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(.16, 1, .3, 1);
+      overflow: hidden;
+    }
+    #vocabHistoryPanel.open { transform: translateX(0); }
+
+    #vocabHistoryPanelHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: rgba(245, 240, 232, 0.95);
+      border-bottom: 1px solid var(--parchment3);
+      flex-shrink: 0;
+    }
+
+    .voh-panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+    }
+
+    .voh-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--r);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--parchment3);
+      color: var(--ink-light);
+      font-size: 0.85rem;
+      transition: background var(--t), color var(--t);
+    }
+    .voh-close-btn:hover { background: var(--parchment2); color: var(--ink); }
+
+    #vocabHistoryPanelBody {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    #vocabHistoryPanelBody::-webkit-scrollbar { width: 4px; }
+    #vocabHistoryPanelBody::-webkit-scrollbar-thumb { background: var(--parchment3); border-radius: 99px; }
+
+    .voh-card {
+      background: var(--parchment);
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+
+    .voh-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      transition: background var(--t);
+    }
+
+    .voh-card-header:hover { background: var(--parchment2); }
+
+    .voh-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.2s;
+      padding: 0 1rem;
+      border-top: 0 solid var(--parchment3);
+    }
+
+    .voh-card-body.open {
+      max-height: 600px;
+      overflow-y: auto;
+      padding: 0.75rem 1rem;
+      border-top-width: 1px;
+    }
+
+    .voh-card-body::-webkit-scrollbar { width: 3px; }
+    .voh-card-body::-webkit-scrollbar-thumb { background: var(--parchment3); border-radius: 99px; }
+
+    /* ── Utility ──────────────────────────────────────────────── */
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-4 { margin-top: 1rem; }
+
+    /* ── Focus ring ───────────────────────────────────────────── */
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    /* ── Micro-interactions ───────────────────────────────────── */
+    button:not(:disabled):active { transform: scale(0.98); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .header-inner { padding: 0.65rem 1rem; }
+      .container { padding: 1.5rem 1rem 3rem; }
+      .card { padding: 1.25rem; }
+      .tab-bar { margin: 0 0 1.5rem; }
+      .action-row { flex-direction: column; }
+      .action-row .btn { width: 100%; }
+      .match-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
 <body>
-    <!-- Auth guard overlay -->
-    <div id="auth-guard-overlay" style="position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,15,40,.96);backdrop-filter:blur(8px);">
-        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:2.5rem 2rem;max-width:360px;width:90%;text-align:center;">
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <p style="color:#fff;font-size:1.15rem;font-weight:700;margin:0 0 .5rem;">Login Required</p>
-            <p style="color:rgba(255,255,255,.65);font-size:.9rem;margin:0 0 1.5rem;">Please sign in to use this tool.</p>
-            <a href="./index.html" style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;text-decoration:none;padding:.65rem 1.75rem;border-radius:12px;font-weight:600;font-size:.95rem;">Go to Login</a>
-        </div>
+
+  <!-- Decorative ink splashes -->
+  <div class="ink-deco ink-deco-tl" aria-hidden="true"></div>
+  <div class="ink-deco ink-deco-br" aria-hidden="true"></div>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a id="back-btn-link" href="./index.html" class="btn-back">← Back to The Writer's Desk</a>
+      <div class="header-center">
+        <span class="header-ornament">✦ &nbsp; Vocabulary Tools &nbsp; ✦</span>
+      </div>
+      <button onclick="openVocabHistory()" class="btn-history" aria-label="View vocabulary history">
+        ◷ History
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Main ===== -->
+  <main class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <p class="header-ornament">✦ &nbsp; The Writer's Desk &nbsp; ✦</p>
+      <h1 class="site-title">Vocabulary <em>Tools</em></h1>
+      <p class="site-subtitle">Generate word lists and test your knowledge with AI-powered quizzes</p>
     </div>
 
-    <!-- ===== Header ===== -->
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="./index.html" class="brand" aria-label="EduGenius Home">
-                <img src="https://i.ibb.co/gMQh9L2S/Edu-Genius-AI.png" alt="EduGenius AI Logo" class="brand-icon" style="object-fit:cover">
-                <span class="brand-name">EduGenius</span>
-            </a>
-            <span class="header-subtitle">📚 Vocabulary Tools</span>
-            <div style="display:flex;align-items:center;gap:.5rem">
-                <button onclick="openVocabHistory()" title="View Vocabulary History" aria-label="View vocabulary history"
-                        style="width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(79,70,229,.1);color:var(--primary);font-size:.95rem;transition:all .2s;flex-shrink:0">
-                    <i class="fas fa-history"></i>
-                </button>
-                <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"
-                        style="width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(79,70,229,.1);color:var(--primary);font-size:1rem;transition:all .2s;flex-shrink:0">
-                    <span class="theme-moon">🌙</span><span class="theme-sun" style="display:none">☀️</span>
-                </button>
-                <a id="back-btn-link" href="./index.html" class="back-btn" aria-label="Back">← Back</a>
+    <!-- Tab bar -->
+    <div class="tab-bar" role="tablist" aria-label="Vocabulary tools">
+      <button class="tab-btn active" id="tab-generator" role="tab"
+              aria-selected="true" aria-controls="panel-generator"
+              onclick="switchTab('generator')">
+        💡 Generator
+      </button>
+      <button class="tab-btn" id="tab-quiz" role="tab"
+              aria-selected="false" aria-controls="panel-quiz"
+              onclick="switchTab('quiz')">
+        ✏️ Quiz
+      </button>
+      <button class="tab-btn" id="tab-srs" role="tab"
+              aria-selected="false" aria-controls="panel-srs"
+              onclick="switchTab('srs')">
+        🧠 SRS Review
+      </button>
+    </div>
+
+    <!-- ============================================================
+         TAB 1: Vocabulary Generator
+         ============================================================ -->
+    <div class="tab-panel active" id="panel-generator" role="tabpanel" aria-labelledby="tab-generator">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-yellow">💡</div>
+          <div>
+            <div class="card-title">Vocabulary Generator</div>
+            <div class="card-hint">Pick a topic and level — AI builds your word list</div>
+          </div>
+        </div>
+
+        <form id="genForm" novalidate>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label for="genTopic">Topic</label>
+              <input type="text" id="genTopic"
+                     placeholder="e.g., Environment, Technology"
+                     aria-label="Vocabulary topic">
             </div>
-        </div>
-    </header>
+            <div class="form-group">
+              <label for="genLevel">Level</label>
+              <select id="genLevel" aria-label="Vocabulary level">
+                <option value="DSE Foundation">DSE Foundation</option>
+                <option value="DSE Core" selected>DSE Core</option>
+                <option value="DSE Extended">DSE Extended</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="genCount">Number of Words</label>
+              <select id="genCount" aria-label="Number of vocabulary words">
+                <option value="6">6 words</option>
+                <option value="9" selected>9 words</option>
+                <option value="12">12 words</option>
+                <option value="15">15 words</option>
+              </select>
+            </div>
+          </div>
 
-    <!-- ===== Main ===== -->
-    <main class="container">
-
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-badge">📚 Vocabulary Tools</div>
-            <h1>Build Your<br><span>Vocabulary</span></h1>
-            <p>Generate custom vocabulary lists and test your knowledge with AI-powered quizzes — all in one place</p>
-        </div>
-
-        <!-- Tab bar -->
-        <div class="tab-bar" role="tablist" aria-label="Vocabulary tools">
-            <button class="tab-btn active" id="tab-generator" role="tab"
-                    aria-selected="true" aria-controls="panel-generator"
-                    onclick="switchTab('generator')">
-                💡 Generator
+          <div class="action-row" style="margin-top:0.75rem;">
+            <button type="submit" id="genBtn" class="btn btn-yellow">
+              💡 Generate Vocabulary
             </button>
-            <button class="tab-btn" id="tab-quiz" role="tab"
-                    aria-selected="false" aria-controls="panel-quiz"
-                    onclick="switchTab('quiz')">
-                ✏️ Quiz
+            <button type="button" id="startQuizFromGenBtn" class="btn btn-ghost hidden"
+                    onclick="switchTab('quiz', true)">
+              ✏️ Quiz These Words
             </button>
-            <button class="tab-btn" id="tab-srs" role="tab"
-                    aria-selected="false" aria-controls="panel-srs"
-                    onclick="switchTab('srs')">
-                🧠 SRS Review
+          </div>
+        </form>
+      </div>
+
+      <!-- Output -->
+      <div id="genOutput">
+        <div class="empty-state">
+          <div class="empty-icon">📖</div>
+          <p>Fill in a topic and click <strong>Generate Vocabulary</strong> to get started</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         TAB 2: Vocabulary Quiz
+         ============================================================ -->
+    <div class="tab-panel hidden" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-red">✏️</div>
+          <div>
+            <div class="card-title">Vocabulary Quiz</div>
+            <div class="card-hint">Test your knowledge with AI-generated questions</div>
+          </div>
+        </div>
+
+        <form id="quizForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quizTopic">Topic</label>
+              <input type="text" id="quizTopic"
+                     placeholder="e.g., Environment, Technology"
+                     aria-label="Quiz topic">
+            </div>
+            <div class="form-group">
+              <label for="quizLevel">Level</label>
+              <select id="quizLevel" aria-label="Quiz level">
+                <option value="DSE Foundation">DSE Foundation</option>
+                <option value="DSE Core" selected>DSE Core</option>
+                <option value="DSE Extended">DSE Extended</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:0.75rem;">
+            <label>Quiz Type</label>
+            <div class="quiz-type-row" id="quizTypeRow" role="group" aria-label="Quiz type">
+              <button type="button" class="quiz-type-btn active" data-type="mcq" onclick="setQuizType('mcq',this)">🔤 Multiple Choice</button>
+              <button type="button" class="quiz-type-btn" data-type="sc" onclick="setQuizType('sc',this)">✍️ Sentence Completion</button>
+              <button type="button" class="quiz-type-btn" data-type="match" onclick="setQuizType('match',this)">🔗 Matching</button>
+            </div>
+          </div>
+          <div class="action-row" style="margin-top:0.75rem;">
+            <button type="submit" id="quizStartBtn" class="btn btn-red">
+              🚀 Start Quiz
             </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Quiz output -->
+      <div id="quizOutput">
+        <div class="empty-state">
+          <div class="empty-icon">🎯</div>
+          <p>Fill in a topic and click <strong>Start Quiz</strong> to begin</p>
         </div>
+      </div>
+    </div>
 
-        <!-- ============================================================
-             TAB 1: Vocabulary Generator
-             ============================================================ -->
-        <div class="tab-panel active" id="panel-generator" role="tabpanel" aria-labelledby="tab-generator">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon icon-yellow">💡</div>
-                    <div>
-                        <div class="card-title">Vocabulary Generator</div>
-                        <div class="card-hint">Pick a topic and level — AI builds your word list</div>
-                    </div>
-                </div>
+    <!-- ============================================================
+         TAB 3: SRS Review
+         ============================================================ -->
+    <div class="tab-panel hidden" id="panel-srs" role="tabpanel" aria-labelledby="tab-srs">
+      <div class="empty-state"><div class="empty-icon">🧠</div><p>Loading SRS data…</p></div>
+    </div>
 
-                <form id="genForm" novalidate>
-                    <div class="form-row form-row-3">
-                        <div class="form-group">
-                            <label for="genTopic">Topic</label>
-                            <input type="text" id="genTopic"
-                                   placeholder="e.g., Environment, Technology"
-                                   aria-label="Vocabulary topic">
-                        </div>
-                        <div class="form-group">
-                            <label for="genLevel">Level</label>
-                            <select id="genLevel" aria-label="Vocabulary level">
-                                <option value="DSE Foundation">DSE Foundation</option>
-                                <option value="DSE Core" selected>DSE Core</option>
-                                <option value="DSE Extended">DSE Extended</option>
-                                <option value="Advanced">Advanced</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="genCount">Number of Words</label>
-                            <select id="genCount" aria-label="Number of vocabulary words">
-                                <option value="6">6 words</option>
-                                <option value="9" selected>9 words</option>
-                                <option value="12">12 words</option>
-                                <option value="15">15 words</option>
-                            </select>
-                        </div>
-                    </div>
+  </main>
 
-                    <div class="action-row" style="margin-top:0.75rem;">
-                        <button type="submit" id="genBtn" class="btn btn-yellow">
-                            💡 Generate Vocabulary
-                        </button>
-                        <button type="button" id="startQuizFromGenBtn" class="btn btn-ghost hidden"
-                                onclick="switchTab('quiz', true)">
-                            ✏️ Quiz These Words
-                        </button>
-                    </div>
-                </form>
-            </div>
+  <footer>
+    <p>The Writer's Desk &nbsp;·&nbsp; Copyright &copy; 2026 Hugo Wong. All rights reserved.</p>
+  </footer>
 
-            <!-- Output -->
-            <div id="genOutput">
-                <div class="empty-state">
-                    <div class="empty-icon">📖</div>
-                    <p>Fill in a topic and click <strong>Generate Vocabulary</strong> to get started</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             TAB 2: Vocabulary Quiz
-             ============================================================ -->
-        <div class="tab-panel hidden" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon icon-red">✏️</div>
-                    <div>
-                        <div class="card-title">Vocabulary Quiz</div>
-                        <div class="card-hint">Test your knowledge with AI-generated questions</div>
-                    </div>
-                </div>
-
-                <form id="quizForm" novalidate>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="quizTopic">Topic</label>
-                            <input type="text" id="quizTopic"
-                                   placeholder="e.g., Environment, Technology"
-                                   aria-label="Quiz topic">
-                        </div>
-                        <div class="form-group">
-                            <label for="quizLevel">Level</label>
-                            <select id="quizLevel" aria-label="Quiz level">
-                                <option value="DSE Foundation">DSE Foundation</option>
-                                <option value="DSE Core" selected>DSE Core</option>
-                                <option value="DSE Extended">DSE Extended</option>
-                                <option value="Advanced">Advanced</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-top:0.75rem;">
-                        <label>Quiz Type</label>
-                        <div class="quiz-type-row" id="quizTypeRow" role="group" aria-label="Quiz type">
-                            <button type="button" class="quiz-type-btn active" data-type="mcq" onclick="setQuizType('mcq',this)">🔤 Multiple Choice</button>
-                            <button type="button" class="quiz-type-btn" data-type="sc" onclick="setQuizType('sc',this)">✍️ Sentence Completion</button>
-                            <button type="button" class="quiz-type-btn" data-type="match" onclick="setQuizType('match',this)">🔗 Matching</button>
-                        </div>
-                    </div>
-                    <div class="action-row" style="margin-top:0.75rem;">
-                        <button type="submit" id="quizStartBtn" class="btn btn-red">
-                            🚀 Start Quiz
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Quiz output -->
-            <div id="quizOutput">
-                <div class="empty-state">
-                    <div class="empty-icon">🎯</div>
-                    <p>Fill in a topic and click <strong>Start Quiz</strong> to begin</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             TAB 3: SRS Review
-             ============================================================ -->
-        <div class="tab-panel hidden" id="panel-srs" role="tabpanel" aria-labelledby="tab-srs">
-            <div class="empty-state"><div class="empty-icon">🧠</div><p>Loading SRS data…</p></div>
-        </div>
-
-    </main>
-
-    <footer>
-        <p><strong>EduGenius</strong> AI 智學 &nbsp;·&nbsp; Copyright &copy; 2026 Hugo Wong. All rights reserved.</p>
-    </footer>
-
-    <script>
+  <script>
         // ============================================================
         // EduGenius Vocabulary Tools – AI Logic
         // ============================================================
@@ -1239,10 +1473,8 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
                     ${renderVocabCards(generatedWords)}
                 </div>`;
 
-            // Save to Firestore history (non-blocking)
-            if (window.saveHistoryRecord) {
-                window.saveHistoryRecord('Vocabulary Generator', topic, level, raw.substring(0, 3000));
-            }
+            // Save to local history
+            saveHistoryLocal(topic, level, raw.substring(0, 3000));
 
             setLoading(genBtn, false);
             genBtn.innerHTML = '💡 Generate Vocabulary';
@@ -1441,8 +1673,8 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             const stats = `
                 <div class="srs-stats">
                     <div class="srs-stat"><div class="srs-stat-num">${all.length}</div><div class="srs-stat-label">Total Words</div></div>
-                    <div class="srs-stat"><div class="srs-stat-num" style="color:#ef4444">${due.length}</div><div class="srs-stat-label">Due Today</div></div>
-                    <div class="srs-stat"><div class="srs-stat-num" style="color:#10b981">${all.length - due.length}</div><div class="srs-stat-label">Reviewed</div></div>
+                    <div class="srs-stat"><div class="srs-stat-num" style="color:var(--rust)">${due.length}</div><div class="srs-stat-label">Due Today</div></div>
+                    <div class="srs-stat"><div class="srs-stat-num" style="color:var(--moss)">${all.length - due.length}</div><div class="srs-stat-label">Reviewed</div></div>
                 </div>`;
 
             if (!due.length) {
@@ -1771,244 +2003,89 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             renderQuestion(0);
         });
     </script>
-    <!-- Firebase auth guard -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, getDoc, getDocs, deleteDoc, query, orderBy, limit, startAfter, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-        const app = initializeApp({
-            apiKey: "AIzaSyAXCSDsibC9yTJed3cbRjmWmOIMv1A2cr8",
-            authDomain: "login-system-9c566.firebaseapp.com",
-            projectId: "login-system-9c566",
-            storageBucket: "login-system-9c566.firebasestorage.app",
-            messagingSenderId: "547074181663",
-            appId: "1:547074181663:web:6e3afd6c7c1ec6ae43232a"
-        });
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const overlay = document.getElementById('auth-guard-overlay');
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                if (overlay) overlay.style.display = 'none';
-                window._fbUser = user;
-                // Restore from history if session ID is in URL
-                const sessionId = new URLSearchParams(window.location.search).get('session');
-                if (sessionId) await _loadVocabSession(db, user, sessionId);
-            } else {
-                window.location.replace('./index.html');
-            }
-        });
-
-        async function _loadVocabSession(db, user, sessionId) {
-            try {
-                const snap = await getDoc(doc(db, 'users', user.uid, 'history', sessionId));
-                if (!snap.exists()) return;
-                const data = snap.data();
-                const msgs = data.messages || [];
-                const userMsg = msgs.find(m => m.role === 'user');
-                const aiMsg   = msgs.find(m => m.role === 'assistant');
-                if (!aiMsg) return;
-
-                const raw = aiMsg.content || '';
-                // Parse topic/level from stored user message
-                const uc = userMsg ? (userMsg.content || '') : '';
-                const topicMatch = uc.match(/Topic:\s*(.+)/);
-                const levelMatch = uc.match(/Level:\s*(.+)/);
-                const topic = topicMatch ? topicMatch[1].trim() : (data.summary || 'Unknown');
-                const level = levelMatch ? levelMatch[1].trim() : '';
-
-                // Restore form fields
-                const topicEl = document.getElementById('genTopic');
-                const levelEl = document.getElementById('genLevel');
-                if (topicEl) topicEl.value = topic;
-                if (levelEl && level) levelEl.value = level;
-
-                // Parse and render vocab
-                const words = window.parseVocabList ? window.parseVocabList(raw) : [];
-                const genOut = document.getElementById('genOutput');
-                if (!genOut) return;
-
-                const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const historyBanner = `<div style="background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.22);border-radius:12px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#4f46e5;display:flex;align-items:center;gap:.5rem">
-                    📜 <span>Restored from history &mdash; ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
-                </div>`;
-
-                if (words.length && window.renderVocabCards) {
-                    genOut.innerHTML = historyBanner + `<div class="card">
-                        <div class="card-header">
-                            <div class="card-icon icon-yellow">📚</div>
-                            <div>
-                                <div class="card-title">${words.length} Words: ${esc(topic)}</div>
-                                <div class="card-hint">${esc(level)} level — restored from history</div>
-                            </div>
-                        </div>
-                        ${window.renderVocabCards(words)}
-                    </div>`;
-                    // Set generatedWords so Quiz These Words button works
-                    if (window.setGeneratedWords) window.setGeneratedWords(words);
-                } else {
-                    // Fallback: show raw content
-                    genOut.innerHTML = historyBanner + `<div class="card"><pre style="white-space:pre-wrap;font-size:.82rem;color:var(--text)">${esc(raw.substring(0, 3000))}</pre></div>`;
-                }
-
-                // Show quiz button
-                const quizBtn = document.getElementById('startQuizFromGenBtn');
-                if (quizBtn) quizBtn.classList.remove('hidden');
-
-                genOut.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) {
-                console.warn('Failed to load vocab history session:', e);
-            }
-        }
-
-        window.saveHistoryRecord = async function(tool, topic, level, content) {
-            const user = window._fbUser;
-            if (!user) return;
-            try {
-                await addDoc(collection(db, 'users', user.uid, 'history'), {
-                    tool: tool,
-                    subject: 'English',
-                    page: 'vocab',
-                    summary: `${tool}: ${topic} (${level})`.substring(0, 100),
-                    messages: [
-                        { role: 'user', content: `Topic: ${topic}\nLevel: ${level}`, timestamp: new Date().toISOString() },
-                        { role: 'assistant', content: content, timestamp: new Date().toISOString() }
-                    ],
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp()
-                });
-            } catch (e) {
-                console.warn('History save failed:', e);
-            }
-        };
-
-        // ── Vocabulary History Panel ────────────────────────────────
-        let _voh = { all:[], lastDoc:null, loading:false };
-        const VOH_PAGE_SIZE = 15;
-
-        window.openVocabHistory = async function() {
-            const backdrop = document.getElementById('vocabHistoryBackdrop');
-            const panel = document.getElementById('vocabHistoryPanel');
-            backdrop.style.display = 'block';
-            requestAnimationFrame(() => {
-                backdrop.classList.add('open');
-                panel.classList.add('open');
-            });
-            _voh = { all:[], lastDoc:null, loading:false };
-            const listEl = document.getElementById('vohList');
-            listEl.innerHTML = `<div style="text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin" style="color:var(--primary);font-size:1.5rem"></i></div>`;
-            document.getElementById('vohLoadMoreWrap').style.display = 'none';
-            try {
-                const user = window._fbUser;
-                if (!user) { listEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:2rem">Please sign in to view history.</p>'; return; }
-                const ref = collection(db, 'users', user.uid, 'history');
-                const q = query(ref, where('tool','==','Vocabulary Generator'), orderBy('updatedAt','desc'), limit(VOH_PAGE_SIZE));
-                const snap = await getDocs(q);
-                _voh.all = snap.docs.map(d => ({id:d.id,...d.data()}));
-                _voh.lastDoc = snap.docs[snap.docs.length-1] || null;
-                _vohRender(_voh.all);
-                document.getElementById('vohLoadMoreWrap').style.display = _voh.lastDoc ? 'block' : 'none';
-            } catch(e) {
-                console.error(e);
-                listEl.innerHTML = '<p style="text-align:center;color:#ef4444;font-size:.85rem;padding:2rem">Failed to load history.</p>';
-            }
-        };
-
-        window.closeVocabHistory = function() {
-            const backdrop = document.getElementById('vocabHistoryBackdrop');
-            const panel = document.getElementById('vocabHistoryPanel');
-            backdrop.classList.remove('open');
-            panel.classList.remove('open');
-            setTimeout(() => { backdrop.style.display = 'none'; }, 380);
-        };
-
-        window.loadMoreVOH = async function() {
-            if (_voh.loading || !_voh.lastDoc) return;
-            _voh.loading = true;
-            const btn = document.getElementById('vohLoadMoreBtn');
-            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading…'; }
-            try {
-                const user = window._fbUser;
-                if (!user) return;
-                const ref = collection(db, 'users', user.uid, 'history');
-                const q = query(ref, where('tool','==','Vocabulary Generator'), orderBy('updatedAt','desc'), startAfter(_voh.lastDoc), limit(VOH_PAGE_SIZE));
-                const snap = await getDocs(q);
-                const more = snap.docs.map(d => ({id:d.id,...d.data()}));
-                _voh.lastDoc = snap.docs[snap.docs.length-1] || null;
-                _voh.all = [..._voh.all, ...more];
-                _vohRender(_voh.all);
-                document.getElementById('vohLoadMoreWrap').style.display = _voh.lastDoc ? 'block' : 'none';
-            } catch(e) { console.error(e); }
-            finally {
-                _voh.loading = false;
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More'; }
-            }
-        };
-
-        window.deleteVOHSession = async function(id) {
-            if (!confirm('Delete this history entry?')) return;
-            const user = window._fbUser;
-            if (!user) return;
-            try {
-                await deleteDoc(doc(db, 'users', user.uid, 'history', id));
-                _voh.all = _voh.all.filter(s => s.id !== id);
-                _vohRender(_voh.all);
-            } catch(e) { alert('Failed to delete. Please try again.'); }
-        };
+  <script>
+        // ============================================================
+        // Local History — no Firebase, no login required
+        // ============================================================
+        const VOCAB_HISTORY_KEY = 'vocab_history_v1';
+        const VOCAB_HISTORY_MAX = 50;
 
         function _vohEsc(s) {
             return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
+
         function _vohFmtTime(ts) {
             if (!ts) return '';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            return d.toLocaleString('en-HK',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+            const d = new Date(ts);
+            return d.toLocaleString('en-HK', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
         }
+
+        function vohLoad() {
+            try { return JSON.parse(localStorage.getItem(VOCAB_HISTORY_KEY)) || []; } catch { return []; }
+        }
+
+        function vohSave(entries) {
+            try { localStorage.setItem(VOCAB_HISTORY_KEY, JSON.stringify(entries)); } catch {}
+        }
+
+        function saveHistoryLocal(topic, level, content) {
+            const entries = vohLoad();
+            const entry = {
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+                topic, level, content,
+                timestamp: new Date().toISOString()
+            };
+            entries.unshift(entry);
+            if (entries.length > VOCAB_HISTORY_MAX) entries.splice(VOCAB_HISTORY_MAX); // trim oldest
+            vohSave(entries);
+        }
+
         window._vohToggle = function(id) {
-            const body = document.getElementById('voh-body-'+id);
-            const chev = document.getElementById('voh-chev-'+id);
+            const body = document.getElementById('voh-body-' + id);
+            const chev = document.getElementById('voh-chev-' + id);
             if (!body) return;
             const open = body.classList.toggle('open');
             if (chev) chev.style.transform = open ? 'rotate(180deg)' : '';
         };
 
+        window.deleteVOHSession = function(id) {
+            if (!confirm('Delete this history entry?')) return;
+            vohSave(vohLoad().filter(e => e.id !== id));
+            _vohRender(vohLoad());
+        };
+
         function _vohRenderCard(s) {
-            const msgs = s.messages || [];
-            const userMsg = msgs.find(m => m.role === 'user');
-            const aiMsg   = msgs.find(m => m.role === 'assistant');
-            const uc = userMsg ? userMsg.content || '' : '';
-            const topicMatch = uc.match(/Topic:\s*(.+)/);
-            const levelMatch = uc.match(/Level:\s*(.+)/);
-            const topic = topicMatch ? topicMatch[1].trim() : (s.summary || '');
-            const level = levelMatch ? levelMatch[1].trim() : '';
-            const preview = aiMsg ? (aiMsg.content||'').substring(0,300) : '';
-            const time = _vohFmtTime(s.updatedAt);
+            const topic   = s.topic || '';
+            const level   = s.level || '';
+            const preview = (s.content || '').substring(0, 300);
+            const time    = _vohFmtTime(s.timestamp);
             return `<div class="voh-card" id="voh-card-${s.id}">
                 <div class="voh-card-header" onclick="_vohToggle('${s.id}')" role="button" tabindex="0"
                      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();_vohToggle('${s.id}')}">
-                    <div style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#7c3aed);flex-shrink:0;font-size:1.1rem">📚</div>
+                    <div style="width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:var(--parchment3);flex-shrink:0;font-size:1.1rem">📚</div>
                     <div style="flex:1;min-width:0">
                         <p style="font-weight:700;font-size:.8rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${_vohEsc(topic.substring(0,60))}${level ? ' · '+_vohEsc(level) : ''}</p>
                         <p style="font-size:.7rem;color:var(--text-muted);margin-top:.1rem">${_vohEsc(time)}</p>
                     </div>
                     <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">
                         <button onclick="event.stopPropagation();deleteVOHSession('${s.id}')"
-                                style="width:28px;height:28px;border-radius:7px;border:none;cursor:pointer;background:rgba(239,68,68,.12);color:#ef4444;font-size:.7rem;display:flex;align-items:center;justify-content:center"
+                                style="width:28px;height:28px;border-radius:var(--r);border:none;cursor:pointer;background:rgba(139,74,47,.1);color:var(--rust);font-size:.75rem;display:flex;align-items:center;justify-content:center"
                                 title="Delete" aria-label="Delete">
-                            <i class="fas fa-trash-alt"></i>
+                            ✕
                         </button>
-                        <i class="fas fa-chevron-down" id="voh-chev-${s.id}" style="font-size:.65rem;color:var(--text-muted);transition:transform .3s"></i>
+                        <span id="voh-chev-${s.id}" style="font-size:.65rem;color:var(--ink-faint);transition:transform .3s">▾</span>
                     </div>
                 </div>
                 <div class="voh-card-body" id="voh-body-${s.id}">
-                    ${topic ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Topic</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(topic)}</p></div>` : ''}
-                    ${level ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Level</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(level)}</p></div>` : ''}
+                    ${topic   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Topic</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(topic)}</p></div>` : ''}
+                    ${level   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Level</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(level)}</p></div>` : ''}
                     ${preview ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Vocabulary Preview</span><p style="font-size:.78rem;color:var(--text);margin-top:.1rem;white-space:pre-wrap;max-height:160px;overflow-y:auto">${_vohEsc(preview)}</p></div>` : ''}
                     <div style="padding-bottom:.5rem">
-                        <a href="./vocab.html?session=${s.id}" title="Restore this session"
-                           style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);overflow:hidden;border:none;text-decoration:none">
-                            <img src="https://i.ibb.co/gMQh9L2S/Edu-Genius-AI.png" alt="Restore session" style="width:100%;height:100%;object-fit:cover">
-                        </a>
+                        <button onclick="restoreVocabSession('${s.id}')"
+                                style="display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .9rem;border-radius:var(--r);background:var(--gold);color:var(--parchment);border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.78rem;transition:background var(--t)"
+                                title="Restore this session">
+                            ↩ Load
+                        </button>
                     </div>
                 </div>
             </div>`;
@@ -2018,7 +2095,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             const list = document.getElementById('vohList');
             if (!sessions.length) {
                 list.innerHTML = `<div style="text-align:center;padding:3rem 1rem">
-                    <div style="width:48px;height:48px;border-radius:14px;background:rgba(79,70,229,.10);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.4rem">📚</div>
+                    <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--parchment3);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.4rem">📚</div>
                     <p style="font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">No history yet</p>
                     <p style="font-size:.78rem;color:var(--text-muted)">Generate vocabulary lists to start building history.</p>
                 </div>`;
@@ -2026,30 +2103,110 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             }
             list.innerHTML = sessions.map(s => _vohRenderCard(s)).join('');
         }
+
+        window.openVocabHistory = function() {
+            const backdrop = document.getElementById('vocabHistoryBackdrop');
+            const panel    = document.getElementById('vocabHistoryPanel');
+            backdrop.style.display = 'block';
+            requestAnimationFrame(() => {
+                backdrop.classList.add('open');
+                panel.classList.add('open');
+            });
+            _vohRender(vohLoad());
+        };
+
+        window.closeVocabHistory = function() {
+            const backdrop = document.getElementById('vocabHistoryBackdrop');
+            const panel    = document.getElementById('vocabHistoryPanel');
+            backdrop.classList.remove('open');
+            panel.classList.remove('open');
+            setTimeout(() => { backdrop.style.display = 'none'; }, 380);
+        };
+
+        // Restore a saved session by ID
+        window.restoreVocabSession = function(id) {
+            const entry = vohLoad().find(e => e.id === id);
+            if (!entry) return;
+            _applyVocabSession(entry);
+            window.closeVocabHistory();
+        };
+
+        function _applyVocabSession(entry) {
+            const esc   = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const topic = entry.topic   || '';
+            const level = entry.level   || '';
+            const raw   = entry.content || '';
+
+            // Restore form fields
+            const topicEl = document.getElementById('genTopic');
+            const levelEl = document.getElementById('genLevel');
+            if (topicEl) topicEl.value = topic;
+            if (levelEl && level) levelEl.value = level;
+
+            // Switch to generator tab
+            switchTab('generator');
+
+            // Parse and render vocab
+            const words  = parseVocabList(raw);
+            const genOut = document.getElementById('genOutput');
+            if (!genOut) return;
+
+            const historyBanner = `<div style="background:rgba(184,150,90,.08);border:1px solid rgba(184,150,90,.3);border-radius:4px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#b8965a;display:flex;align-items:center;gap:.5rem;font-style:italic;">
+                📜 <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
+            </div>`;
+
+            if (words.length) {
+                genOut.innerHTML = historyBanner + `<div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-yellow">📚</div>
+                        <div>
+                            <div class="card-title">${words.length} Words: ${esc(topic)}</div>
+                            <div class="card-hint">${esc(level)} level — restored from history</div>
+                        </div>
+                    </div>
+                    ${renderVocabCards(words)}
+                </div>`;
+                generatedWords = words;
+            } else {
+                genOut.innerHTML = historyBanner + `<div class="card"><pre style="white-space:pre-wrap;font-size:.82rem;color:var(--text)">${esc(raw.substring(0, 3000))}</pre></div>`;
+            }
+
+            const quizBtn = document.getElementById('startQuizFromGenBtn');
+            if (quizBtn) quizBtn.classList.remove('hidden');
+            genOut.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Session restore via URL ?session=ID
+        (function() {
+            const sessionId = new URLSearchParams(window.location.search).get('session');
+            // Validate: only allow alphanumeric session IDs generated by our code
+            if (sessionId && /^[a-z0-9]{8,20}$/.test(sessionId)) {
+                const entry = vohLoad().find(e => e.id === sessionId);
+                if (entry) {
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', () => _applyVocabSession(entry), { once: true });
+                    } else {
+                        _applyVocabSession(entry);
+                    }
+                }
+            }
+        })();
     </script>
-    <!-- Vocab History Panel -->
-    <div id="vocabHistoryBackdrop" onclick="closeVocabHistory()" aria-hidden="true"></div>
-    <div id="vocabHistoryPanel" role="dialog" aria-modal="true" aria-label="Vocabulary history">
-        <div id="vocabHistoryPanelHeader">
-            <div style="display:flex;align-items:center;gap:.5rem">
-                <div style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#7c3aed);flex-shrink:0;font-size:.95rem">📚</div>
-                <span style="font-weight:700;font-size:.95rem;color:var(--text)">Vocabulary History</span>
-            </div>
-            <button onclick="closeVocabHistory()" aria-label="Close history"
-                    style="width:32px;height:32px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.05);color:var(--text-muted);font-size:.85rem">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div id="vocabHistoryPanelBody">
-            <div id="vohList"></div>
-            <div id="vohLoadMoreWrap" style="display:none;text-align:center;padding:.75rem 0">
-                <button id="vohLoadMoreBtn" onclick="loadMoreVOH()"
-                        style="border:1px solid var(--border);background:var(--card-bg);color:var(--text);padding:.4rem 1.25rem;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer">
-                    <i class="fas fa-chevron-down"></i> Load More
-                </button>
-            </div>
-        </div>
+
+  <!-- Vocab History Panel -->
+  <div id="vocabHistoryBackdrop" onclick="closeVocabHistory()" aria-hidden="true"></div>
+  <div id="vocabHistoryPanel" role="dialog" aria-modal="true" aria-label="Vocabulary history">
+    <div id="vocabHistoryPanelHeader">
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <span style="font-size:1.1rem">📚</span>
+        <span class="voh-panel-title">Vocabulary History</span>
+      </div>
+      <button onclick="closeVocabHistory()" class="voh-close-btn" aria-label="Close history">✕</button>
     </div>
+    <div id="vocabHistoryPanelBody">
+      <div id="vohList"></div>
+    </div>
+  </div>
 
 <script>
     (function() {
