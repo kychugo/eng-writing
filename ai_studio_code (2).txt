@@ -1,0 +1,497 @@
+[
+  {
+    "year": 2022,
+    "question_number": "Part A",
+    "question": "You work at the Visitor Information Centre at Hong Kong Adventure Farm. Use the map and headings below to help you complete a guide for first-time visitors. The guide should include: About Hong Kong Adventure Farm, and Top three things to see and do."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q2",
+    "question": "You are the host of ‘Teen Chat’, a YouTube channel that explores a wide range of topics from a teenage perspective. Write an article for Teen Magazine about why you started this channel and what you have learned in the process."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q3",
+    "question": "You write an advice column for Jobs Online magazine. A reader submitted the following question: 'My dream is to open a café with a few friends, but I’ve just been offered a promotion at my company. The pay is good, but I’m not that interested in the work. Should I leave now or wait a few years? - Kam Chai, 25 years old'. Write a reply to Kam Chai offering your advice."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q4",
+    "question": "You are the captain of the school’s basketball team. Your team made it to the inter-school championship final but came second. Write a speech to be delivered to the team at the end-of-season dinner celebration."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q5",
+    "question": "The following comment appeared in the editorial of Hong Kong Post: 'Young people today lack interest in traditional art forms such as lion dance, calligraphy or the art of tea drinking.' You are the chairperson of your school’s Heritage Club. Express your views by writing a letter to the editor of Hong Kong Post."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q6",
+    "question": "The musical group Nine Dragons has asked you to help promote them by writing a bio for their website. The bio should include background information about the group, style of music and plans for the future."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q7",
+    "question": "As part of your drama class, you played the role of the hero and the villain in different plays. Write an entry in your drama journal. Reflect on which role you preferred playing and why."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q8",
+    "question": "You entered the ‘Stories of Survival’ short story competition. The theme of this year’s competition is ‘Nature: friend or enemy?’ Write a story about a hiker who gets caught in a storm while hiking in the mountains."
+  },
+  {
+    "year": 2022,
+    "question_number": "Q9",
+    "question": "The School Management is considering a four-day school week. Students would only need to attend school four days a week instead of five, but the length of each day would be increased by one hour. You are a member of the Parent-Teacher Association (PTA). Write a letter to the President of the PTA stating your opinion either for or against a four-day school week. Give reasons to support your view."
+  },
+  {
+    "year": 2021,
+    "question_number": "Part A",
+    "question": "You are helping your school organize the annual school fair. You have been asked to make an announcement about the event during the morning assembly. Use the provided poster to help you write your announcement. In your announcement: Introduce the event. Describe some of the activities that will take place. Let students know how they can help out."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q2",
+    "question": "Although studies show electric cars are more environmentally friendly than petrol cars, less than 3% of all vehicles sold in 2020 worldwide were electric. Write a letter to the editor of Hong Kong Post. Discuss why sales of electric vehicles are so low. Suggest what can be done to attract more people to drive these vehicles."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q3",
+    "question": "You work in the sales department at Fast Fashion, an online company that sells clothes. Recently, you have received a number of complaints from customers about the company’s no-exchange/no-refund policy. Write an email to the sales manager. Explain why you think this policy should be changed. Suggest what changes could be made. Discuss ways to prevent customers from taking advantage of the new policy."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q4",
+    "question": "You are a professional athlete looking for a career change. You have seen a job vacancy for the position of Assistant Coach at the Hong Kong Sports Foundation. Main duties include designing training programs, organizing competitions, and supporting local talent. Write a job application letter to the Human Resources Manager. Introduce yourself and your athletic history. Explain your interest and suitability for the job."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q5",
+    "question": "A social media influencer is a person who is paid by a company to promote goods and services through their social media networks. Surveys show that a majority of millennials trust the advice of social media influencers over traditional media advertisements. Write an argumentative essay. Discuss whether social media influencers are more trustworthy than traditional media advertisements. Give reasons to support your point of view."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q6",
+    "question": "You took part in a social media challenge called ‘The 21-day Gratitude Challenge’. For three weeks, you kept a journal about the things you were thankful for on a daily basis. After completing the challenge, participants are invited to share their experience on the challenge's website. Write a blog post. Explain why you accepted this challenge and what you hoped to achieve. Reflect on the 21 days and whether taking on this challenge has changed you in any way."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q7",
+    "question": "You are joining a short story contest organized by a book shop. Write a scary story about a security guard on duty one night. Use the provided pictures to help you write your story."
+  },
+  {
+    "year": 2021,
+    "question_number": "Q8",
+    "question": "You read the poem 'New Friends and Old Friends' by Joseph Parry in class and your teacher has asked you to write an essay on the theme of friendship. Use these questions to help you write your essay: What is the difference between old and new friendships? Do you agree that older friendships are better than new ones?"
+  },
+  {
+    "year": 2021,
+    "question_number": "Q9",
+    "question": "You want to be a screenwriter and have an idea of a TV drama series about three generations of a family. Write a letter to the production manager at TV-Station X. Introduce the characters, plot and setting of your TV drama. Explain why you think this idea would be popular with viewers."
+  },
+  {
+    "year": 2020,
+    "question_number": "Part A",
+    "question": "You finally got the chance to eat at Hong Kong’s hottest new restaurant, Dim Sum One. Write a review for Eat & Drink, an online food guide that allows users to write their own reviews. Write about what you liked, what you didn’t like and if you would recommend this restaurant."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q2",
+    "question": "Some of Hong Kong’s housing estates have become extremely popular places to take Instagram photos. As part of a class assignment, you interviewed Instagrammers and residents at a housing estate which has been listed as one of the top 10 places in Hong Kong to take Instagram photos. Write an essay for your assignment. Explain what attracts Instagrammers to Hong Kong’s housing estates and how residents feel about this."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q3",
+    "question": "In recent years, the number of small independent stationery shops in Hong Kong has fallen. Write a news report for the Hong Kong Post. Explain this trend and discuss whether independent stationery shops can survive."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q4",
+    "question": "You work for the Park Hotel in Hong Kong. You would like to apply for a work transfer to the Shanghai branch of the hotel. Write a letter to Mr Wong, your manager. Highlight your work experience, why you would like to transfer and how your transfer will benefit the organisation."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q5",
+    "question": "Some people think that the International Olympic Committee (IOC) should include a greater variety of sports in the Olympic Games, meeting criteria like youth appeal, gender equality, and media coverage. The IOC is inviting the public to suggest sports. You would like to propose Dragon Boat Racing. Write a letter to the President of the IOC. Give reasons to support your opinion."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q6",
+    "question": "To raise public awareness of healthy eating, some countries now legally require food manufacturers to put warning labels on foods that are high in sugar, saturated fat and salt. Write an argumentative essay. Argue either for OR against the effectiveness of food warning labels in changing people’s eating habits."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q7",
+    "question": "You are a reporter for Do-Re-Mi, a music magazine. You interviewed Zoe Kwan, who has just won ‘Best New Artist’ at the HKTV Music Awards. Write a feature article based on your interview. Report on Zoe’s sudden rise to fame and where the ideas behind her songs came from."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q8",
+    "question": "Sci-Fi magazine is organising a First Chapter Competition. The competition involves writing the first chapter of a story based on the following scenario: A journalist is sent to investigate a research station in the Arctic after staff begin to mysteriously disappear one by one. You would like to enter the competition. Write the first chapter ONLY of your story."
+  },
+  {
+    "year": 2020,
+    "question_number": "Q9",
+    "question": "You are visiting Hong Kong. Last night, a friend took you to the new Xiqu Centre in West Kowloon Cultural District to watch Chinese Opera. You didn’t think you would like it, but after watching the performance, you changed your mind. Write a blog post for World Passport, a travel blog about different places and cultures. Describe your experience and the impact it had on you."
+  },
+  {
+    "year": 2019,
+    "question_number": "Part A",
+    "question": "The Yearbook Committee is putting together a book for all graduating students. You are a student in Class 6C at Kowloon Secondary School. The committee has asked you to complete the following yearbook entry. 1.1 academic life: Write about one subject that you enjoyed studying or found challenging. 1.2 student life: Write about what you will miss most about being a student in Class 6C."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q2",
+    "question": "An article in the Hong Kong Daily Press states that companies now hire the best individuals from around the world, unlike 100 years ago. Write an essay for your English teacher. Explain some of the benefits and challenges international talent brings to Hong Kong society and ways to ensure that people from the local community are not neglected. Include a title for your essay."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q3",
+    "question": "The Hong Kong Daily Press invites readers to submit their views on the topic: 'Do social media platforms such as Facebook or Twitter encourage or stifle public debate?' Write an argumentative essay. Choose one side of the argument and state your position, giving reasons and evidence to support your view. Include a title for your essay."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q4",
+    "question": "You are a reporter for the sports section of the Young Post. You were attending the final game of the season between rivals St. George’s School and Royal College when something unexpected happened during the game. Write a news report. Describe the incident and what happened afterwards. Include thoughts and opinions from different people involved. Give your report a headline."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q5",
+    "question": "The Young Post’s 'Over to You' column asks: 'Where do you get information about the latest trends in pop culture? Do you turn to newspapers and magazines or do you prefer blogs and videos on social media?' Write an article for the column. Choose one or two areas of pop culture and tell readers where you like to get information about the latest trends. Provide the name of the sources you recommend. Give your article a title."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q6",
+    "question": "You are a reporter for the entertainment section of the Young Post. You have been asked to review a new film called Cinderella which is based on the comic series Princesses of Power. Write a review of the film. Include a brief description of the plot, how the characters are portrayed in this new version of Cinderella and why the director wanted to make this film. Give your review a title."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q7",
+    "question": "Taylor Swift discussed dealing with critics in an interview. You lead an after-school arts club and would like to instruct members on how to review each other’s work. Write a speech to be delivered to club members. Discuss what a critic does, how to give criticism and ways to respond to criticism. Give your speech a title."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q8",
+    "question": "You are a volunteer in your local district council office. You have been asked to design a campaign poster for Ricky Kwan, a candidate in the upcoming council election. You have finished two designs (A and B) and are working on a third (C). Write an email to the council election committee. Explain the ideas behind designs A and B and how they would make a good campaign theme. Share the ideas you have for your third design. Include a subject heading for the email."
+  },
+  {
+    "year": 2019,
+    "question_number": "Q9",
+    "question": "Cosmo book shop is organising a short story contest. The task is to re-write the story of 'The Tortoise and the Hare'. Use the same characters but imagine that the tortoise and the hare team up to race against other contestants. Express a message through the telling of the story. Give your story a title."
+  },
+  {
+    "year": 2018,
+    "question_number": "Part A",
+    "question": "You are Chris Wong, the class teacher of 6A. You will be taking your class on a school trip next month to sky100. Write a letter to parents giving them the necessary information about the trip."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q2",
+    "question": "You recently ran the Hong Kong Marathon for the first time. Write a blog to be posted on the Hong Kong Marathon’s website to encourage other young people to take part in the next marathon."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q3",
+    "question": "You are the boss of Reboot Online Company and you have recently received complaints from some staff about the number of work-related emails and text messages received out of office hours. Write a letter to staff addressing their complaints."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q4",
+    "question": "You write an advice column for Teen magazine and you have received the following letter: 'I’ve been thinking about my future. I love animals and I’ve always wanted to be a vet. But when I told my parents, the first thing they said was “No.” I feel really frustrated. What should I do? – J.C., 16 years old'. Write a letter of advice."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q5",
+    "question": "You are representing your school at an inter-school debating competition. The motion is: ‘The policy of reporting students’ class position should be abolished’. Write a debate speech arguing for OR against the motion."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q6",
+    "question": "‘Athleisure’ is currently one of the biggest trends in the fashion industry. This is a term for clothes that can be worn both for exercise and as everyday wear. Write an article for the local newspaper explaining possible reasons for the rise in popularity of athleisure."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q7",
+    "question": "The Hong Kong Academy for Performing Arts (HKAPA) wants to encourage more people to watch stage plays by showing video-recordings of live drama performances from theatres all over the world. You have just watched one of these recordings. Write an article for Showbiz magazine discussing whether these recordings are a good way to attract more people to watch stage plays."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q8",
+    "question": "Poetry House is offering a scholarship for ten young writers to attend their summer poetry workshop. Write an application letter, explaining your interest in poetry and why you should be selected to take part in this workshop."
+  },
+  {
+    "year": 2018,
+    "question_number": "Q9",
+    "question": "Imagine you are a pet bird in a cage. One day your owner left your bird cage open. Write a story from the bird’s point of view."
+  },
+  {
+    "year": 2017,
+    "question_number": "Part A",
+    "question": "You are the chairperson of the Social Service Club in your school. The school would like to develop closer links with the community. Write a letter to your principal, Ms Lee, proposing a new community project that the school can carry out with a home for the elderly in your district. In your letter, persuade your principal to accept your project by (i) describing one activity that could be carried out, and (ii) identifying the benefits for the elderly home. Sign your letter Chris Wong."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q2",
+    "question": "You have just heard a song about opportunities with the lyrics 'If you had one shot... would you capture it or just let it slip?'. You have been inspired to share your feelings about opportunities on your online blog. In your blog write about one opportunity that you missed and one opportunity that you took."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q3",
+    "question": "You are entering a short story competition on the topic of ‘Wildlife’. Your story should describe the events leading up to the provided image. Write your story."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q4",
+    "question": "In your drama lessons you have been looking at plays about romantic love, such as Romeo and Juliet. Your essay assignment from your drama teacher is to answer the question: Is Romantic Love Necessary for a Happy Marriage? Write your essay."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q5",
+    "question": "Recently the Hong Kong Government published a list of intangible cultural heritage items that the city should protect, including traditional egg tarts and Mahjong. Write a letter to the editor of the Hong Kong Daily supporting the Government’s choice of these two features of Hong Kong culture, suggesting why they are worth protecting and how they can be protected."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q6",
+    "question": "As captain of the debate team you have been asked to write a debate speech. The task is to argue that ‘Watching TV Makes Us Smarter’. In your speech you should include three reasons to support the statement. Write your speech."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q7",
+    "question": "You are working on a project entitled ‘Hong Kong’s NEETs’. NEETs are young people who are not in education, employment or training. Many of these young people spend their time at home playing video games or surfing the Internet. Write a report to explain why the number of NEETs in Hong Kong is rising and suggest what can be done to help these youths. Give reasons to support your suggestions."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q8",
+    "question": "Unlike swimmers or basketball players, dancers are not traditionally thought of as athletes. As a member of your school’s dance team you have been asked to write an article for your school magazine. Use the title and headings 'Dancers Are Athletes', 'Physical Strength & Skills', and 'Self-discipline & Training' to support the idea of dancers as athletes."
+  },
+  {
+    "year": 2017,
+    "question_number": "Q9",
+    "question": "It has recently been claimed that in the workplace many Hong Kong fresh university graduates are less hardworking and less willing to face challenges compared to those in the past. You strongly disagree with this opinion. Write a letter to the editor of the Hong Kong Daily disagreeing with this opinion. Support your view with three reasons and/or examples."
+  },
+  {
+    "year": 2016,
+    "question_number": "Part A",
+    "question": "You are the President of the Students’ Union at your school. You are preparing a speech to welcome new students on the first day of school. To help new students, you want to talk about the importance of following school rules and the importance of interpersonal relationships. Finish the speech which starts: 'Good morning Principal, teachers and fellow students...'"
+  },
+  {
+    "year": 2016,
+    "question_number": "Q2",
+    "question": "Because of the lack of sports facilities, some people in your community have suggested that schools should allow the public to use their sports facilities after school hours. Write a letter to the editor of the Hong Kong Daily stating your opinion. Support your opinion with three reasons."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q3",
+    "question": "Many Hong Kong graduates complain about the lack of employment opportunities in the city. It has been suggested that graduates who fail to find a job in Hong Kong could look for opportunities in other cities in Asia. Do you support this suggestion? Write an article for your school magazine expressing your views. Give three reasons to support your views. Provide an appropriate title for your article."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q4",
+    "question": "It has recently been reported that some parents in Asian countries are installing apps on their children’s mobile phones that monitor their activities. Write a letter to the Young Post stating whether you agree with these parents’ actions or not. Justify your position with three reasons."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q5",
+    "question": "The Hong Kong Daily is holding an essay competition for secondary school students on the theme ‘Hong Kong’s Disappearing Street Life’. Entries must focus on one aspect of local street life or culture that is fast disappearing and suggest why it is worth preserving. Write your essay."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q6",
+    "question": "One of the planned activities for the Creative Writing Week at your school is a short story writing competition. The theme for this year’s competition is ‘Revenge is Sweet’. Write your story."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q7",
+    "question": "The Hong Kong Youth Association is organising a Youth Festival to showcase popular youth trends in Hong Kong. Write a proposal for the Festival suggesting one or two trends popular with young people. You should explain how you would present these trends at the festival and justify the way you plan to present your ideas."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q8",
+    "question": "A famous songwriter once said, ‘Expose yourself to your deepest fear; after that, fear has no power’. How important is it for us to acknowledge the challenges we face and find ways to cope with them? Write an essay explaining your opinion with relevant examples from your personal experience."
+  },
+  {
+    "year": 2016,
+    "question_number": "Q9",
+    "question": "As a Form Six student, you are considering educational opportunities after your HKDSE. One option is the Hong Kong Academy for Performing Arts for an acting career, but your parents would like you to pursue an academic subject. As the application deadline is approaching, write an email to your parents, who are overseas, to convince them to support your choice."
+  },
+  {
+    "year": 2015,
+    "question_number": "Part A",
+    "question": "A recent article in the Young Post suggested that an 8:00 am start to the school day makes students feel tired and sleepy. Write to the editor of the Young Post expressing your views on why students feel tired, and whether or not a 9:00 am start will solve the problem."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q2",
+    "question": "A number of your classmates have expressed their disappointment about physical education (PE) lessons at school, saying that the lessons are not interesting. As the chairperson of the Class Association, write a letter to your principal Ms Chan explaining why your classmates are unhappy about existing PE lessons. Suggest two new activities that could be introduced and explain why students would prefer them."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q3",
+    "question": "The Hong Kong Drama Association is planning to organise a drama competition for secondary school students. The theme is 'You are never too old to live your dreams’. Students are invited to submit stories. Your story should be about the elderly realising their dreams. Write your story."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q4",
+    "question": "Many parents in Hong Kong are sending their children to other countries to complete their schooling. Write an article for your school magazine examining two reasons for this phenomenon. You should also discuss the impact of this on local schools and on children who leave to study overseas."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q5",
+    "question": "Many parts of Hong Kong’s harbour front are still undeveloped. Some suggest using these areas for housing and commercial use, while others argue that such areas should be left as open space for public use. Write to the editor of the Hong Kong Daily stating your opinion either for or against leaving these areas open for public use. Justify your point of view with three reasons."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q6",
+    "question": "You are a summer intern working in Hong Kong Mobile’s customer services department. Your job is to handle complaints. Write an email to Jackie Lee, the manager of the customer services department, summarising details of a recent complaint and suggesting three possible actions that could be taken to deal with this complaint."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q7",
+    "question": "You are working on a project entitled ‘Cinemas in Hong Kong’ and have found that fewer people go to cinemas than before. Write a report to explain why this is happening and to suggest what could be done to increase the number of moviegoers. Give reasons to support your suggestions."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q8",
+    "question": "The Hong Kong Central Library is holding a language arts festival during the summer break to enhance students’ interest in learning English. As the chairperson of the school’s Poetry Club, your teacher has asked you to write a letter to the Central Library suggesting two interesting activities. You should also explain how these activities would increase students’ interest in learning English."
+  },
+  {
+    "year": 2015,
+    "question_number": "Q9",
+    "question": "The Reading Club at your school is planning to hold a 'Meet the Author' evening. As the chairperson of the Club, you have been asked to choose one author to invite. Write an email to Ms Li, the English teacher in charge of the Reading Club, mentioning your choice of author. Explain why you have selected that author, and suggest activities the author can lead or help with."
+  },
+  {
+    "year": 2014,
+    "question_number": "Part A",
+    "question": "The Local History Newsletter is a newsletter about the history of Hong Kong. You have been asked to write an article about an old village called Lucky Village. Write your article using the three headings provided: Life in Lucky Village 40 years ago, An event that changed Lucky Village, What Lucky Village is famous for."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q2",
+    "question": "A local fitness centre is being renovated. As the chairperson of your school’s Sports Club, write a letter to ask the fitness centre to donate some of their old equipment to your school. In your letter, describe how the donation could benefit your school and the fitness centre."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q3",
+    "question": "Your school has received a complaint from City Hall about the poor behaviour of a group of your Drama Club members who attended a drama performance last week. You are the chairperson of your school’s Drama Club. Write an email to your Club members regarding the complaint."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q4",
+    "question": "Some people believe that filming movies in the city centre should not be allowed. Others support it. Write a letter to the editor of the Hong Kong Daily giving your opinions. Provide three reasons to support your point of view."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q5",
+    "question": "Currently, only a small number of students in your school have access to school lockers. As the chairperson of the Student Union, you have collected the views of students. Write a letter to Ms Lee, your school Principal, to persuade her to change the policy on lockers."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q6",
+    "question": "The Hong Kong Daily is asking students to submit an article about their summer job experiences. You were employed as a costumed character performer in a local theme park last summer. In your article, write about your typical working day, and the good things and bad things about your job. Write the article."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q7",
+    "question": "You recently attended a stand-up comedy show and you were impressed by the performance. Write an article for your school magazine describing the show, discussing the challenges such performers might face and how students at school can benefit from watching such a performance."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q8",
+    "question": "You took part in the Hong Kong Schools Poetry Festival. You have been asked by your teacher to write an article for your school magazine about how you prepared for the competition and what you learned from this experience."
+  },
+  {
+    "year": 2014,
+    "question_number": "Q9",
+    "question": "You are taking a creative writing workshop and you have to submit an assignment based on a provided image/prompt."
+  },
+  {
+    "year": 2013,
+    "question_number": "Part A",
+    "question": "You are taking part in a photo exhibition called ‘My Memories’. As part of the photo exhibition, you have presented two photos. Now you need to give a title to each and a brief explanation of why these photos are meaningful to you."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q2",
+    "question": "You have been asked by Ms Chan, the teacher in charge of Campus TV, to produce a 30-minute programme about a local Hong Kong sporting event. Write an email to Ms Chan. In this email, suggest a sporting event, explain what would be included in the programme and outline how you will make the programme interesting to your schoolmates."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q3",
+    "question": "You are reading ‘Julius Caesar’ by William Shakespeare for drama class. In the play, Brutus betrayed his best friend, Julius Caesar, for the good of the country. Your homework is to write a diary entry about a situation when you betrayed your best friend."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q4",
+    "question": "Many people say that private school bus service operators do not follow proper safety procedures when dealing with young children, which may pose a danger. Write a letter to the Bus Operators Association Of Hong Kong to express your concerns and give three recommendations for how private school bus services can be improved."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q5",
+    "question": "Recently you have heard several people making complaints which you thought were unreasonable. Write a letter to the editor of the Hong Kong Post about this. In your letter, describe the situation which some people complained about, outline the point of view of the complainants, and indicate why you think those people are unreasonable."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q6",
+    "question": "You are a human resources assistant. Your boss has observed that many people are leaving the office very late. He has asked you to write an article for the company newsletter describing the situation and discussing the negative effects. You have also been asked to give two suggestions to improve the situation. Provide a suitable title for your article."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q7",
+    "question": "You are the President of the Students’ Union. You are giving a speech to the graduating classes. The inspiration for the speech comes from a popular song about how time can slip away. Write your speech."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q8",
+    "question": "You took part in the Hong Kong Schools Poetry Festival. You have been asked by your teacher to write an article for your school magazine about how you prepared for the competition and what you learned from this experience."
+  },
+  {
+    "year": 2013,
+    "question_number": "Q9",
+    "question": "You are entering the ‘Detective Story Competition’ and have been given the following situation: 'VANDALS HIT MUSEUM. Several valuable masterpieces were found damaged yesterday in the Hong Kong Museum of Art.' Write the story."
+  },
+  {
+    "year": 2012,
+    "question_number": "Part A",
+    "question": "You are a famous news reporter for Hong Kong News. Your old secondary school has asked you to write a feature article about yourself for the next edition of the school magazine. Use the following three headings to write the article: The best part of my job, The biggest challenge I have ever faced in my job, My school days. Add one heading of your own."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q2",
+    "question": "You have been following an online debate in Health and Fitness eMag about the value of doing virtual sports (such as those played on a Wii) versus real sports. Write your view on the topic and post it on the online forum."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q3",
+    "question": "You have seen a topic on an online forum about the use of drama in education, with some parents feeling learning cannot take place through drama. What is your opinion? Share your experience of learning through drama."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q4",
+    "question": "You are the lead singer in a band. Last week you held your first performance at a music festival in Victoria Park. Write on your blog describing the performance, including how you felt, the atmosphere and the things you could have done better."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q5",
+    "question": "You are trying to recruit more people to join the school debating club. Write a speech to give at the next school assembly explaining the activities the debating club organises, the benefits of being in the club and also the importance in life of being a good debater."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q6",
+    "question": "The human desire to look attractive is universal and because of this, cosmetic surgery is now a multi-million dollar industry. Write a letter to the editor of the Hong Kong Express about the obsession with physical beauty."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q7",
+    "question": "Your creative writing teacher has given you a task: You were walking by the Peninsula Hotel in Tsim Sha Tsui when you spotted your brother driving an expensive sports car. The last time you spoke to him, he was looking for a job. Write a story about how you found out the truth."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q8",
+    "question": "You are an intern at Hong Kong Correctional Services. The government has launched a campaign called Second Chance to encourage employers to recruit reformed criminals or drug addicts. Write a letter to all Hong Kong businesses outlining the new project, explaining the benefits and persuading them to join the scheme."
+  },
+  {
+    "year": 2012,
+    "question_number": "Q9",
+    "question": "Your school magazine is going to include a special feature on mental health. Recently, one of your friends was suffering from depression. Write an article for the school magazine about your friend’s depression and how he/she overcame it. Give advice to others on how to help fight depression."
+  }
+]
