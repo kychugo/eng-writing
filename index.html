@@ -6,11 +6,9 @@
   <title>The Writer's Desk</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
   <style>
-    /* ── Reset & Base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    /* ── Design tokens ────────────────────────────────────────── */
     :root {
       --ink:        #2c2416;
       --ink-light:  #5a4e3a;
@@ -24,103 +22,124 @@
       --moss:       #5a6b4a;
       --shadow:     rgba(44, 36, 22, 0.12);
       --shadow2:    rgba(44, 36, 22, 0.06);
-      --radius:     2px;
-      --transition: 0.3s ease;
+      --r:          4px;
+      --r-lg:       10px;
+      --t:          0.3s ease;
+      --t-slide:    0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    /* ── Reset ────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Lato', sans-serif;
-      background-color: var(--parchment);
+      background: var(--parchment);
       color: var(--ink);
       min-height: 100vh;
       line-height: 1.7;
-      /* Subtle paper grain texture */
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      overflow: hidden; /* views handle their own scroll */
     }
 
-    /* ── Layout ───────────────────────────────────────────────── */
-    .page-wrap {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 0 1.5rem 4rem;
+    /* ── Two-view SPA ─────────────────────────────────────────── */
+    .view {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: var(--parchment);
+      transition: transform var(--t-slide), opacity var(--t-slide);
+      will-change: transform, opacity;
     }
+    /* Default: hidden off-right */
+    .view { transform: translateX(100%); opacity: 0; pointer-events: none; }
+    .view.v-active { transform: translateX(0); opacity: 1; pointer-events: auto; overflow-y: auto; }
+    .view.v-exit   { transform: translateX(-6%); opacity: 0; pointer-events: none; }
 
-    /* ── Header / Hero ────────────────────────────────────────── */
-    header {
-      text-align: center;
-      padding: 3.5rem 1rem 2rem;
-      position: relative;
-    }
-
-    .header-rule {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .header-rule::before,
-    .header-rule::after {
+    /* ── Paper grain (shared background texture) ──────────────── */
+    .view::after {
       content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 1;
     }
-    .header-rule span {
+
+    /* ── Decorative ink splashes ──────────────────────────────── */
+    .ink-deco {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.025;
+    }
+    .ink-deco-tl { top: -60px; left: -60px; width: 280px; height: 280px; background: radial-gradient(circle, var(--ink) 0%, transparent 70%); }
+    .ink-deco-br { bottom: -80px; right: -80px; width: 380px; height: 380px; background: radial-gradient(circle, var(--gold) 0%, transparent 70%); }
+
+    /* ════════════════════════════════════════════════════════════
+       VIEW 1 — FORM
+       ════════════════════════════════════════════════════════════ */
+    #viewForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem 4rem;
+      min-height: 100%;
+    }
+
+    .form-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+    }
+
+    /* ── Site header ──────────────────────────────────────────── */
+    .site-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header-ornament {
       font-family: 'IM Fell English', serif;
-      font-size: 1.1rem;
+      font-size: 0.88rem;
       color: var(--gold);
-      white-space: nowrap;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.22em;
+      opacity: 0.8;
+      margin-bottom: 0.9rem;
     }
 
     .site-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-size: clamp(2rem, 5.5vw, 3.2rem);
       font-weight: 300;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
       color: var(--ink);
-      margin-bottom: 0.5rem;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.4rem;
     }
-    .site-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
+    .site-title em { font-style: italic; color: var(--gold); }
 
     .site-subtitle {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--ink-faint);
-      letter-spacing: 0.06em;
-      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
     }
 
-    /* ── Divider ornament ─────────────────────────────────────── */
-    .ornament {
-      text-align: center;
-      font-size: 1.2rem;
-      color: var(--gold);
-      letter-spacing: 0.5em;
-      margin: 1.5rem 0;
-      opacity: 0.7;
-    }
-
-    /* ── Card ─────────────────────────────────────────────────── */
-    .card {
+    /* ── Form card ────────────────────────────────────────────── */
+    .form-card {
       background: #faf7f2;
       border: 1px solid var(--parchment3);
-      border-radius: var(--radius);
-      padding: 2.5rem 2.5rem 2rem;
-      box-shadow: 0 2px 12px var(--shadow), 0 1px 3px var(--shadow2);
+      border-radius: var(--r-lg);
+      padding: 2rem 2rem 1.8rem;
+      box-shadow: 0 4px 28px var(--shadow), 0 1px 4px var(--shadow2);
       position: relative;
       overflow: hidden;
     }
 
-    .card::before {
+    .form-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -128,468 +147,602 @@
       background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
     }
 
-    /* ── Form ─────────────────────────────────────────────────── */
-    .form-grid {
+    .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
     }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
 
-    @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .card { padding: 1.5rem 1.2rem; }
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-
-    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 0.32rem; }
 
     label {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--ink-light);
+      color: var(--ink-faint);
     }
 
-    label .required {
-      color: var(--rust);
-      margin-left: 2px;
-      font-style: normal;
-    }
-
-    label .optional {
+    label .lbl-optional {
       font-family: 'Lato', sans-serif;
       font-weight: 300;
-      font-size: 0.78rem;
-      letter-spacing: 0.05em;
-      color: var(--ink-faint);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
       text-transform: none;
-      margin-left: 0.4em;
+      margin-left: 0.35em;
     }
 
     select, input[type="text"] {
       width: 100%;
-      padding: 0.7rem 1rem;
+      padding: 0.62rem 0.9rem;
       border: 1px solid var(--parchment3);
-      border-radius: var(--radius);
+      border-radius: var(--r);
       background: var(--parchment);
       color: var(--ink);
       font-family: 'Lato', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 300;
-      letter-spacing: 0.02em;
-      transition: border-color var(--transition), box-shadow var(--transition);
+      transition: border-color var(--t), box-shadow var(--t);
       -webkit-appearance: none;
       appearance: none;
       outline: none;
     }
-
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c7f6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
+      background-position: right 0.85rem center;
+      padding-right: 2.2rem;
       cursor: pointer;
     }
-
     select:focus, input[type="text"]:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.15);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.14);
     }
-
     select:invalid, select option[value=""] { color: var(--ink-faint); }
     select option { color: var(--ink); }
 
-    .field-hint {
-      font-size: 0.8rem;
-      color: var(--ink-faint);
-      font-weight: 300;
-      letter-spacing: 0.02em;
-    }
-
-    /* ── Generate Button ──────────────────────────────────────── */
-    .btn-wrap {
-      margin-top: 1.8rem;
-      text-align: center;
-    }
-
+    /* ── Generate button ──────────────────────────────────────── */
     .btn-generate {
-      display: inline-flex;
+      width: 100%;
+      display: flex;
       align-items: center;
-      gap: 0.6rem;
+      justify-content: center;
+      gap: 0.55rem;
       background: var(--ink);
       color: var(--parchment);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      padding: 0.85rem 2.5rem;
+      padding: 0.88rem 1.5rem;
       border: none;
-      border-radius: var(--radius);
+      border-radius: var(--r);
       cursor: pointer;
-      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      transition: background var(--t), transform var(--t), box-shadow var(--t);
       box-shadow: 0 2px 8px var(--shadow);
-      position: relative;
-      overflow: hidden;
     }
-
-    .btn-generate::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-    }
-
     .btn-generate:hover:not(:disabled) {
       background: var(--ink-light);
       transform: translateY(-1px);
       box-shadow: 0 4px 16px var(--shadow);
     }
+    .btn-generate:active:not(:disabled) { transform: none; }
+    .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .btn-generate:active:not(:disabled) { transform: translateY(0); }
-
-    .btn-generate:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-
-    .btn-icon { font-size: 1.1rem; line-height: 1; }
-
-    /* ── Loading ──────────────────────────────────────────────── */
-    .loading-wrap {
+    /* ── Error ────────────────────────────────────────────────── */
+    .error-box {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      padding: 2.5rem 0;
+      background: #fdf3f0;
+      border-left: 3px solid var(--rust);
+      border-radius: 0 var(--r) var(--r) 0;
+      padding: 0.7rem 1rem;
+      color: var(--rust);
+      font-size: 0.86rem;
+      margin-top: 0.8rem;
     }
+    .error-box.visible { display: block; }
 
-    .loading-wrap.visible { display: flex; }
-
-    .quill-loader {
-      width: 40px;
-      height: 40px;
-      position: relative;
-    }
-
-    .quill-loader::before {
-      content: '✒';
-      font-size: 2rem;
-      display: block;
-      text-align: center;
-      animation: quill-write 1.2s ease-in-out infinite;
-      color: var(--gold);
-    }
-
-    @keyframes quill-write {
-      0%, 100% { transform: rotate(-10deg) translateY(0); opacity: 1; }
-      50%        { transform: rotate(8deg) translateY(-4px); opacity: 0.7; }
-    }
-
-    .loading-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      color: var(--ink-faint);
-      font-size: 1rem;
-      animation: fade-pulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes fade-pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.5; }
-    }
-
-    .model-indicator {
-      font-size: 0.78rem;
-      color: var(--ink-faint);
-      letter-spacing: 0.06em;
-      font-weight: 300;
-    }
-
-    /* ── Result ───────────────────────────────────────────────── */
-    .result-section {
-      display: none;
-      margin-top: 2rem;
-    }
-    .result-section.visible { display: block; }
-
-    .result-header {
+    /* ── History & footer (below form card) ───────────────────── */
+    .form-bottom {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
+      justify-content: space-between;
+      margin-top: 1.4rem;
+      padding: 0 0.2rem;
     }
 
-    .result-header h2 {
+    .btn-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: var(--ink-faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color var(--t);
+      padding: 0;
+    }
+    .btn-history:hover { color: var(--ink-light); }
+
+    .btn-history-count {
+      background: var(--gold);
+      color: var(--parchment);
+      font-size: 0.65rem;
+      font-weight: 400;
+      min-width: 1.3em;
+      height: 1.3em;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.3em;
+    }
+
+    .form-footer-text {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      opacity: 0.75;
+      text-align: right;
+    }
+    .form-footer-text span { color: var(--gold); opacity: 1; }
+
+    /* ════════════════════════════════════════════════════════════
+       LOADING OVERLAY — full-screen immersive
+       ════════════════════════════════════════════════════════════ */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--ink);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .loading-overlay.lo-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Ink ripple rings */
+    .ink-rings {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+    }
+    .ink-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      opacity: 0;
+      animation: ring-expand 2.4s ease-out infinite;
+    }
+    .ink-ring:nth-child(2) { animation-delay: 0.6s; }
+    .ink-ring:nth-child(3) { animation-delay: 1.2s; }
+    .ink-ring:nth-child(4) { animation-delay: 1.8s; }
+    @keyframes ring-expand {
+      0%   { transform: scale(0.1); opacity: 0.9; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    .ink-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      animation: quill-bob 2s ease-in-out infinite;
+      color: var(--gold-light);
+    }
+    @keyframes quill-bob {
+      0%, 100% { transform: rotate(-8deg) translateY(0); }
+      50%       { transform: rotate(7deg) translateY(-5px); }
+    }
+
+    /* Phrase text */
+    .loading-phrase {
       font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
       font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-light);
+      color: rgba(245, 240, 232, 0.55);
+      text-align: center;
+      letter-spacing: 0.04em;
+      max-width: 260px;
+      min-height: 2.2em;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    .result-header::after {
+    /* ════════════════════════════════════════════════════════════
+       VIEW 2 — RESULT (full page)
+       ════════════════════════════════════════════════════════════ */
+    #viewResult {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky top bar */
+    .result-topbar {
+      display: flex;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--parchment3);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      background: none;
+      border: 1px solid var(--parchment3);
+      border-radius: 99px;
+      padding: 0.28em 0.95em;
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-back:hover { background: var(--parchment2); border-color: var(--ink-faint); }
+
+    .result-topbar-badge {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--parchment);
+      background: var(--gold);
+      padding: 0.2em 0.9em;
+      border-radius: 99px;
+      white-space: nowrap;
+      flex: 1;
+      text-align: center;
+      max-width: fit-content;
+    }
+
+    .result-topbar-actions {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: var(--ink-light);
+      background: none;
+      border: 1px solid var(--parchment3);
+      border-radius: 99px;
+      padding: 0.28em 0.9em;
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t), color var(--t);
+      white-space: nowrap;
+    }
+    .btn-action:hover { background: var(--parchment2); border-color: var(--ink-faint); }
+    .btn-action.success { color: var(--moss); border-color: var(--moss); }
+
+    /* Scrollable result body */
+    .result-body {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem 5rem;
+    }
+
+    /* Type label above prompt */
+    .result-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+    }
+    .result-label::before, .result-label::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--parchment3);
     }
 
-    .result-type-badge {
-      font-family: 'Lato', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--parchment);
-      background: var(--gold);
-      padding: 0.22em 0.8em;
-      border-radius: 20px;
-    }
-
+    /* The prompt text */
     .result-box {
-      background: var(--parchment);
-      border: 1px solid var(--parchment3);
-      border-left: 3px solid var(--gold);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      padding: 1.8rem 2rem;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 400;
-      line-height: 1.85;
+      line-height: 1.9;
       color: var(--ink);
-      position: relative;
+    }
+    .result-box p { margin-bottom: 1.1rem; }
+    .result-box p:last-child { margin-bottom: 0; }
+    .result-box ul { margin: 0.2rem 0 1.1rem 1.5rem; list-style-type: disc; }
+    .result-box li { margin-bottom: 0.45rem; line-height: 1.75; }
+
+    .result-divider {
+      height: 1px;
+      background: var(--parchment3);
+      margin: 2.8rem 0 1.5rem;
     }
 
-    .result-box::before {
-      content: '\201C';
-      font-size: 4rem;
-      line-height: 0;
-      color: var(--gold);
-      opacity: 0.25;
-      position: absolute;
-      top: 1.4rem;
-      left: 0.8rem;
-      font-family: 'IM Fell English', serif;
-    }
-
-    /* ── Result meta ──────────────────────────────────────────── */
-    .result-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .result-meta-info {
-      font-size: 0.8rem;
-      color: var(--ink-faint);
-      font-weight: 300;
-      letter-spacing: 0.04em;
-    }
-
-    .btn-copy {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+    /* Reference questions */
+    .ref-toggle {
       font-family: 'Lato', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 300;
-      letter-spacing: 0.06em;
-      color: var(--ink-light);
-      background: none;
-      border: 1px solid var(--parchment3);
-      border-radius: 20px;
-      padding: 0.3em 0.9em;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .btn-copy:hover { background: var(--parchment2); border-color: var(--ink-faint); }
-    .btn-copy.copied { color: var(--moss); border-color: var(--moss); }
-
-    /* ── Error ────────────────────────────────────────────────── */
-    .error-box {
-      display: none;
-      background: #fdf3f0;
-      border: 1px solid #e8c4b8;
-      border-left: 3px solid var(--rust);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      padding: 1rem 1.2rem;
-      color: var(--rust);
-      font-size: 0.9rem;
-      margin-top: 1rem;
-    }
-    .error-box.visible { display: block; }
-
-    /* ── Footer ───────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--parchment3);
-      font-size: 0.82rem;
-      color: var(--ink-faint);
-      font-weight: 300;
-      letter-spacing: 0.06em;
-    }
-
-    footer span { color: var(--gold); }
-
-    .footer-copyright {
-      margin-top: 0.4rem;
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    /* ── Info section below form ──────────────────────────────── */
-    .info-strip {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 1.2rem;
-      flex-wrap: wrap;
-    }
-
-    .info-chip {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--ink-faint);
-      font-weight: 300;
-    }
-
-    .info-chip-icon { font-size: 0.9rem; }
-
-    /* ── Sample questions panel (debug) ───────────────────────── */
-    .samples-toggle {
-      margin-top: 1.5rem;
-      text-align: right;
-    }
-
-    .btn-samples {
-      font-family: 'Lato', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 300;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       color: var(--ink-faint);
       background: none;
       border: none;
       cursor: pointer;
       text-decoration: underline;
       text-decoration-style: dotted;
-      transition: color var(--transition);
+      transition: color var(--t);
+      margin-bottom: 0.8rem;
+      display: block;
     }
-    .btn-samples:hover { color: var(--ink-light); }
+    .ref-toggle:hover { color: var(--ink-light); }
 
-    .samples-panel {
+    .ref-panel {
       display: none;
-      margin-top: 1rem;
       background: var(--parchment2);
       border: 1px dashed var(--parchment3);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.5rem;
+      border-radius: var(--r);
+      padding: 1rem 1.4rem;
     }
-    .samples-panel.visible { display: block; }
+    .ref-panel.visible { display: block; }
 
-    .samples-panel h3 {
+    .ref-panel-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-light);
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.75rem;
     }
 
-    .sample-item {
-      font-size: 0.85rem;
+    .ref-item {
+      font-size: 0.82rem;
       color: var(--ink-light);
       line-height: 1.6;
       padding: 0.5rem 0;
       border-bottom: 1px solid var(--parchment3);
     }
-    .sample-item:last-child { border-bottom: none; }
-    .sample-item .sample-year {
+    .ref-item:last-child { border-bottom: none; }
+    .ref-item-year {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--ink-faint);
       display: block;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.1rem;
     }
 
-    /* ── Wabi-sabi ink splash decoration ─────────────────────── */
-    .ink-deco {
+    /* ════════════════════════════════════════════════════════════
+       HISTORY DRAWER — bottom sheet
+       ════════════════════════════════════════════════════════════ */
+    .history-backdrop {
       position: fixed;
+      inset: 0;
+      background: rgba(44, 36, 22, 0.45);
+      z-index: 300;
+      opacity: 0;
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.03;
+      transition: opacity var(--t);
     }
-    .ink-deco-tl {
-      top: -60px; left: -60px;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, var(--ink) 0%, transparent 70%);
+    .history-backdrop.hb-visible { opacity: 1; pointer-events: auto; }
+
+    .history-drawer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #faf7f2;
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
+      border-top: 1px solid var(--parchment3);
+      box-shadow: 0 -12px 48px var(--shadow);
+      z-index: 310;
+      max-height: 72vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform var(--t-slide);
     }
-    .ink-deco-br {
-      bottom: -80px; right: -80px;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+    .history-drawer.hd-open { transform: translateY(0); }
+
+    /* Drag handle */
+    .history-handle {
+      display: flex;
+      justify-content: center;
+      padding: 0.7rem 0 0.3rem;
+      flex-shrink: 0;
+    }
+    .history-handle::before {
+      content: '';
+      width: 36px;
+      height: 4px;
+      background: var(--parchment3);
+      border-radius: 99px;
     }
 
-    /* ── Animation ────────────────────────────────────────────── */
-    @keyframes slide-up {
-      from { opacity: 0; transform: translateY(12px); }
+    .history-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.3rem 1.5rem 0.9rem;
+      border-bottom: 1px solid var(--parchment3);
+      flex-shrink: 0;
+    }
+    .history-drawer-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+    }
+    .btn-close-drawer {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-faint);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.2rem;
+      transition: color var(--t);
+    }
+    .btn-close-drawer:hover { color: var(--ink); }
+
+    .history-list {
+      overflow-y: auto;
+      flex: 1;
+      padding: 0.4rem 1rem 1.5rem;
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--ink-faint);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    .history-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      padding: 0.85rem 0.6rem;
+      border-bottom: 1px solid var(--parchment3);
+      cursor: pointer;
+      border-radius: var(--r);
+      transition: background var(--t);
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-item:hover { background: var(--parchment2); }
+
+    .history-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .history-item-badge {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--parchment);
+      background: var(--gold);
+      padding: 0.14em 0.7em;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+    .history-item-time {
+      font-size: 0.73rem;
+      color: var(--ink-faint);
+      font-weight: 300;
+    }
+
+    .history-item-topic {
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    .history-item-preview {
+      font-size: 0.84rem;
+      color: var(--ink-light);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── Slide-in animation (result content) ──────────────────── */
+    @keyframes content-appear {
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
-    .animate-in { animation: slide-up 0.5s ease forwards; }
+    .content-appear { animation: content-appear 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
   </style>
 </head>
 <body>
 
-  <!-- Decorative ink splashes (wabi-sabi) -->
+  <!-- Decorative ink splashes (on top of everything, pointer-events:none) -->
   <div class="ink-deco ink-deco-tl" aria-hidden="true"></div>
   <div class="ink-deco ink-deco-br" aria-hidden="true"></div>
 
-  <div class="page-wrap">
+  <!-- ═══════════════════════════════════════════════════════════
+       VIEW 1 — FORM
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="viewForm" class="view v-active" aria-label="Question generator">
+    <div class="form-inner">
 
-    <!-- ── Header ─────────────────────────────────────────────── -->
-    <header>
-      <div class="header-rule">
-        <span>✦ The Writer's Desk ✦</span>
-      </div>
-      <h1 class="site-title">English Writing<br /><em>Question Generator</em></h1>
-      <p class="site-subtitle">Inspired by past questions &middot; Crafted by AI &middot; Unique every time</p>
-    </header>
+      <!-- Header -->
+      <header class="site-header">
+        <p class="header-ornament">✦ &nbsp; The Writer's Desk &nbsp; ✦</p>
+        <h1 class="site-title">English Writing<br /><em>Question Generator</em></h1>
+        <p class="site-subtitle">Inspired by past exams &middot; Crafted by AI</p>
+      </header>
 
-    <!-- ── Main Card ─────────────────────────────────────────── -->
-    <main>
-      <div class="card" role="main">
-
-        <!-- Form -->
+      <!-- Form card -->
+      <div class="form-card">
         <form id="generatorForm" novalidate>
-          <div class="form-grid">
 
-            <!-- Text Type -->
+          <div class="form-row">
+            <!-- Writing type -->
             <div class="form-group">
-              <label for="textType">
-                Writing Type <span class="required" aria-label="required">*</span>
-              </label>
+              <label for="textType">Type</label>
               <select id="textType" name="textType" required aria-required="true">
-                <option value="" disabled selected>— Choose a type —</option>
+                <option value="" disabled selected>— choose —</option>
                 <option value="LETTER (FORMAL)">Letter (Formal)</option>
                 <option value="STORY">Story</option>
                 <option value="ARTICLE">Article</option>
-                <option value="LETTER TO THE EDITOR">Letter to the Editor</option>
+                <option value="LETTER TO THE EDITOR">Letter to Editor</option>
                 <option value="FORMAL EMAIL">Formal Email</option>
                 <option value="REPORT">Report</option>
                 <option value="DIARY ENTRY">Diary Entry</option>
@@ -598,91 +751,117 @@
                 <option value="PROPOSAL">Proposal</option>
                 <option value="BLOG ENTRY">Blog Entry</option>
                 <option value="BIO">Bio</option>
-                <option value="ENTRY IN JOURNAL">Entry in Journal</option>
+                <option value="ENTRY IN JOURNAL">Journal Entry</option>
               </select>
-              <span class="field-hint">Select the form of writing you want to practise</span>
             </div>
 
-            <!-- Topic (optional) -->
+            <!-- Topic -->
             <div class="form-group">
-              <label for="topic">
-                Topic <span class="optional">(optional)</span>
-              </label>
+              <label for="topic">Topic <span class="lbl-optional">(optional)</span></label>
               <input
                 type="text"
                 id="topic"
                 name="topic"
-                placeholder="e.g. climate change, social media…"
+                placeholder="e.g. climate change…"
                 maxlength="120"
                 autocomplete="off"
               />
-              <span class="field-hint">Leave blank for a random topic</span>
             </div>
-
-          </div><!-- /.form-grid -->
+          </div>
 
           <!-- Generate button -->
-          <div class="btn-wrap">
-            <button type="submit" class="btn-generate" id="generateBtn">
-              <span class="btn-icon" aria-hidden="true">✒</span>
-              Generate My Prompt
-            </button>
-          </div>
+          <button type="submit" class="btn-generate" id="generateBtn">
+            <span aria-hidden="true">✒</span>
+            Generate
+          </button>
 
+        </form>
 
-
-        </form><!-- /#generatorForm -->
-
-        <!-- Loading state -->
-        <div class="loading-wrap" id="loadingWrap" role="status" aria-live="polite">
-          <div class="quill-loader" aria-hidden="true"></div>
-          <p class="loading-text" id="loadingText">The quill is writing your prompt…</p>
-          <p class="model-indicator" id="modelIndicator"></p>
-        </div>
-
-        <!-- Error message -->
+        <!-- Error -->
         <div class="error-box" id="errorBox" role="alert" aria-live="assertive"></div>
+      </div><!-- /.form-card -->
 
-        <!-- Result -->
-        <div class="result-section" id="resultSection" aria-live="polite">
-          <div class="result-header">
-            <h2>Your Prompt</h2>
-            <span class="result-type-badge" id="resultBadge"></span>
-          </div>
+      <!-- Below card: history + footer -->
+      <div class="form-bottom">
+        <button class="btn-history" id="historyOpenBtn" type="button" aria-label="View prompt history">
+          <span aria-hidden="true">🕐</span>
+          History
+          <span class="btn-history-count" id="historyCount" aria-label="history entries" style="display:none"></span>
+        </button>
+        <p class="form-footer-text">HKDSE past papers &middot; <span>AI-powered</span></p>
+      </div>
 
-          <div class="result-box" id="resultBox" tabindex="0"></div>
+    </div><!-- /.form-inner -->
+  </div><!-- /#viewForm -->
 
-          <div class="result-meta">
-            <span class="result-meta-info" id="resultMeta"></span>
-            <button class="btn-copy" id="copyBtn" type="button" aria-label="Copy prompt to clipboard">
-              <span aria-hidden="true">⎘</span> Copy
-            </button>
-          </div>
 
-          <!-- Sampled references toggle -->
-          <div class="samples-toggle">
-            <button class="btn-samples" id="samplesToggle" type="button">
-              View reference questions used ▾
-            </button>
-          </div>
+  <!-- ═══════════════════════════════════════════════════════════
+       VIEW 2 — RESULT (full page)
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="viewResult" class="view" aria-label="Generated prompt">
 
-          <div class="samples-panel" id="samplesPanel" aria-label="Reference questions">
-            <h3>Reference Questions</h3>
-            <div id="samplesList"></div>
-          </div>
+    <!-- Sticky top bar -->
+    <div class="result-topbar">
+      <button class="btn-back" id="backBtn" type="button">← New</button>
+      <span class="result-topbar-badge" id="resultBadge"></span>
+      <div class="result-topbar-actions">
+        <button class="btn-action" id="copyBtn" type="button" aria-label="Copy prompt">
+          <span aria-hidden="true">⎘</span> Copy
+        </button>
+        <button class="btn-action" id="exportBtn" type="button" aria-label="Export as Word doc">
+          <span aria-hidden="true">↓</span> Doc
+        </button>
+      </div>
+    </div>
 
-        </div><!-- /#resultSection -->
+    <!-- Scrollable body -->
+    <div class="result-body">
+      <div class="result-content" id="resultContent">
+        <p class="result-label" id="resultLabel"></p>
+        <div class="result-box" id="resultBox" tabindex="0"></div>
 
-      </div><!-- /.card -->
-    </main>
+        <div class="result-divider"></div>
 
-    <!-- ── Footer ─────────────────────────────────────────────── -->
-    <footer>
-      <p>Woven with care for students &middot; Questions sourced from HKDSE past papers &middot; <span>Powered by AI</span></p>
-      <p class="footer-copyright">Copyright &copy; 2026 Hugo Wong. All rights reserved.</p>
-    </footer>
+        <button class="ref-toggle" id="refToggle" type="button">
+          View reference questions ▾
+        </button>
+        <div class="ref-panel" id="refPanel" aria-label="Reference questions">
+          <p class="ref-panel-title">Reference Questions</p>
+          <div id="refList"></div>
+        </div>
+      </div>
+    </div>
 
-  </div><!-- /.page-wrap -->
+  </div><!-- /#viewResult -->
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LOADING OVERLAY — full-screen immersive
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="loadingOverlay" class="loading-overlay" role="status" aria-label="Generating…" aria-live="polite">
+    <div class="ink-rings" aria-hidden="true">
+      <div class="ink-ring"></div>
+      <div class="ink-ring"></div>
+      <div class="ink-ring"></div>
+      <div class="ink-ring"></div>
+      <div class="ink-ring-center">✒</div>
+    </div>
+    <p class="loading-phrase" id="loadingPhrase"></p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HISTORY DRAWER — bottom sheet
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="history-backdrop" id="historyBackdrop" aria-hidden="true"></div>
+  <div class="history-drawer" id="historyDrawer" role="dialog" aria-label="Prompt history" aria-modal="true">
+    <div class="history-handle" aria-hidden="true"></div>
+    <div class="history-drawer-header">
+      <h3>History</h3>
+      <button class="btn-close-drawer" id="historyCloseBtn" type="button" aria-label="Close history">✕</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
 
 
   <script>
@@ -690,39 +869,144 @@
     'use strict';
 
     /* ── Config ─────────────────────────────────────────────── */
-    const API_URL  = 'https://gen.pollinations.ai/v1/chat/completions';
-    const API_KEY  = 'sk_svDIS85ASPKBX9Fu8JrCEHY5TWtVm6Sq';
-    const MODELS   = ['openai-fast', 'gemini-search', 'openai-fast', 'openai'];
-    const JSON_URL = 'qlist.json';
+    const API_URL     = 'https://gen.pollinations.ai/v1/chat/completions';
+    const API_KEY     = 'sk_svDIS85ASPKBX9Fu8JrCEHY5TWtVm6Sq';
+    const MODELS      = ['openai-fast', 'gemini-search', 'openai-fast', 'openai'];
+    const JSON_URL    = 'qlist.json';
+    const HISTORY_KEY = 'writers_desk_history';
+    const MAX_HISTORY = 30;
+
+    /* ── Loading phrases ────────────────────────────────────── */
+    const PHRASES = [
+      'Dipping the quill…',
+      'Consulting the muse…',
+      'Turning the pages…',
+      'Crafting your scenario…',
+      'Finding inspiration…',
+      'Gathering words…',
+      'The ink is flowing…',
+      'Setting the scene…',
+      'Almost ready…',
+    ];
+
+    /* ── Console branding ───────────────────────────────────── */
+    const C = {
+      title: 'color:#b8965a;font-size:15px;font-weight:bold;font-family:Georgia,serif',
+      sep:   'color:#5a4e3a;font-size:10px',
+      faint: 'color:#8c7f6a;font-size:11px;font-style:italic',
+      ok:    'color:#5a6b4a;font-weight:bold',
+      warn:  'color:#8b4a2f',
+      info:  'color:#5a4e3a;font-size:11px',
+    };
+    console.log('%c✒  Writer\'s Desk — Debug Console', C.title);
+    console.log('%c' + '─'.repeat(44), C.sep);
+    console.log('%cModel info will appear here during generation.', C.faint);
+    console.log('%c' + '─'.repeat(44), C.sep);
 
     /* ── State ──────────────────────────────────────────────── */
-    let questionBank = [];
+    let questionBank   = [];
+    let currentPrompt  = '';
+    let currentType    = '';
+    let currentTopic   = '';
+    let currentSamples = [];
+    let phraseTimer    = null;
+    let phraseIdx      = 0;
 
     /* ── DOM refs ───────────────────────────────────────────── */
-    const form           = document.getElementById('generatorForm');
-    const textTypeEl     = document.getElementById('textType');
-    const topicEl        = document.getElementById('topic');
-    const generateBtn    = document.getElementById('generateBtn');
-    const loadingWrap    = document.getElementById('loadingWrap');
-    const loadingText    = document.getElementById('loadingText');
-    const modelIndicator = document.getElementById('modelIndicator');
-    const errorBox       = document.getElementById('errorBox');
-    const resultSection  = document.getElementById('resultSection');
-    const resultBadge    = document.getElementById('resultBadge');
-    const resultBox      = document.getElementById('resultBox');
-    const resultMeta     = document.getElementById('resultMeta');
-    const copyBtn        = document.getElementById('copyBtn');
-    const samplesToggle  = document.getElementById('samplesToggle');
-    const samplesPanel   = document.getElementById('samplesPanel');
-    const samplesList    = document.getElementById('samplesList');
+    const viewForm        = document.getElementById('viewForm');
+    const viewResult      = document.getElementById('viewResult');
+    const form            = document.getElementById('generatorForm');
+    const textTypeEl      = document.getElementById('textType');
+    const topicEl         = document.getElementById('topic');
+    const generateBtn     = document.getElementById('generateBtn');
+    const errorBox        = document.getElementById('errorBox');
+    const loadingOverlay  = document.getElementById('loadingOverlay');
+    const loadingPhrase   = document.getElementById('loadingPhrase');
+    const resultBadge     = document.getElementById('resultBadge');
+    const resultLabel     = document.getElementById('resultLabel');
+    const resultBox       = document.getElementById('resultBox');
+    const resultContent   = document.getElementById('resultContent');
+    const copyBtn         = document.getElementById('copyBtn');
+    const exportBtn       = document.getElementById('exportBtn');
+    const backBtn         = document.getElementById('backBtn');
+    const refToggle       = document.getElementById('refToggle');
+    const refPanel        = document.getElementById('refPanel');
+    const refList         = document.getElementById('refList');
+    const historyOpenBtn  = document.getElementById('historyOpenBtn');
+    const historyCloseBtn = document.getElementById('historyCloseBtn');
+    const historyDrawer   = document.getElementById('historyDrawer');
+    const historyBackdrop = document.getElementById('historyBackdrop');
+    const historyList     = document.getElementById('historyList');
+    const historyCount    = document.getElementById('historyCount');
 
     /* ── Load question bank ─────────────────────────────────── */
     fetch(JSON_URL)
-      .then(r => { if (!r.ok) throw new Error('Failed to load question list'); return r.json(); })
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(data => { questionBank = data; })
-      .catch(() => { showError('Could not load question bank. Please refresh the page.'); });
+      .catch(() => showError('Could not load question bank. Please refresh the page.'));
 
-    /* ── Utility: shuffle & pick ────────────────────────────── */
+    /* ── Update history count badge ─────────────────────────── */
+    function refreshHistoryBadge() {
+      const count = loadHistory().length;
+      if (count > 0) {
+        historyCount.textContent = count;
+        historyCount.style.display = '';
+      } else {
+        historyCount.style.display = 'none';
+      }
+    }
+    refreshHistoryBadge();
+
+    /* ── View transitions ───────────────────────────────────── */
+    function showResultView() {
+      viewForm.classList.remove('v-active');
+      viewForm.classList.add('v-exit');
+      viewResult.classList.add('v-active');
+      // Reset and replay entry animation on content
+      resultContent.classList.remove('content-appear');
+      void resultContent.offsetWidth; // force reflow
+      resultContent.classList.add('content-appear');
+      // Scroll result body to top
+      const body = viewResult.querySelector('.result-body');
+      if (body) body.scrollTop = 0;
+    }
+
+    function showFormView() {
+      // Remove v-active so result slides back to its default translateX(100%) — natural "back" direction
+      viewResult.classList.remove('v-active');
+      viewForm.classList.remove('v-exit');
+      viewForm.classList.add('v-active');
+    }
+
+    /* ── Loading overlay ────────────────────────────────────── */
+    function setPhrase(text) {
+      loadingPhrase.style.opacity = '0';
+      loadingPhrase.style.transform = 'translateY(8px)';
+      setTimeout(() => {
+        loadingPhrase.textContent = text;
+        loadingPhrase.style.opacity = '1';
+        loadingPhrase.style.transform = 'translateY(0)';
+      }, 280);
+    }
+
+    function startLoading() {
+      phraseIdx = Math.floor(Math.random() * PHRASES.length);
+      loadingPhrase.textContent = PHRASES[phraseIdx];
+      loadingPhrase.style.opacity = '1';
+      loadingPhrase.style.transform = 'translateY(0)';
+      loadingOverlay.classList.add('lo-visible');
+      phraseTimer = setInterval(() => {
+        phraseIdx = (phraseIdx + 1) % PHRASES.length;
+        setPhrase(PHRASES[phraseIdx]);
+      }, 2400);
+    }
+
+    function stopLoading() {
+      clearInterval(phraseTimer);
+      loadingOverlay.classList.remove('lo-visible');
+    }
+
+    /* ── Utilities ──────────────────────────────────────────── */
     function shuffled(arr) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -737,16 +1021,47 @@
       return shuffled(pool).slice(0, n);
     }
 
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderPrompt(text) {
+      const blocks = text.split(/\n{2,}/);
+      let html = '';
+      for (const block of blocks) {
+        if (!block.trim()) continue;
+        const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+        if (!lines.length) continue;
+        const textLines = [], listLines = [], postLines = [];
+        let seenBullet = false;
+        for (const line of lines) {
+          if (/^[\*\-•]\s/.test(line)) { seenBullet = true; listLines.push(line); }
+          else if (!seenBullet)          textLines.push(line);
+          else                           postLines.push(line);
+        }
+        if (textLines.length) html += `<p>${textLines.map(l => escapeHtml(l)).join('<br>')}</p>`;
+        if (listLines.length) {
+          html += '<ul>';
+          for (const l of listLines) html += `<li>${escapeHtml(l.replace(/^[\*\-•]\s+/, ''))}</li>`;
+          html += '</ul>';
+        }
+        if (postLines.length) html += `<p>${postLines.map(l => escapeHtml(l)).join('<br>')}</p>`;
+      }
+      return html || `<p>${escapeHtml(text)}</p>`;
+    }
+
     /* ── Build AI prompt ────────────────────────────────────── */
     function buildPrompt(textType, topic, samples) {
       const sampleText = samples
         .map((s, i) => `${i + 1}. [${s.year} ${s.question_number}] ${s.question}`)
         .join('\n\n');
-
       const topicClause = topic
         ? `The writing prompt should be related to the topic: "${topic}".`
         : 'You may choose any interesting, relevant topic suitable for secondary school or young adult writers.';
-
       return `You are an expert English language examiner creating a brand-new writing prompt for students.
 
 Writing Type Required: ${textType}
@@ -773,10 +1088,8 @@ Write ONE original, engaging writing prompt of the type "${textType}".
       if (modelIndex >= MODELS.length) {
         throw new Error('All AI models failed. Please try again later.');
       }
-
       const model = MODELS[modelIndex];
-      modelIndicator.textContent = `Using model: ${model}`;
-
+      console.log(`%c  ⟳  Trying [${modelIndex + 1}/${MODELS.length}] ${model}`, C.faint);
       try {
         const resp = await fetch(API_URL, {
           method: 'POST',
@@ -792,79 +1105,138 @@ Write ONE original, engaging writing prompt of the type "${textType}".
             seed: Math.floor(Math.random() * 2147483647),
           }),
         });
-
         if (!resp.ok) {
           const errText = await resp.text().catch(() => '');
-          console.warn(`Model ${model} failed (${resp.status}):`, errText);
+          console.warn(`%c  ✗ ${model} failed (${resp.status})`, C.warn, errText);
           return callAI(messages, modelIndex + 1);
         }
-
         const data = await resp.json();
         const content = data?.choices?.[0]?.message?.content;
-
         if (!content || content.trim() === '') {
-          console.warn(`Model ${model} returned empty content`);
+          console.warn(`%c  ✗ ${model} returned empty content`, C.warn);
           return callAI(messages, modelIndex + 1);
         }
-
+        console.log(`%c  ✓ Success — ${model}`, C.ok);
+        console.log('%c' + '─'.repeat(44), C.sep);
         return { content: content.trim(), model };
       } catch (err) {
-        console.warn(`Model ${model} threw error:`, err.message);
+        console.warn(`%c  ✗ ${model} error: ${err.message}`, C.warn);
         return callAI(messages, modelIndex + 1);
       }
     }
 
-    /* ── UI helpers ─────────────────────────────────────────── */
-    function setLoading(on) {
-      generateBtn.disabled = on;
-      loadingWrap.classList.toggle('visible', on);
-      if (!on) modelIndicator.textContent = '';
+    /* ── History (localStorage) ─────────────────────────────── */
+    function loadHistory() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+      catch { return []; }
     }
 
+    function saveHistory(entry) {
+      const hist = loadHistory();
+      hist.unshift(entry);
+      if (hist.length > MAX_HISTORY) hist.length = MAX_HISTORY;
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(hist)); } catch {}
+      refreshHistoryBadge();
+    }
+
+    function formatRelativeTime(ts) {
+      const diff = Date.now() - ts;
+      if (diff < 60000)    return 'just now';
+      if (diff < 3600000)  return `${Math.floor(diff / 60000)}m ago`;
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+      return new Date(ts).toLocaleDateString();
+    }
+
+    function renderHistoryList() {
+      const hist = loadHistory();
+      if (!hist.length) {
+        historyList.innerHTML = '<p class="history-empty">No history yet — generate a prompt to get started.</p>';
+        return;
+      }
+      historyList.innerHTML = '';
+      hist.forEach(entry => {
+        const el = document.createElement('div');
+        el.className = 'history-item';
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        el.innerHTML = `
+          <div class="history-item-meta">
+            <span class="history-item-badge">${escapeHtml(entry.type)}</span>
+            <span class="history-item-time">${formatRelativeTime(entry.ts)}</span>
+          </div>
+          ${entry.topic ? `<span class="history-item-topic">${escapeHtml(entry.topic)}</span>` : ''}
+          <p class="history-item-preview">${escapeHtml(entry.prompt)}</p>`;
+        const activate = () => {
+          currentPrompt  = entry.prompt;
+          currentType    = entry.type;
+          currentTopic   = entry.topic || '';
+          currentSamples = [];
+          closeHistory();
+          displayResult(entry.prompt, entry.type);
+        };
+        el.addEventListener('click', activate);
+        el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+        historyList.appendChild(el);
+      });
+    }
+
+    /* ── History drawer open/close ──────────────────────────── */
+    function openHistory() {
+      renderHistoryList();
+      historyDrawer.classList.add('hd-open');
+      historyBackdrop.classList.add('hb-visible');
+      historyBackdrop.removeAttribute('aria-hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeHistory() {
+      historyDrawer.classList.remove('hd-open');
+      historyBackdrop.classList.remove('hb-visible');
+      historyBackdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    historyOpenBtn.addEventListener('click', openHistory);
+    historyCloseBtn.addEventListener('click', closeHistory);
+    historyBackdrop.addEventListener('click', closeHistory);
+
+    /* ── Display result ─────────────────────────────────────── */
+    function displayResult(prompt, textType) {
+      resultBadge.textContent = textType;
+      resultLabel.textContent = textType;
+      resultBox.innerHTML     = renderPrompt(prompt);
+
+      // Ref questions
+      refPanel.classList.remove('visible');
+      refToggle.textContent = 'View reference questions ▾';
+      refList.innerHTML = '';
+      if (currentSamples.length) {
+        refToggle.style.display = '';
+        currentSamples.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'ref-item';
+          div.innerHTML = `<span class="ref-item-year">${s.year} — ${s.question_number}</span>${escapeHtml(s.question)}`;
+          refList.appendChild(div);
+        });
+      } else {
+        refToggle.style.display = 'none';
+      }
+      showResultView();
+    }
+
+    /* ── UI helpers ─────────────────────────────────────────── */
     function showError(msg) {
       errorBox.textContent = msg;
       errorBox.classList.add('visible');
     }
-
     function hideError() {
       errorBox.classList.remove('visible');
     }
 
-    function showResult({ prompt, textType, topic, samples, model }) {
-      resultBadge.textContent = textType;
-      resultBox.textContent   = prompt;
-
-      const topicNote = topic ? ` · Topic: "${topic}"` : '';
-      resultMeta.textContent  = `Generated by ${model}${topicNote} · ${samples.length} reference questions used`;
-
-      // Populate samples list
-      samplesList.innerHTML = '';
-      samples.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'sample-item';
-        div.innerHTML = `<span class="sample-year">${s.year} — ${s.question_number}</span>${escapeHtml(s.question)}`;
-        samplesList.appendChild(div);
-      });
-
-      resultSection.classList.add('visible', 'animate-in');
-      resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
     /* ── Form submit ────────────────────────────────────────── */
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async e => {
       e.preventDefault();
       hideError();
-      resultSection.classList.remove('visible', 'animate-in');
-      samplesPanel.classList.remove('visible');
-
       const textType = textTypeEl.value;
       const topic    = topicEl.value.trim();
 
@@ -873,74 +1245,112 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         showError('Please select a writing type to continue.');
         return;
       }
-
-      if (questionBank.length === 0) {
+      if (!questionBank.length) {
         showError('Question bank not loaded yet. Please wait a moment and try again.');
         return;
       }
 
       const samples = pickSamples(textType);
-
-      if (samples.length === 0) {
+      if (!samples.length) {
         showError(`No reference questions found for "${textType}". Please try a different type.`);
         return;
       }
 
-      setLoading(true);
-      loadingText.textContent = 'The quill is crafting your prompt…';
+      currentSamples = samples;
+      generateBtn.disabled = true;
+      startLoading();
 
-      const promptText = buildPrompt(textType, topic, samples);
-      const messages   = [
+      const messages = [
         {
           role: 'system',
           content: 'You are an expert English language examiner who creates original, engaging writing prompts for students. You always produce prompts that are completely original and distinct from any provided examples.',
         },
-        { role: 'user', content: promptText },
+        { role: 'user', content: buildPrompt(textType, topic, samples) },
       ];
+
+      console.log('%c' + '─'.repeat(44), C.sep);
+      console.log(`%c  ✒ Generating "${textType}"${topic ? ' · ' + topic : ''}`, C.info);
 
       try {
         const { content, model } = await callAI(messages);
-        setLoading(false);
-        showResult({ prompt: content, textType, topic, samples, model });
+        currentPrompt = content;
+        currentType   = textType;
+        currentTopic  = topic;
+
+        saveHistory({ type: textType, topic, prompt: content, ts: Date.now() });
+
+        stopLoading();
+        generateBtn.disabled = false;
+        displayResult(content, textType);
       } catch (err) {
-        setLoading(false);
+        stopLoading();
+        generateBtn.disabled = false;
         showError(err.message || 'An unexpected error occurred. Please try again.');
       }
     });
 
-    /* ── Copy button ─────────────────────────────────────────── */
-    copyBtn.addEventListener('click', async () => {
-      const text = resultBox.textContent;
-      if (!text) return;
+    /* ── Back button ────────────────────────────────────────── */
+    backBtn.addEventListener('click', showFormView);
 
+    /* ── Copy ───────────────────────────────────────────────── */
+    copyBtn.addEventListener('click', async () => {
+      if (!currentPrompt) return;
+      const reset = () => {
+        copyBtn.classList.remove('success');
+        copyBtn.innerHTML = '<span aria-hidden="true">⎘</span> Copy';
+      };
       try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.classList.add('copied');
-        copyBtn.innerHTML = '<span aria-hidden="true">✓</span> Copied!';
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.innerHTML = '<span aria-hidden="true">⎘</span> Copy';
-        }, 2000);
+        await navigator.clipboard.writeText(currentPrompt);
+        copyBtn.classList.add('success');
+        copyBtn.innerHTML = '<span aria-hidden="true">✓</span> Copied';
+        setTimeout(reset, 2000);
       } catch {
-        // Fallback
         const ta = document.createElement('textarea');
-        ta.value = text;
+        ta.value = currentPrompt;
         ta.style.cssText = 'position:fixed;top:-9999px';
         document.body.appendChild(ta);
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => { copyBtn.innerHTML = '<span aria-hidden="true">⎘</span> Copy'; }, 2000);
+        copyBtn.classList.add('success');
+        copyBtn.textContent = '✓ Copied';
+        setTimeout(reset, 2000);
       }
     });
 
-    /* ── Samples toggle ─────────────────────────────────────── */
-    samplesToggle.addEventListener('click', () => {
-      const open = samplesPanel.classList.toggle('visible');
-      samplesToggle.textContent = open
-        ? 'Hide reference questions ▴'
-        : 'View reference questions used ▾';
+    /* ── Export as Doc ──────────────────────────────────────── */
+    exportBtn.addEventListener('click', () => {
+      if (!currentPrompt) return;
+      const title = `Writing Prompt — ${currentType}${currentTopic ? ': ' + currentTopic : ''}`;
+      const body  = renderPrompt(currentPrompt);
+      const doc   = `<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office'
+      xmlns:w='urn:schemas-microsoft-com:office:word'
+      xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'><title>${escapeHtml(title)}</title>
+<style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.6;margin:2.5cm;color:#2c2416}h1{font-size:14pt;font-weight:bold;margin-bottom:1em}p{margin:0 0 0.8em}ul{margin:0.4em 0 0.8em 1.5em}li{margin-bottom:0.3em}</style>
+</head><body><h1>${escapeHtml(title)}</h1>${body}</body></html>`;
+      const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `writing-prompt-${currentType.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      exportBtn.classList.add('success');
+      exportBtn.innerHTML = '<span aria-hidden="true">✓</span> Saved';
+      setTimeout(() => {
+        exportBtn.classList.remove('success');
+        exportBtn.innerHTML = '<span aria-hidden="true">↓</span> Doc';
+      }, 2000);
+    });
+
+    /* ── Ref toggle ─────────────────────────────────────────── */
+    refToggle.addEventListener('click', () => {
+      const open = refPanel.classList.toggle('visible');
+      refToggle.textContent = open ? 'Hide reference questions ▴' : 'View reference questions ▾';
     });
 
   })();
