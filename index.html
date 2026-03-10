@@ -547,6 +547,15 @@
       border-radius: var(--r);
       padding: 1rem 1.3rem;
     }
+    .patterns-item.patterns-loading {
+      color: var(--ink-faint);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      text-align: center;
+      background: transparent;
+      border-color: transparent;
+    }
     .patterns-formula {
       font-family: 'Lato', sans-serif;
       font-size: 0.78rem;
@@ -1192,6 +1201,7 @@
     let phraseIdx      = 0;
     let selectedType   = '';
     let abortController = null;
+    let currentGenId   = 0;
 
     /* ── DOM refs ───────────────────────────────────────────── */
     const viewForm           = document.getElementById('viewForm');
@@ -1642,6 +1652,8 @@ Write ONE original, engaging writing prompt of the type "${textType}".
 
     /* ── Display result ─────────────────────────────────────── */
     function displayResult(prompt, textType) {
+      const genId = ++currentGenId;
+
       resultBadge.textContent = textType;
       resultLabel.textContent = textType;
       resultBox.innerHTML     = renderPrompt(prompt);
@@ -1660,23 +1672,74 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         refBtn.style.display = 'none';
       }
 
-      // Sentence patterns — pick 5 at random (Fisher-Yates shuffle)
-      const shuffled = [...SENTENCE_PATTERNS];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      const picked   = shuffled.slice(0, 5);
+      // Show patterns section with loading state while fetching topic-specific patterns
+      patternsList.innerHTML = '<li class="patterns-item patterns-loading">Finding patterns for this topic…</li>';
+      patternsSection.removeAttribute('hidden');
+
+      fetchTopicPatterns(prompt, textType, currentTopic)
+        .then(patterns => {
+          if (currentGenId !== genId) return; // stale result, ignore
+          renderPatternsList(patterns);
+        })
+        .catch(() => {
+          if (currentGenId !== genId) return;
+          renderPatternsList(randomPatterns());
+        });
+
+      showResultView();
+    }
+
+    /* ── Render a list of pattern objects into the patterns list ── */
+    function renderPatternsList(patterns) {
       patternsList.innerHTML = '';
-      picked.forEach(p => {
+      patterns.forEach(p => {
         const li = document.createElement('li');
         li.className = 'patterns-item';
         li.innerHTML = `<div class="patterns-formula">${escapeHtml(p.formula)}</div><div class="patterns-example">${escapeHtml(p.example)}</div>`;
         patternsList.appendChild(li);
       });
-      patternsSection.removeAttribute('hidden');
+    }
 
-      showResultView();
+    /* ── Pick 5 random fallback patterns ─────────────────────── */
+    function randomPatterns() {
+      return shuffled(SENTENCE_PATTERNS).slice(0, 5);
+    }
+
+    /* ── Build AI prompt for topic-specific sentence patterns ─── */
+    function buildPatternsPrompt(generatedPrompt, textType, topic) {
+      const topicClause = topic
+        ? `The writing topic is: "${topic}".`
+        : 'No specific topic was provided.';
+      return `You are an English language teacher helping a student prepare to write. The student has been given this writing prompt:
+
+"${generatedPrompt}"
+
+Writing Type: ${textType}
+${topicClause}
+
+Select 5 useful English sentence patterns from the list below that would be most helpful for writing about this specific topic and writing task. Choose the patterns that best match the content, ideas, or structure needed for this particular prompt.
+
+Available patterns:
+${SENTENCE_PATTERNS.map((p, i) => `${i + 1}. Formula: ${p.formula} | Example: ${p.example}`).join('\n')}
+
+Respond with a JSON array only — no explanation, no markdown fences, no extra text. Use this exact format:
+[
+  {"formula": "...", "example": "example sentence directly related to the writing topic"},
+  ...
+]
+The "example" for each selected pattern must be a NEW sentence directly related to the student's writing topic above (not the original example from the list).`;
+    }
+
+    /* ── Fetch topic-specific sentence patterns via AI ───────── */
+    async function fetchTopicPatterns(prompt, textType, topic) {
+      const { content: raw } = await callAI([
+        { role: 'user', content: buildPatternsPrompt(prompt, textType, topic) },
+      ]);
+      const match = raw.match(/\[[\s\S]*\]/);
+      if (!match) throw new Error('No JSON array in patterns response');
+      const patterns = JSON.parse(match[0]);
+      if (!Array.isArray(patterns) || patterns.length === 0) throw new Error('Empty patterns array');
+      return patterns.slice(0, 5).filter(p => p && p.formula && p.example);
     }
 
     /* ── UI helpers ─────────────────────────────────────────── */
