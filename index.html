@@ -258,19 +258,20 @@
     .btn-history {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       font-family: 'Lato', sans-serif;
       font-size: 0.8rem;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: var(--ink-faint);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
       background: none;
-      border: none;
+      border: 1px solid var(--parchment3);
+      border-radius: 99px;
       cursor: pointer;
-      transition: color var(--t);
-      padding: 0;
+      transition: background var(--t), border-color var(--t), color var(--t);
+      padding: 0.35em 1em;
     }
-    .btn-history:hover { color: var(--ink-light); }
+    .btn-history:hover { background: var(--parchment2); border-color: var(--ink-faint); color: var(--ink); }
 
     .btn-history-count {
       background: var(--gold);
@@ -708,6 +709,151 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .content-appear { animation: content-appear 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+    /* ── Film-strip type picker ─────────────────────────────── */
+    .strip-outer { margin-bottom: 1.4rem; }
+    .strip-wrap {
+      position: relative;
+      background: #1c140a;
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid #3a2a18;
+    }
+    .strip-wrap::before, .strip-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 28px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .strip-wrap::before { left: 0;  background: linear-gradient(to right, #1c140a 40%, transparent); }
+    .strip-wrap::after  { right: 0; background: linear-gradient(to left,  #1c140a 40%, transparent); }
+    .strip-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 2px;
+      padding: 6px 6px;
+      scrollbar-width: none;
+      cursor: grab;
+      user-select: none;
+    }
+    .strip-track::-webkit-scrollbar { display: none; }
+    .strip-cell {
+      flex-shrink: 0;
+      width: 74px;
+      scroll-snap-align: start;
+      background: #2a1e0f;
+      border-radius: 2px;
+      padding: 10px 4px 8px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color var(--t), background var(--t), color var(--t);
+      color: rgba(245, 240, 232, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      outline: none;
+    }
+    .strip-cell:hover { background: #38280f; color: rgba(245, 240, 232, 0.82); }
+    .strip-cell.s-selected { border-color: var(--gold); background: #38280f; color: var(--gold-light); }
+    .strip-cell:focus-visible { border-color: var(--gold-light); }
+    .strip-icon { font-size: 1.5rem; line-height: 1; display: block; }
+    .strip-name {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.57rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+    .strip-hint {
+      font-size: 0.64rem;
+      color: var(--ink-faint);
+      text-align: center;
+      letter-spacing: 0.08em;
+      margin-top: 0.4rem;
+      opacity: 0.55;
+    }
+
+    /* ── Reference modal ────────────────────────────────────── */
+    .ref-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 36, 22, 0.52);
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t);
+    }
+    .ref-modal-backdrop.rm-visible { opacity: 1; pointer-events: auto; }
+    .ref-modal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -42%) scale(0.96);
+      width: min(460px, 92vw);
+      max-height: 74vh;
+      background: #faf7f2;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--parchment3);
+      box-shadow: 0 24px 72px rgba(44,36,22,0.28);
+      z-index: 410;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .ref-modal.rm-open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .ref-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.4rem 0.85rem;
+      border-bottom: 1px solid var(--parchment3);
+      flex-shrink: 0;
+    }
+    .ref-modal-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+    }
+    .btn-close-modal {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-faint);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.25rem;
+      transition: color var(--t);
+    }
+    .btn-close-modal:hover { color: var(--ink); }
+    .ref-modal-body { overflow-y: auto; flex: 1; padding: 0.8rem 1.4rem 1.4rem; }
+
+    /* ── Loading cancel button ──────────────────────────────── */
+    .btn-cancel-loading {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.48);
+      background: none;
+      border: 1px solid rgba(245, 240, 232, 0.2);
+      border-radius: 99px;
+      padding: 0.45em 1.5em;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-cancel-loading:hover { color: rgba(245, 240, 232, 0.85); border-color: rgba(245, 240, 232, 0.45); }
   </style>
 </head>
 <body>
@@ -726,47 +872,46 @@
       <header class="site-header">
         <p class="header-ornament">✦ &nbsp; The Writer's Desk &nbsp; ✦</p>
         <h1 class="site-title">English Writing<br /><em>Question Generator</em></h1>
-        <p class="site-subtitle">Inspired by past exams &middot; Crafted by AI</p>
       </header>
 
       <!-- Form card -->
       <div class="form-card">
         <form id="generatorForm" novalidate>
 
-          <div class="form-row">
-            <!-- Writing type -->
-            <div class="form-group">
-              <label for="textType">Type</label>
-              <select id="textType" name="textType" required aria-required="true">
-                <option value="" disabled selected>— choose —</option>
-                <option value="LETTER (FORMAL)">Letter (Formal)</option>
-                <option value="STORY">Story</option>
-                <option value="ARTICLE">Article</option>
-                <option value="LETTER TO THE EDITOR">Letter to Editor</option>
-                <option value="FORMAL EMAIL">Formal Email</option>
-                <option value="REPORT">Report</option>
-                <option value="DIARY ENTRY">Diary Entry</option>
-                <option value="SPEECH">Speech</option>
-                <option value="ESSAY">Essay</option>
-                <option value="PROPOSAL">Proposal</option>
-                <option value="BLOG ENTRY">Blog Entry</option>
-                <option value="BIO">Bio</option>
-                <option value="ENTRY IN JOURNAL">Journal Entry</option>
-              </select>
+          <!-- Film-strip type picker -->
+          <div class="strip-outer">
+            <label>Type</label>
+            <div class="strip-wrap">
+              <div class="strip-track" id="stripTrack" role="listbox" aria-label="Select writing type">
+                <div class="strip-cell" data-value="LETTER (FORMAL)"     role="option" tabindex="0"  aria-selected="false"><span class="strip-icon">✉</span><span class="strip-name">Formal Letter</span></div>
+                <div class="strip-cell" data-value="STORY"               role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📖</span><span class="strip-name">Story</span></div>
+                <div class="strip-cell" data-value="ARTICLE"             role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📰</span><span class="strip-name">Article</span></div>
+                <div class="strip-cell" data-value="LETTER TO THE EDITOR" role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">🗞</span><span class="strip-name">To Editor</span></div>
+                <div class="strip-cell" data-value="FORMAL EMAIL"        role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📧</span><span class="strip-name">Formal Email</span></div>
+                <div class="strip-cell" data-value="REPORT"              role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📊</span><span class="strip-name">Report</span></div>
+                <div class="strip-cell" data-value="DIARY ENTRY"         role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📔</span><span class="strip-name">Diary</span></div>
+                <div class="strip-cell" data-value="SPEECH"              role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">🗣</span><span class="strip-name">Speech</span></div>
+                <div class="strip-cell" data-value="ESSAY"               role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">🖊</span><span class="strip-name">Essay</span></div>
+                <div class="strip-cell" data-value="PROPOSAL"            role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📋</span><span class="strip-name">Proposal</span></div>
+                <div class="strip-cell" data-value="BLOG ENTRY"          role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">💬</span><span class="strip-name">Blog</span></div>
+                <div class="strip-cell" data-value="BIO"                 role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">👤</span><span class="strip-name">Biography</span></div>
+                <div class="strip-cell" data-value="ENTRY IN JOURNAL"    role="option" tabindex="-1" aria-selected="false"><span class="strip-icon">📓</span><span class="strip-name">Journal</span></div>
+              </div>
             </div>
+            <p class="strip-hint">‹ swipe to explore ›</p>
+          </div>
 
-            <!-- Topic -->
-            <div class="form-group">
-              <label for="topic">Topic <span class="lbl-optional">(optional)</span></label>
-              <input
-                type="text"
-                id="topic"
-                name="topic"
-                placeholder="e.g. climate change…"
-                maxlength="120"
-                autocomplete="off"
-              />
-            </div>
+          <!-- Topic -->
+          <div class="form-group" style="margin-bottom:1.4rem">
+            <label for="topic">Topic <span class="lbl-optional">(optional)</span></label>
+            <input
+              type="text"
+              id="topic"
+              name="topic"
+              placeholder="e.g. climate change…"
+              maxlength="120"
+              autocomplete="off"
+            />
           </div>
 
           <!-- Generate button -->
@@ -788,7 +933,6 @@
           History
           <span class="btn-history-count" id="historyCount" aria-label="history entries" style="display:none"></span>
         </button>
-        <p class="form-footer-text">HKDSE past papers &middot; <span>AI-powered</span></p>
       </div>
 
     </div><!-- /.form-inner -->
@@ -805,11 +949,11 @@
       <button class="btn-back" id="backBtn" type="button">← New</button>
       <span class="result-topbar-badge" id="resultBadge"></span>
       <div class="result-topbar-actions">
+        <button class="btn-action" id="refBtn" type="button" aria-label="View reference questions" style="display:none">
+          <span aria-hidden="true">◻</span> Ref
+        </button>
         <button class="btn-action" id="copyBtn" type="button" aria-label="Copy prompt">
           <span aria-hidden="true">⎘</span> Copy
-        </button>
-        <button class="btn-action" id="exportBtn" type="button" aria-label="Export as Word doc">
-          <span aria-hidden="true">↓</span> Doc
         </button>
       </div>
     </div>
@@ -819,16 +963,6 @@
       <div class="result-content" id="resultContent">
         <p class="result-label" id="resultLabel"></p>
         <div class="result-box" id="resultBox" tabindex="0"></div>
-
-        <div class="result-divider"></div>
-
-        <button class="ref-toggle" id="refToggle" type="button">
-          View reference questions ▾
-        </button>
-        <div class="ref-panel" id="refPanel" aria-label="Reference questions">
-          <p class="ref-panel-title">Reference Questions</p>
-          <div id="refList"></div>
-        </div>
       </div>
     </div>
 
@@ -847,6 +981,20 @@
       <div class="ink-ring-center">✒</div>
     </div>
     <p class="loading-phrase" id="loadingPhrase"></p>
+    <button class="btn-cancel-loading" id="cancelBtn" type="button">Cancel</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       REFERENCE QUESTIONS MODAL
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="ref-modal-backdrop" id="refModalBackdrop" aria-hidden="true"></div>
+  <div class="ref-modal" id="refModal" role="dialog" aria-label="Reference questions" aria-modal="true">
+    <div class="ref-modal-header">
+      <h3>Reference Questions</h3>
+      <button class="btn-close-modal" id="refModalClose" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="ref-modal-body" id="refModalList"></div>
   </div>
 
 
@@ -911,12 +1059,14 @@
     let currentSamples = [];
     let phraseTimer    = null;
     let phraseIdx      = 0;
+    let selectedType   = '';
+    let abortController = null;
 
     /* ── DOM refs ───────────────────────────────────────────── */
     const viewForm        = document.getElementById('viewForm');
     const viewResult      = document.getElementById('viewResult');
     const form            = document.getElementById('generatorForm');
-    const textTypeEl      = document.getElementById('textType');
+    const stripTrack      = document.getElementById('stripTrack');
     const topicEl         = document.getElementById('topic');
     const generateBtn     = document.getElementById('generateBtn');
     const errorBox        = document.getElementById('errorBox');
@@ -927,11 +1077,13 @@
     const resultBox       = document.getElementById('resultBox');
     const resultContent   = document.getElementById('resultContent');
     const copyBtn         = document.getElementById('copyBtn');
-    const exportBtn       = document.getElementById('exportBtn');
     const backBtn         = document.getElementById('backBtn');
-    const refToggle       = document.getElementById('refToggle');
-    const refPanel        = document.getElementById('refPanel');
-    const refList         = document.getElementById('refList');
+    const refBtn          = document.getElementById('refBtn');
+    const refModalBackdrop= document.getElementById('refModalBackdrop');
+    const refModal        = document.getElementById('refModal');
+    const refModalClose   = document.getElementById('refModalClose');
+    const refModalList    = document.getElementById('refModalList');
+    const cancelBtn       = document.getElementById('cancelBtn');
     const historyOpenBtn  = document.getElementById('historyOpenBtn');
     const historyCloseBtn = document.getElementById('historyCloseBtn');
     const historyDrawer   = document.getElementById('historyDrawer');
@@ -956,6 +1108,62 @@
       }
     }
     refreshHistoryBadge();
+
+    /* ── Film-strip selection & drag-scroll ─────────────────── */
+    const DRAG_SCROLL_MULTIPLIER = 1.2;
+    const DRAG_THRESHOLD_PX = 4;
+    const stripCells = Array.from(stripTrack.querySelectorAll('.strip-cell'));
+    let dragStartX = 0, dragScrollLeft = 0, dragged = false;
+
+    function selectStripCell(cell) {
+      stripCells.forEach(c => {
+        c.classList.remove('s-selected');
+        c.setAttribute('aria-selected', 'false');
+        c.setAttribute('tabindex', '-1');
+      });
+      cell.classList.add('s-selected');
+      cell.setAttribute('aria-selected', 'true');
+      cell.setAttribute('tabindex', '0');
+      selectedType = cell.dataset.value;
+      hideError();
+    }
+    // Pre-select the first cell so a type is ready by default
+    if (stripCells.length) selectStripCell(stripCells[0]);
+
+    stripTrack.addEventListener('mousedown', e => {
+      dragStartX    = e.pageX - stripTrack.offsetLeft;
+      dragScrollLeft = stripTrack.scrollLeft;
+      dragged        = false;
+      stripTrack.style.cursor = 'grabbing';
+    });
+    stripTrack.addEventListener('mouseleave', () => { stripTrack.style.cursor = ''; });
+    stripTrack.addEventListener('mouseup',    () => { stripTrack.style.cursor = ''; dragged = false; });
+    stripTrack.addEventListener('mousemove', e => {
+      if (!e.buttons) return;
+      const walk = (e.pageX - stripTrack.offsetLeft - dragStartX) * DRAG_SCROLL_MULTIPLIER;
+      if (Math.abs(walk) > DRAG_THRESHOLD_PX) dragged = true;
+      stripTrack.scrollLeft = dragScrollLeft - walk;
+    });
+    stripCells.forEach((cell, idx) => {
+      cell.addEventListener('click', e => {
+        if (dragged) { dragged = false; e.stopPropagation(); return; }
+        selectStripCell(cell);
+      });
+      cell.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectStripCell(cell);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          const next = stripCells[idx + 1];
+          if (next) { selectStripCell(next); next.focus(); next.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); }
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const prev = stripCells[idx - 1];
+          if (prev) { selectStripCell(prev); prev.focus(); prev.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); }
+        }
+      });
+    });
 
     /* ── View transitions ───────────────────────────────────── */
     function showResultView() {
@@ -990,6 +1198,7 @@
     }
 
     function startLoading() {
+      abortController = new AbortController();
       phraseIdx = Math.floor(Math.random() * PHRASES.length);
       loadingPhrase.textContent = PHRASES[phraseIdx];
       loadingPhrase.style.opacity = '1';
@@ -1004,6 +1213,7 @@
     function stopLoading() {
       clearInterval(phraseTimer);
       loadingOverlay.classList.remove('lo-visible');
+      abortController = null;
     }
 
     /* ── Utilities ──────────────────────────────────────────── */
@@ -1104,6 +1314,7 @@ Write ONE original, engaging writing prompt of the type "${textType}".
             max_tokens: 600,
             seed: Math.floor(Math.random() * 2147483647),
           }),
+          signal: abortController?.signal,
         });
         if (!resp.ok) {
           const errText = await resp.text().catch(() => '');
@@ -1120,6 +1331,10 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         console.log('%c' + '─'.repeat(44), C.sep);
         return { content: content.trim(), model };
       } catch (err) {
+        if (err.name === 'AbortError') {
+          console.info('%c  ✕ Request cancelled by user', C.faint);
+          throw err;
+        }
         console.warn(`%c  ✗ ${model} error: ${err.message}`, C.warn);
         return callAI(messages, modelIndex + 1);
       }
@@ -1206,20 +1421,18 @@ Write ONE original, engaging writing prompt of the type "${textType}".
       resultLabel.textContent = textType;
       resultBox.innerHTML     = renderPrompt(prompt);
 
-      // Ref questions
-      refPanel.classList.remove('visible');
-      refToggle.textContent = 'View reference questions ▾';
-      refList.innerHTML = '';
+      // Ref questions modal
+      refModalList.innerHTML = '';
       if (currentSamples.length) {
-        refToggle.style.display = '';
+        refBtn.style.display = '';
         currentSamples.forEach(s => {
           const div = document.createElement('div');
           div.className = 'ref-item';
           div.innerHTML = `<span class="ref-item-year">${s.year} — ${s.question_number}</span>${escapeHtml(s.question)}`;
-          refList.appendChild(div);
+          refModalList.appendChild(div);
         });
       } else {
-        refToggle.style.display = 'none';
+        refBtn.style.display = 'none';
       }
       showResultView();
     }
@@ -1237,11 +1450,11 @@ Write ONE original, engaging writing prompt of the type "${textType}".
     form.addEventListener('submit', async e => {
       e.preventDefault();
       hideError();
-      const textType = textTypeEl.value;
+      const textType = selectedType;
       const topic    = topicEl.value.trim();
 
       if (!textType) {
-        textTypeEl.focus();
+        stripCells[0]?.focus();
         showError('Please select a writing type to continue.');
         return;
       }
@@ -1285,6 +1498,7 @@ Write ONE original, engaging writing prompt of the type "${textType}".
       } catch (err) {
         stopLoading();
         generateBtn.disabled = false;
+        if (err.name === 'AbortError') return;
         showError(err.message || 'An unexpected error occurred. Please try again.');
       }
     });
@@ -1318,39 +1532,27 @@ Write ONE original, engaging writing prompt of the type "${textType}".
       }
     });
 
-    /* ── Export as Doc ──────────────────────────────────────── */
-    exportBtn.addEventListener('click', () => {
-      if (!currentPrompt) return;
-      const title = `Writing Prompt — ${currentType}${currentTopic ? ': ' + currentTopic : ''}`;
-      const body  = renderPrompt(currentPrompt);
-      const doc   = `<!DOCTYPE html>
-<html xmlns:o='urn:schemas-microsoft-com:office:office'
-      xmlns:w='urn:schemas-microsoft-com:office:word'
-      xmlns='http://www.w3.org/TR/REC-html40'>
-<head><meta charset='utf-8'><title>${escapeHtml(title)}</title>
-<style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.6;margin:2.5cm;color:#2c2416}h1{font-size:14pt;font-weight:bold;margin-bottom:1em}p{margin:0 0 0.8em}ul{margin:0.4em 0 0.8em 1.5em}li{margin-bottom:0.3em}</style>
-</head><body><h1>${escapeHtml(title)}</h1>${body}</body></html>`;
-      const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href     = url;
-      a.download = `writing-prompt-${currentType.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.doc`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      exportBtn.classList.add('success');
-      exportBtn.innerHTML = '<span aria-hidden="true">✓</span> Saved';
-      setTimeout(() => {
-        exportBtn.classList.remove('success');
-        exportBtn.innerHTML = '<span aria-hidden="true">↓</span> Doc';
-      }, 2000);
-    });
+    /* ── Reference modal ─────────────────────────────────────── */
+    function onRefModalEscape(e) { if (e.key === 'Escape') closeRefModal(); }
+    function openRefModal() {
+      refModalBackdrop.classList.add('rm-visible');
+      refModal.classList.add('rm-open');
+      document.addEventListener('keydown', onRefModalEscape);
+    }
+    function closeRefModal() {
+      refModalBackdrop.classList.remove('rm-visible');
+      refModal.classList.remove('rm-open');
+      document.removeEventListener('keydown', onRefModalEscape);
+    }
+    refBtn.addEventListener('click', openRefModal);
+    refModalClose.addEventListener('click', closeRefModal);
+    refModalBackdrop.addEventListener('click', closeRefModal);
 
-    /* ── Ref toggle ─────────────────────────────────────────── */
-    refToggle.addEventListener('click', () => {
-      const open = refPanel.classList.toggle('visible');
-      refToggle.textContent = open ? 'Hide reference questions ▴' : 'View reference questions ▾';
+    /* ── Cancel loading ──────────────────────────────────────── */
+    cancelBtn.addEventListener('click', () => {
+      if (abortController) abortController.abort();
+      stopLoading();
+      generateBtn.disabled = false;
     });
 
   })();
