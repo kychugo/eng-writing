@@ -808,9 +808,6 @@
         <button class="btn-action" id="copyBtn" type="button" aria-label="Copy prompt">
           <span aria-hidden="true">⎘</span> Copy
         </button>
-        <button class="btn-action" id="exportBtn" type="button" aria-label="Export as Word doc">
-          <span aria-hidden="true">↓</span> Doc
-        </button>
       </div>
     </div>
 
@@ -927,7 +924,6 @@
     const resultBox       = document.getElementById('resultBox');
     const resultContent   = document.getElementById('resultContent');
     const copyBtn         = document.getElementById('copyBtn');
-    const exportBtn       = document.getElementById('exportBtn');
     const backBtn         = document.getElementById('backBtn');
     const refToggle       = document.getElementById('refToggle');
     const refPanel        = document.getElementById('refPanel');
@@ -1316,35 +1312,6 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         copyBtn.textContent = '✓ Copied';
         setTimeout(reset, 2000);
       }
-    });
-
-    /* ── Export as Doc ──────────────────────────────────────── */
-    exportBtn.addEventListener('click', () => {
-      if (!currentPrompt) return;
-      const title = `Writing Prompt — ${currentType}${currentTopic ? ': ' + currentTopic : ''}`;
-      const body  = renderPrompt(currentPrompt);
-      const doc   = `<!DOCTYPE html>
-<html xmlns:o='urn:schemas-microsoft-com:office:office'
-      xmlns:w='urn:schemas-microsoft-com:office:word'
-      xmlns='http://www.w3.org/TR/REC-html40'>
-<head><meta charset='utf-8'><title>${escapeHtml(title)}</title>
-<style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.6;margin:2.5cm;color:#2c2416}h1{font-size:14pt;font-weight:bold;margin-bottom:1em}p{margin:0 0 0.8em}ul{margin:0.4em 0 0.8em 1.5em}li{margin-bottom:0.3em}</style>
-</head><body><h1>${escapeHtml(title)}</h1>${body}</body></html>`;
-      const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href     = url;
-      a.download = `writing-prompt-${currentType.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.doc`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      exportBtn.classList.add('success');
-      exportBtn.innerHTML = '<span aria-hidden="true">✓</span> Saved';
-      setTimeout(() => {
-        exportBtn.classList.remove('success');
-        exportBtn.innerHTML = '<span aria-hidden="true">↓</span> Doc';
-      }, 2000);
     });
 
     /* ── Ref toggle ─────────────────────────────────────────── */
