@@ -1693,6 +1693,13 @@ html, body {
     #cropper-container { width: 100%; height: 400px; background-color: var(--color-bg); border: 2px dashed var(--color-border); border-radius: var(--border-radius); color: var(--color-text-muted); position: relative; }
     #cropper-container span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
     #cropper-image { display: none; max-width: 100%; max-height: 100%; }
+    .ocr-upload-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; width: 100%; padding: 2rem 1rem; margin-top: 0.5rem; border: 2px dashed var(--color-border); border-radius: var(--border-radius); background: var(--color-bg); color: var(--color-text-muted); cursor: pointer; transition: border-color 0.2s, background 0.2s; text-align: center; }
+    .ocr-upload-zone:hover, .ocr-upload-zone.dragover { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 6%, transparent); color: var(--color-text); }
+    .ocr-upload-zone svg { opacity: 0.5; }
+    .ocr-upload-zone .ocr-upload-label { font-size: 0.9rem; font-weight: 600; }
+    .ocr-upload-zone .ocr-upload-hint { font-size: 0.78rem; opacity: 0.7; }
+    .ocr-upload-btn { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; padding: 0.4rem 1rem; background: var(--color-primary); color: #fff; border: none; border-radius: var(--border-radius); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .ocr-upload-btn:hover { opacity: 0.85; }
 
     /* --- CHECKER & ENHANCER A/B VIEW (V3) --- */
     .comparison-container { display: flex; gap: 1.5rem; width: 100%; flex-wrap: wrap; }
@@ -3195,8 +3202,17 @@ html, body {
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Upload an image of a document, crop the desired area, and extract the text.</p>
             <div class="ocr-container">
                 <div class="ocr-image-area">
-                    <label for="ocr-input">1. Upload Image</label>
-                    <input type="file" id="ocr-input" accept="image/*" class="input-field" style="margin-top: 0.5rem;">
+                    <label>1. Upload Image</label>
+                    <input type="file" id="ocr-input" accept="image/*" style="display:none;">
+                    <div class="ocr-upload-zone" id="ocr-upload-zone" role="button" tabindex="0" aria-label="Click or drag and drop to upload an image for OCR">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span class="ocr-upload-label">Drag &amp; drop an image here</span>
+                        <span class="ocr-upload-hint">or click to browse files (JPG, PNG, etc.)</span>
+                        <button type="button" class="ocr-upload-btn" id="ocr-choose-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            Choose Image
+                        </button>
+                    </div>
                     <div id="cropper-container" style="margin-top: 1rem;"><img id="cropper-image"><span>Image preview will appear here</span></div>
                     <button id="ocr-btn" class="btn" style="margin-top: 1rem;" disabled>2. Scan Cropped Area</button>
                 </div>
@@ -3338,7 +3354,7 @@ html, body {
          PANEL 8: SRS / Flipcard Review (from vocab.html)
          ═══════════════════════════════════════════════════════ -->
 <div class="desk-panel" id="panel-srs" role="tabpanel" aria-labelledby="tab-srs">
-      <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div><p>Loading SRS data…</p></div>
+      <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><p>Loading SRS data…</p></div>
     </div>
     <!-- /#panel-srs -->
 
@@ -4343,7 +4359,7 @@ Before finalizing, self-review to ensure all five '###' sections are present and
         enhancerBtn.addEventListener('click', () => {
             const text = document.getElementById('enhancer-text').value;
             if (!text.trim()) { alert('Please enter text to enhance.'); return; }
-            const prompt = `You are an expert editor. Enhance the user's text by improving vocabulary, sentence structure, and flow, without changing the original meaning. You MUST respond with a single, valid JSON object ONLY. The JSON object must have this structure: { "full_enhanced_text": "The complete, polished version...", "enhancements": [ { "original_phrase": "...", "enhanced_phrase": "...", "enhancement_type": "One of: 'Vocabulary', 'Fluency', 'Clarity', 'Conciseness'", "explanation": "A brief explanation." } ] }. If no enhancements are needed, return an empty "enhancements" array. Now, enhance: --- ${text} ---`;
+            const prompt = `You are an expert editor. Enhance the user's text by improving vocabulary, sentence structure, and flow, without changing the original meaning. When enhancing vocabulary, only use words at B2 to C1 CEFR level. You MUST respond with a single, valid JSON object ONLY. The JSON object must have this structure: { "full_enhanced_text": "The complete, polished version...", "enhancements": [ { "original_phrase": "...", "enhanced_phrase": "...", "enhancement_type": "One of: 'Vocabulary', 'Fluency', 'Clarity', 'Conciseness'", "explanation": "A brief explanation." } ] }. If no enhancements are needed, return an empty "enhancements" array. Now, enhance: --- ${text} ---`;
             const payload = { model: 'openai', messages: [{ role: 'user', content: prompt }], response_format: { "type": "json_object" } };
             callApi(payload, document.getElementById('enhancer-loader'), enhancerBtn, document.getElementById('enhancer-results'), (json, el) => displayComparisonResults(json, el, 'enhancer'));
         });
@@ -4454,18 +4470,37 @@ Before finalizing, self-review to ensure all five '###' sections are present and
 
         // --- IMAGE TO TEXT (OCR) ---
         const ocrInput = document.getElementById('ocr-input'), cropperImage = document.getElementById('cropper-image'), cropperContainer = document.getElementById('cropper-container'), ocrBtn = document.getElementById('ocr-btn');
+        const ocrUploadZone = document.getElementById('ocr-upload-zone');
+
+        function ocrLoadFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (ocrCropper) ocrCropper.destroy();
+                cropperImage.src = event.target.result; cropperContainer.querySelector('span').style.display = 'none';
+                ocrCropper = new Cropper(cropperImage, { viewMode: 1, background: false, autoCropArea: 0.8, responsive: true });
+                ocrBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
         ocrInput.addEventListener('change', (e) => {
             const files = e.target.files;
-            if (files && files.length > 0) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (ocrCropper) ocrCropper.destroy();
-                    cropperImage.src = event.target.result; cropperContainer.querySelector('span').style.display = 'none';
-                    ocrCropper = new Cropper(cropperImage, { viewMode: 1, background: false, autoCropArea: 0.8, responsive: true });
-                    ocrBtn.disabled = false;
-                };
-                reader.readAsDataURL(files[0]);
-            }
+            if (files && files.length > 0) ocrLoadFile(files[0]);
+        });
+
+        ocrUploadZone.addEventListener('click', (e) => {
+            if (e.target.closest('.ocr-upload-btn')) return;
+            ocrInput.click();
+        });
+        document.getElementById('ocr-choose-btn').addEventListener('click', () => ocrInput.click());
+        ocrUploadZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ocrInput.click(); } });
+        ocrUploadZone.addEventListener('dragover', (e) => { e.preventDefault(); ocrUploadZone.classList.add('dragover'); });
+        ocrUploadZone.addEventListener('dragleave', () => ocrUploadZone.classList.remove('dragover'));
+        ocrUploadZone.addEventListener('drop', (e) => {
+            e.preventDefault(); ocrUploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) ocrLoadFile(file);
         });
         ocrBtn.addEventListener('click', () => {
             if (!ocrCropper) return;
@@ -4651,6 +4686,7 @@ Before finalizing, self-review to ensure all five '###' sections are present and
 
             const prompt =
 `Generate a vocabulary list of exactly ${count} English words for Hong Kong DSE students at ${level} level on the topic of "${topic}".
+All words MUST be strictly at B2 to C1 CEFR level — do not include words below B2 or above C1.
 
 For EACH word, use this exact format:
 1. [WORD] ([part of speech])
@@ -4875,7 +4911,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             if (!all.length) {
                 panel.innerHTML = `
                     <div class="card">
-                        <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div>
+                        <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
                         <div><div class="card-title">Flipcard</div>
                         <div class="card-hint">No words yet — generate vocabulary and add words to Flipcard</div></div></div>
                         <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></div>
@@ -4906,7 +4942,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             srsQueue = shuffle(due);
             srsIdx = 0;
             panel.innerHTML = `<div class="card">
-                <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div>
+                <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
                 <div><div class="card-title">Flipcard Session</div>
     </div></div>
                 ${stats}
@@ -5064,7 +5100,7 @@ Return ONLY valid JSON (no other text):
         }
 
         async function startMatchingQuiz(topic, level, quizBtn, quizOut) {
-            const prompt = `Generate 5 vocabulary matching pairs for Hong Kong DSE English students at ${level} level on the topic of "${topic}".
+            const prompt = `Generate 5 vocabulary matching pairs for Hong Kong DSE English students at ${level} level on the topic of "${topic}". All words MUST be strictly at B2 to C1 CEFR level.
 Return ONLY valid JSON:
 {
   "pairs": [
@@ -5180,7 +5216,7 @@ Return ONLY valid JSON:
             }
 
             // MCQ (existing logic)
-            const prompt = `Generate a vocabulary quiz for Hong Kong DSE English students at ${level} level on the topic of "${topic}".
+            const prompt = `Generate a vocabulary quiz for Hong Kong DSE English students at ${level} level on the topic of "${topic}". All vocabulary used MUST be strictly at B2 to C1 CEFR level.
 Create exactly 5 multiple-choice questions.
 
 Return ONLY valid JSON (no other text, no markdown code blocks) in this format:

@@ -1416,6 +1416,7 @@
 
             const prompt =
 `Generate a vocabulary list of exactly ${count} English words for Hong Kong DSE students at ${level} level on the topic of "${topic}".
+All words MUST be strictly at B2 to C1 CEFR level — do not include words below B2 or above C1.
 
 For EACH word, use this exact format:
 1. [WORD] ([part of speech])
@@ -1829,7 +1830,7 @@ Return ONLY valid JSON (no other text):
         }
 
         async function startMatchingQuiz(topic, level, quizBtn, quizOut) {
-            const prompt = `Generate 5 vocabulary matching pairs for Hong Kong DSE English students at ${level} level on the topic of "${topic}".
+            const prompt = `Generate 5 vocabulary matching pairs for Hong Kong DSE English students at ${level} level on the topic of "${topic}". All words MUST be strictly at B2 to C1 CEFR level.
 Return ONLY valid JSON:
 {
   "pairs": [
@@ -1945,7 +1946,7 @@ Return ONLY valid JSON:
             }
 
             // MCQ (existing logic)
-            const prompt = `Generate a vocabulary quiz for Hong Kong DSE English students at ${level} level on the topic of "${topic}".
+            const prompt = `Generate a vocabulary quiz for Hong Kong DSE English students at ${level} level on the topic of "${topic}". All vocabulary used MUST be strictly at B2 to C1 CEFR level.
 Create exactly 5 multiple-choice questions.
 
 Return ONLY valid JSON (no other text, no markdown code blocks) in this format:
