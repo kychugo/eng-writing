@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 30 30">
+  <!-- Background: rounded square, dark ink colour matching the site palette -->
+  <rect x="-3" y="-3" width="30" height="30" rx="7" fill="#2c2416"/>
+  <!-- Pen / edit icon (filled gold) -->
+  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"
+        fill="#b8965a"/>
+  <!-- Cap accent line (parchment / cream) -->
+  <line x1="15" y1="5" x2="19" y2="9"
+        stroke="#f5f0e8" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

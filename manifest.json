@@ -1,0 +1,29 @@
+{
+  "name": "The Writer's Desk",
+  "short_name": "Writer's Desk",
+  "description": "An English writing and vocabulary platform for HKDSE students.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#2c2416",
+  "theme_color": "#2c2416",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
