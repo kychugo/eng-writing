@@ -5075,25 +5075,66 @@ Return ONLY valid JSON (no other text):
                 document.getElementById(`sc-input-${idx}`).addEventListener('keydown', e => { if(e.key==='Enter') checkSC(idx); });
             }
 
-            window.checkSC = function(idx) {
+            window.checkSC = async function(idx) {
                 const input = document.getElementById(`sc-input-${idx}`);
                 const btn = input.parentElement.querySelector('button');
                 const explanation = document.getElementById(`sc-explanation-${idx}`);
-                const answer = (input.value||'').trim().toLowerCase();
-                const correct = scQs[idx].answer.toLowerCase();
-                const isCorrect = answer === correct;
-                if(isCorrect) scScore++;
+                const userAnswer = (input.value||'').trim();
+                const q = scQs[idx];
+                const correct = q.answer;
+
                 input.disabled = true; if(btn) btn.disabled = true;
-                input.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)';
-                input.style.background = isCorrect ? 'var(--green-light)' : 'var(--red-light)';
-                explanation.innerHTML = `${isCorrect ? '<b>Correct!</b>' : `The answer was: <strong>${escapeHtml(scQs[idx].answer)}</strong>`}<br><i>${escapeHtml(scQs[idx].explanation||'')}</i>`;
-                explanation.classList.add('show');
-                const nextBtnSC = document.createElement('button');
-                nextBtnSC.className = 'btn btn-primary quiz-next-btn';
-                nextBtnSC.style.cssText = 'margin-top:1rem;display:flex;align-items:center;gap:.5rem';
-                nextBtnSC.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
-                nextBtnSC.onclick = function() { scIdx++; renderSCQ(scIdx); };
-                explanation.parentElement.appendChild(nextBtnSC);
+
+                const exactMatch = userAnswer.toLowerCase() === correct.toLowerCase();
+
+                function showResult(isCorrect, feedbackHtml) {
+                    input.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)';
+                    input.style.background = isCorrect ? 'var(--green-light)' : 'var(--red-light)';
+                    explanation.innerHTML = `${feedbackHtml}<br><i>${escapeHtml(q.explanation||'')}</i>`;
+                    explanation.classList.add('show');
+                    const nextBtnSC = document.createElement('button');
+                    nextBtnSC.className = 'btn btn-primary quiz-next-btn';
+                    nextBtnSC.style.cssText = 'margin-top:1rem;display:flex;align-items:center;gap:.5rem';
+                    nextBtnSC.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
+                    nextBtnSC.onclick = function() { scIdx++; renderSCQ(scIdx); };
+                    explanation.parentElement.appendChild(nextBtnSC);
+                }
+
+                if (exactMatch) {
+                    scScore++;
+                    showResult(true, '<b>Correct!</b>');
+                } else {
+                    explanation.innerHTML = `<span class="spinner" role="status" aria-label="Checking with AI"></span> <span aria-live="polite">Checking with AI…</span>`;
+                    explanation.classList.add('show');
+
+                    const aiPrompt = `You are an English teacher marking a sentence completion exercise. Decide if the student's answer is correct, a valid synonym, or an acceptable alternative for the blank.
+
+Sentence: "${q.sentence}"
+Expected answer: "${correct}"
+Hint given: "${q.hint||''}"
+Student's answer: "${userAnswer}"
+
+Respond ONLY with valid JSON, no other text:
+{"correct": true, "feedback": "Well done! Your answer is acceptable because …"}
+or
+{"correct": false, "feedback": "Not quite. The expected answer is '${correct}' because …"}`;
+
+                    let aiResult = null;
+                    try {
+                        const raw = await callAI(aiPrompt);
+                        if (raw) {
+                            const m = raw.match(/\{[\s\S]*\}/);
+                            aiResult = m ? JSON.parse(m[0]) : null;
+                        }
+                    } catch(e) { /* fall back to string-match result */ }
+
+                    const isCorrect = aiResult?.correct ?? false;
+                    if (isCorrect) scScore++;
+                    const feedbackText = aiResult?.feedback
+                        ? escapeHtml(aiResult.feedback)
+                        : `The answer was: <strong>${escapeHtml(correct)}</strong>`;
+                    showResult(isCorrect, isCorrect ? `<b>Correct!</b> ${feedbackText}` : feedbackText);
+                }
             };
 
             renderSCQ(0);
