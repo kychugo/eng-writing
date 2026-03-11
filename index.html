@@ -2966,13 +2966,17 @@ html, body {
 // ============================================================
 // SECTION 1: PANEL NAVIGATION (must come first)
 // ============================================================
-// ============================================================
-// THE WRITER'S DESK — PANEL NAVIGATION
-// ============================================================
+
+// Cache all desk panels at startup to avoid repeated DOM queries
+var _deskPanels = null;
+function _getDeskPanels() {
+  if (!_deskPanels) _deskPanels = document.querySelectorAll('.desk-panel');
+  return _deskPanels;
+}
 
 function showPanel(panelId) {
   // Hide all desk panels
-  document.querySelectorAll('.desk-panel').forEach(function(p) {
+  _getDeskPanels().forEach(function(p) {
     p.style.display = 'none';
   });
 
@@ -4995,21 +4999,21 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
 // Replaces the original vocab.html switchTab with our panel nav
 // ============================================================
 function switchTab(name, fromGen) {
-  var panelMap = {
+  const panelMap = {
     'generator': 'panel-vocab',
     'quiz': 'panel-quiz',
     'srs': 'panel-srs'
   };
-  var panelId = panelMap[name] || ('panel-' + name);
+  const panelId = panelMap[name] || ('panel-' + name);
   showPanel(panelId);
 
   // Handle fromGen: copy topic & level to quiz form
   if (name === 'quiz' && fromGen) {
     try {
-      var genTopic = document.getElementById('genTopic');
-      var genLevel = document.getElementById('genLevel');
-      var quizTopic = document.getElementById('quizTopic');
-      var quizLevel = document.getElementById('quizLevel');
+      const genTopic = document.getElementById('genTopic');
+      const genLevel = document.getElementById('genLevel');
+      const quizTopic = document.getElementById('quizTopic');
+      const quizLevel = document.getElementById('quizLevel');
       if (genTopic && quizTopic && genTopic.value) quizTopic.value = genTopic.value;
       if (genLevel && quizLevel) quizLevel.value = genLevel.value;
     } catch(e) {}
