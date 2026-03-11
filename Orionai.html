@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orion | Advanced HKDSE English Suite</title>
+
+<!-- Third-party Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://unpkg.com/html-to-docx-js@1.3.0/dist/html-to-docx.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<style>
+    /* CSS RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* FONTS */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono&display=swap');
+
+    /* VARIABLES */
+    :root {
+        --color-bg: #0d1117;
+        --color-surface: #161b22;
+        --color-primary: #8A2BE2; /* A vibrant purple */
+        --color-primary-light: #a052e8;
+        --color-text: #c9d1d9;
+        --color-text-muted: #8b949e;
+        --color-border: #30363d;
+        --color-success: #28a745;
+        --color-error: #dc3545;
+        --font-main: 'Inter', sans-serif;
+        --font-mono: 'Roboto Mono', monospace;
+        --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+        --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+        --border-radius: 10px;
+
+        /* V3 Feedback Colors */
+        --color-enhancement: #64b5f6;      /* Blue for Enhancements */
+        --color-feedback-grammar: #e57373;     /* Red for Grammar */
+        --color-feedback-typo: #ffb74d;        /* Orange for Typo */
+        --color-feedback-fluency: #81c784;     /* Green for Fluency */
+        --color-feedback-punctuation: #fff176; /* Yellow for Punctuation */
+        --color-feedback-style: #9575cd;       /* Purple for Style */
+    }
+
+    /* GENERAL STYLES */
+    body {
+        font-family: var(--font-main);
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.7;
+        font-size: 16px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* HEADER & LOGO */
+    .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .logo-container { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 50px; height: 50px; animation: pulse-glow 4s ease-in-out infinite; }
+    @keyframes pulse-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px var(--color-primary)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 8px var(--color-primary-light)); } }
+    .logo-title { font-size: 2rem; font-weight: 700; color: var(--color-text); }
+    .logo-title span { color: var(--color-primary); }
+
+    /* NAVIGATION */
+    .nav-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; background-color: var(--color-surface); padding: 0.5rem; border-radius: var(--border-radius); border: 1px solid var(--color-border); }
+    .nav-tab { padding: 0.75rem 1.25rem; border: none; border-radius: 7px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; background-color: transparent; color: var(--color-text-muted); font-size: 0.9rem; }
+    .nav-tab:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--color-text); }
+    .nav-tab.active { background-color: var(--color-primary); color: #fff; }
+
+    /* TOOL PANEL & FORM */
+    .tool-panel { display: none; padding: 2rem; background-color: var(--color-surface); border-radius: var(--border-radius); margin-top: 1rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-md); animation: fadeIn 0.5s ease-in-out; }
+    .tool-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-text-muted); }
+    .input-field, .textarea-field { width: 100%; padding: 0.8rem 1rem; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--border-radius); color: var(--color-text); font-family: var(--font-main); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+    .input-field:focus, .textarea-field:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3); }
+    .textarea-field { min-height: 200px; resize: vertical; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background-color: var(--color-primary); color: #fff; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1rem; font-weight: 600; transition: background-color 0.3s, transform 0.2s; box-shadow: var(--shadow-sm); }
+    .btn:hover { background-color: var(--color-primary-light); transform: translateY(-2px); }
+    .btn:disabled { background-color: var(--color-text-muted); cursor: not-allowed; transform: none; }
+    .btn-secondary { background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
+    .btn-secondary:hover { background-color: var(--color-border); }
+
+    /* RESULTS AREA & ERROR CARD */
+    .results-area { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;}
+    .results-header h3 { font-size: 1.5rem; color: var(--color-primary-light); margin: 0; }
+    .error-card { display: flex; align-items: center; gap: 1rem; background-color: rgba(220, 53, 69, 0.1); border: 1px solid var(--color-error); border-radius: var(--border-radius); padding: 1.5rem; }
+    .error-card svg { width: 32px; height: 32px; fill: var(--color-error); flex-shrink: 0; }
+    .error-card h4 { color: var(--color-error); margin: 0 0 0.25rem 0; }
+
+    /* LOADER */
+    .loader-container { display: none; justify-content: center; align-items: center; margin: 2rem 0; gap: 1rem; flex-direction: column; }
+    .loader { width: 50px; height: 50px; border: 5px solid var(--color-border); border-top: 5px solid var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* --- WRITING PLANNER & SHARED STYLES --- */
+    .planner-card { background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--border-radius); margin-bottom: 2rem; opacity: 0; transform: translateY(20px); animation: card-fade-in 0.6s ease-out forwards; }
+    @keyframes card-fade-in { to { opacity: 1; transform: translateY(0); } }
+    .planner-card-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); border-radius: var(--border-radius) var(--border-radius) 0 0; }
+    .planner-card-header svg { width: 28px; height: 28px; fill: var(--color-primary-light); flex-shrink: 0; }
+    .planner-card-header h3 { font-size: 1.4rem; font-weight: 600; color: var(--color-text); margin: 0; }
+    .planner-card-body { padding: 1.5rem; }
+    .planner-card-body p { margin-bottom: 1rem; }
+    .planner-card-body strong { color: var(--color-primary-light); }
+    .mindmap-container { overflow-x: auto; padding: 1rem; }
+    .mindmap { display: inline-flex; flex-direction: column; align-items: flex-start; min-width: 100%; padding-left: 0; }
+    .mindmap ul { position: relative; padding-left: 3rem; list-style: none; }
+    .mindmap li { position: relative; padding: 0.75rem 1.25rem; margin: 1.5rem 0; background-color: var(--color-surface); border-radius: var(--border-radius); border-left: 4px solid var(--color-primary); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .mindmap li:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .mindmap li::before, .mindmap li::after { content: ''; position: absolute; left: -1.5rem; background-color: var(--color-border); z-index: -1; }
+    .mindmap li::before { top: 50%; width: 1.5rem; height: 2px; margin-top: -1px; }
+    .mindmap ul > li:first-child::after { top: 50%; height: 50%; }
+    .mindmap ul > li:last-child::after { top: 0; height: 50%; }
+    .mindmap ul > li:not(:first-child):not(:last-child)::after { top: 0; height: 100%; }
+    .mindmap li::after { top: 0; width: 2px; height: 100%; }
+    .mindmap > ul > li::after { display: none; }
+    .idea-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .idea-card { background-color: var(--color-surface); padding: 1.25rem; border-radius: var(--border-radius); border-left: 4px solid; transition: transform 0.2s ease; }
+    .idea-card:hover { transform: translateY(-4px); }
+    .idea-card.for { border-color: var(--color-success); }
+    .idea-card.against { border-color: var(--color-error); }
+    .idea-card.neutral { border-color: var(--color-primary-light); }
+    .idea-card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .idea-card.for .idea-card-title { color: var(--color-success); }
+    .idea-card.against .idea-card-title { color: var(--color-error); }
+    .idea-card.neutral .idea-card-title { color: var(--color-primary-light); }
+    .structure-stepper { position: relative; padding: 1rem 0; }
+    .structure-stepper::before { content: ''; position: absolute; left: 18px; top: 1rem; bottom: 1rem; width: 4px; background-color: var(--color-border); border-radius: 2px; }
+    .step { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .step-number { flex-shrink: 0; z-index: 1; width: 40px; height: 40px; display: grid; place-items: center; background-color: var(--color-primary); color: #fff; border-radius: 50%; font-weight: 700; border: 4px solid var(--color-bg); }
+    .step-content strong { display: block; font-size: 1.2rem; margin-bottom: 0.25rem; }
+    .tips-grid, .sentences-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1rem; }
+    .tip-card, .sentence-card { display: flex; align-items: flex-start; gap: 1rem; background-color: var(--color-surface); padding: 1.25rem; border-radius: var(--border-radius); }
+    .tip-card svg, .sentence-card svg { flex-shrink: 0; width: 24px; height: 24px; margin-top: 4px; color: var(--color-primary-light); }
+    .sentence-card strong { color: var(--color-primary-light); }
+
+    /* --- OCR --- */
+    .ocr-container { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .ocr-image-area, .ocr-text-area { flex: 1; min-width: 300px; }
+    #cropper-container { width: 100%; height: 400px; background-color: var(--color-bg); border: 2px dashed var(--color-border); border-radius: var(--border-radius); color: var(--color-text-muted); position: relative; }
+    #cropper-container span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    #cropper-image { display: none; max-width: 100%; max-height: 100%; }
+
+    /* --- CHECKER & ENHANCER A/B VIEW (V3) --- */
+    .comparison-container { display: flex; gap: 1.5rem; width: 100%; flex-wrap: wrap; }
+    .comparison-panel { flex: 1; min-width: 300px; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--border-radius); padding: 1.5rem; }
+    .comparison-panel h4 { margin-top: 0; margin-bottom: 1rem; color: var(--color-text); border-bottom: 1px solid var(--color-border); padding-bottom: 0.75rem; }
+    .comparison-panel-content { white-space: pre-wrap; line-height: 1.8; font-size: 0.95rem; }
+    .change-span { cursor: pointer; border-radius: 4px; padding: 2px 4px; transition: background-color 0.2s; }
+    del.change-span { text-decoration: none; }
+    ins.change-span { text-decoration: none; }
+    .change-span:hover { background-color: rgba(138, 43, 226, 0.4) !important; }
+    .correct-mark { color: var(--color-success); }
+    .incorrect-mark { color: var(--color-error); }
+    .enhancement-mark { color: var(--color-enhancement); }
+    
+    .change-span.feedback-grammar { background-color: rgba(229, 115, 115, 0.2); }
+    .change-span.feedback-typo { background-color: rgba(255, 183, 77, 0.2); }
+    .change-span.feedback-fluency { background-color: rgba(129, 199, 132, 0.2); }
+    .change-span.feedback-punctuation { background-color: rgba(255, 241, 118, 0.2); }
+    .change-span.feedback-style { background-color: rgba(149, 117, 205, 0.2); }
+    .change-span.enhancement { background-color: rgba(100, 181, 246, 0.2); }
+
+    /* --- Popover (V3) --- */
+    .popover { position: absolute; z-index: 1000; background-color: var(--color-surface); border-radius: var(--border-radius); box-shadow: var(--shadow-md); padding: 1rem; width: 350px; max-width: 90vw; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; border-top: 4px solid; }
+    .popover.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .popover-header { margin-bottom: 0.75rem; }
+    .popover-header .type-badge { font-weight: 600; font-size: 0.9rem; padding: 3px 8px; border-radius: 5px; color: #0d1117; }
+    .popover-body p { margin: 0.5rem 0; font-size: 0.9rem; }
+    .popover-body strong { color: var(--color-text-muted); }
+    .popover-body .suggestion { font-weight: 500;}
+    .popover-actions { margin-top: 1rem; border-top: 1px solid var(--color-border); padding-top: 0.75rem; }
+    
+    .popover.feedback-grammar { border-color: var(--color-feedback-grammar); } .popover .type-badge.feedback-grammar { background-color: var(--color-feedback-grammar); }
+    .popover.feedback-typo { border-color: var(--color-feedback-typo); } .popover .type-badge.feedback-typo { background-color: var(--color-feedback-typo); }
+    .popover.feedback-fluency { border-color: var(--color-feedback-fluency); } .popover .type-badge.feedback-fluency { background-color: var(--color-feedback-fluency); }
+    .popover.feedback-punctuation { border-color: var(--color-feedback-punctuation); color: #0d1117 } .popover .type-badge.feedback-punctuation { background-color: var(--color-feedback-punctuation); }
+    .popover.feedback-style { border-color: var(--color-feedback-style); } .popover .type-badge.feedback-style { background-color: var(--color-feedback-style); }
+    .popover.enhancement { border-color: var(--color-enhancement); } .popover .type-badge.enhancement { background-color: var(--color-enhancement); }
+    
+    /* --- Mistake Notebook Styles (V3) --- */
+    .notebook-entry { background-color: var(--color-surface); border-left: 4px solid; padding: 1rem 1.5rem; border-radius: var(--border-radius); margin-bottom: 1rem; position: relative; }
+    .notebook-entry .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 1.2rem; padding: 5px; }
+    .notebook-entry .delete-btn:hover { color: var(--color-error); }
+    .notebook-entry p { margin: 0.5rem 0; }
+    .notebook-entry .notebook-type { font-weight: bold; }
+    .notebook-entry del { background-color: rgba(220, 53, 69, 0.1); padding: 0 4px; border-radius: 3px; }
+    .notebook-entry ins { background-color: rgba(40, 167, 69, 0.1); padding: 0 4px; border-radius: 3px; text-decoration: none; }
+    #notebook-container:empty::after { content: 'Your saved mistakes will appear here. Add them from the Grammar Checker results.'; color: var(--color-text-muted); display: block; text-align: center; padding: 2rem; }
+
+    /* FOOTER */
+    .footer { text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; border-top: 1px solid var(--color-border); background-color: var(--color-surface); }
+    .footer-links { display: flex; justify-content: center; align-items: center; gap: 2rem; margin-bottom: 1rem; }
+    .footer-links a { color: var(--color-text-muted); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--color-primary-light); }
+    .footer-links svg { width: 28px; height: 28px; fill: currentColor; }
+    .footer-copyright { font-size: 0.9rem; color: var(--color-text-muted); }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+        .container { padding: 1rem; }
+        .header, .nav-tabs { flex-direction: column; align-items: stretch; text-align: center; }
+        .logo-container { justify-content: center; }
+        .nav-tab { width: 100%; }
+        .tool-panel { padding: 1.5rem; }
+        .results-header { flex-direction: column; align-items: flex-start; }
+        .idea-grid, .tips-grid, .sentences-grid, .comparison-container { grid-template-columns: 1fr; flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="logo-container">
+            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:var(--color-primary-light);stop-opacity:1" /><stop offset="100%" style="stop-color:var(--color-primary);stop-opacity:1" /></linearGradient></defs><path fill="url(#grad1)" d="M50,5 A45,45 0 1,1 50,95 A45,45 0 1,1 50,5 M50,15 A35,35 0 1,0 50,85 A35,35 0 1,0 50,15 Z"/><path fill="var(--color-text)" d="M40,35 l20,15 l-20,15 Z"/></svg>
+            <h1 class="logo-title">Orion<span>AI</span></h1>
+        </div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="planner">Writing Planner</button>
+            <button class="nav-tab" data-tab="checker">Grammar Checker</button>
+            <button class="nav-tab" data-tab="enhancer">Text Enhancer</button>
+            <button class="nav-tab" data-tab="ocr">Image to Text</button>
+            <button class="nav-tab" data-tab="notebook">Mistake Notebook</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Writing Planner Tool -->
+        <div id="planner-tool" class="tool-panel active">
+            <h2>Writing Planner</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Get a complete, AI-driven plan for your essay based on your topic.</p>
+            <div class="form-group">
+                <label for="planner-topic">Writing Topic or Question</label>
+                <input type="text" id="planner-topic" class="input-field" placeholder="e.g., 'The advantages and disadvantages of online learning'">
+            </div>
+            <button id="planner-btn" class="btn">Generate Plan</button>
+            <div id="planner-loader" class="loader-container"><div class="loader"></div><p>Orion is building your strategic plan...</p></div>
+            <div id="planner-results" class="results-area"></div>
+        </div>
+
+        <!-- Grammar Checker Tool -->
+        <div id="checker-tool" class="tool-panel">
+            <h2>Grammar, Typos & Fluency Checker</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Paste your text for an A/B comparison and detailed analysis.</p>
+            <div class="form-group"><label for="checker-text">Your Text</label><textarea id="checker-text" class="textarea-field" placeholder="Enter your text here..."></textarea></div>
+            <button id="checker-btn" class="btn">Check Text</button>
+            <div id="checker-loader" class="loader-container"><div class="loader"></div><p>Orion is meticulously reviewing your text...</p></div>
+            <div id="checker-results" class="results-area"></div>
+        </div>
+
+        <!-- Text Enhancer Tool (V3) -->
+        <div id="enhancer-tool" class="tool-panel">
+            <h2>Text Enhancer</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Paste your text to improve vocabulary, sentence structure, and overall flow.</p>
+            <div class="form-group"><label for="enhancer-text">Your Text</label><textarea id="enhancer-text" class="textarea-field" placeholder="Enter text to enhance... e.g., 'The man was sad because his cat ran away. It was a bad day.'"></textarea></div>
+            <button id="enhancer-btn" class="btn">Enhance Text</button>
+            <div id="enhancer-loader" class="loader-container"><div class="loader"></div><p>Orion is elevating your language...</p></div>
+            <div id="enhancer-results" class="results-area"></div>
+        </div>
+        
+        <!-- Image to Text (OCR) Tool -->
+        <div id="ocr-tool" class="tool-panel">
+            <h2>Image to Text</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Upload an image of a document, crop the desired area, and extract the text.</p>
+            <div class="ocr-container">
+                <div class="ocr-image-area">
+                    <label for="ocr-input">1. Upload Image</label>
+                    <input type="file" id="ocr-input" accept="image/*" class="input-field" style="margin-top: 0.5rem;">
+                    <div id="cropper-container" style="margin-top: 1rem;"><img id="cropper-image"><span>Image preview will appear here</span></div>
+                    <button id="ocr-btn" class="btn" style="margin-top: 1rem;" disabled>2. Scan Cropped Area</button>
+                </div>
+                <div class="ocr-text-area">
+                    <label for="ocr-output">3. Extracted Text</label>
+                    <div id="ocr-loader" class="loader-container"><div class="loader"></div><p>Reading text from image...</p></div>
+                    <div id="ocr-results" class="results-area" style="margin-top: 0.5rem; padding-top: 0; border-top: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mistake Notebook Panel -->
+        <div id="notebook-tool" class="tool-panel">
+            <h2>Mistake Notebook</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Review your saved mistakes to improve your writing. Records are saved in your browser.</p>
+            <div id="notebook-container"></div>
+        </div>
+    </main>
+</div>
+
+<div class="popover" id="explanation-popover"></div>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="https://github.com/hugow0528" target="_blank" title="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+        <a href="mailto:whugo0528@yahoo.com" title="Email"><svg viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16z"/></svg></a>
+    </div>
+    <div class="footer-copyright">Copyright © 2025 Hugo Wong. All rights reserved.</div>
+</footer>
+
+<script>
+    let cropper = null; 
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const { jsPDF } = window.jspdf;
+
+        // --- NAVIGATION & GENERAL SETUP ---
+        const tabs = document.querySelectorAll('.nav-tab');
+        const toolPanels = document.querySelectorAll('.tool-panel');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                toolPanels.forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                const targetPanel = document.getElementById(tab.dataset.tab + '-tool');
+                if (targetPanel) targetPanel.classList.add('active');
+                if (tab.dataset.tab === 'notebook') renderNotebook();
+            });
+        });
+
+        // --- API & ERROR HANDLING (V3 UPGRADE) ---
+        const API_URL = 'https://text.pollinations.ai/openai';
+        async function callApi(payload, loaderElement, buttonElement, resultsElement, callback) {
+            loaderElement.style.display = 'flex';
+            if(buttonElement) buttonElement.disabled = true;
+            resultsElement.innerHTML = '';
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`API server responded with status ${response.status}`);
+                }
+                const data = await response.json();
+                if (!data.choices || data.choices.length === 0) {
+                     throw new Error("API returned an empty response.");
+                }
+                const content = data.choices[0].message.content;
+                if (payload.response_format && payload.response_format.type === "json_object") {
+                    try {
+                        JSON.parse(content);
+                    } catch (e) {
+                        throw new Error("AI returned invalid JSON format.");
+                    }
+                }
+                callback(content, resultsElement);
+            } catch (error) {
+                console.error("API Call Failed:", error);
+                let userMessage = "An unexpected error occurred. Please try again later.";
+                if (error.message.includes("Failed to fetch")) {
+                    userMessage = "Network connection failed. Please check your internet and try again.";
+                } else if (error.message.includes("API server responded")) {
+                    userMessage = `The AI service is temporarily unavailable (${error.message}). Please wait a moment and try again.`;
+                } else if (error.message.includes("invalid JSON")) {
+                    userMessage = "The AI returned a response in an unexpected format. This can be a temporary issue. Please try again.";
+                } else if (error.message.includes("empty response")) {
+                    userMessage = "The AI returned an empty or incomplete response. Please try again.";
+                }
+                displayErrorCard(userMessage, resultsElement);
+            } finally {
+                loaderElement.style.display = 'none';
+                if(buttonElement) buttonElement.disabled = false;
+            }
+        }
+
+        function displayErrorCard(message, element) {
+            element.innerHTML = `
+                <div class="error-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--color-error)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <div><h4>Operation Failed</h4><p>${message}</p></div>
+                </div>`;
+        }
+        
+        // --- EXPORT FUNCTION ---
+        function setupExportButtons(containerId, contentGenerator, fileName) {
+            const exportContainer = document.querySelector(`#${containerId} .export-buttons`);
+            if (!exportContainer) return;
+            exportContainer.innerHTML = '';
+            const pdfBtn = document.createElement('button');
+            pdfBtn.className = 'btn btn-secondary'; pdfBtn.textContent = 'PDF';
+            pdfBtn.onclick = () => {
+                const { element } = contentGenerator();
+                const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+                doc.html(element, { callback: (doc) => doc.save(`${fileName}.pdf`), margin: [40, 40, 40, 40], autoPaging: 'text', width: 515, windowWidth: element.scrollWidth });
+            };
+            exportContainer.appendChild(pdfBtn);
+            const docxBtn = document.createElement('button');
+            docxBtn.className = 'btn btn-secondary'; docxBtn.textContent = 'DOCX';
+            docxBtn.onclick = () => {
+                const { htmlString } = contentGenerator();
+                const blob = htmlToDocx.asBlob(htmlString, { orientation: 'portrait', margins: { top: 720, right: 720, bottom: 720, left: 720 } });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = `${fileName}.docx`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            };
+            exportContainer.appendChild(docxBtn);
+        }
+
+        // --- WRITING PLANNER (V3 PROMPT UPGRADE) ---
+        const plannerBtn = document.getElementById('planner-btn');
+        plannerBtn.addEventListener('click', () => {
+            const topic = document.getElementById('planner-topic').value;
+            if (!topic.trim()) { alert('Please enter a topic.'); return; }
+            const prompt = createPlannerPromptV3(topic);
+            const payload = { model: 'openai', messages: [{ role: 'user', content: prompt }], temperature: 0.7 };
+            callApi(payload, document.getElementById('planner-loader'), plannerBtn, document.getElementById('planner-results'), displayPlannerResults);
+        });
+
+        function createPlannerPromptV3(topic) {
+            return `You are an expert HKDSE English writing tutor.
+WARNING: Your response MUST strictly contain the following five sections, identified by '###' headings, in this exact order. Any missing section will render the response invalid.
+1. ### Mind Map ###
+2. ### Idea Points ###
+3. ### Writing Structure ###
+4. ### Useful Tips for HKDSE ###
+5. ### Advanced Sentence Structures ###
+
+INSTRUCTIONS:
+- Analyze the user's topic to deduce the most likely writing genre (e.g., Argumentative, Narrative).
+- For ### Mind Map ###: Create a conceptual mind map using a nested hyphenated list.
+- For ### Idea Points ###: Provide detailed, actionable points tailored to the deduced genre. For 'Argumentative', use headings like **For:**, **Against:**. For 'Narrative', use **Setting the Scene:**, **Climax:**, etc.
+- For ### Writing Structure ###: Outline a clear, logical structure (e.g., Introduction, Body Paragraphs, Conclusion), explaining the purpose of each part.
+- For ### Useful Tips for HKDSE ###: Give 3-4 specific, practical tips relevant to the HKDSE context for this genre.
+- For ### Advanced Sentence Structures ###: This section is critical. From the provided list, you MUST select EXACTLY FIVE distinct structures. For each of the five, your output format must be: 1. The structure name on one line, in bold (e.g., **In spite of / Despite + phrase, + clause**). 2. On the next line, a high-quality example sentence directly relevant to the topic "${topic}".
+
+List of Available Sentence Structures (Choose 5):
+* .... be (not) + worth + ger/ N, * …. aim + to-inf …., * Ger (as a subject) + (plural N) + singular V, * So + be / have / do + S, * Neither + be / have / do + S, * …. used to + to-inf …., * …. be / get + used to + ger …., * What-clause + be + N, * It is time / It is high time + S + V (past tense), * clause + on condition that + clause, * …. with a view to + ger / N, * Thanks to + N / phrase, + clause, * When it comes to + ger / N, * out of + N, * owing to / due to / because of + phrase / N, * Unless + clause, + clause, * clause + instead of + ger / N, * No matter + wh-clause, + clause, * In spite of / Despite + phrase, + clause, * Not only… , but also …..
+
+Before finalizing, self-review to ensure all five '###' sections are present and correctly formatted. Do not add any text before the first heading or after the last one. Now, create the plan for: "${topic}"`;
+        }
+
+        function displayPlannerResults(content, resultsElement) {
+            const topic = document.getElementById('planner-topic').value;
+            const fileName = (topic.substring(0, 30) || 'writing-plan').replace(/\s+/g, '-').toLowerCase();
+            const iconMap = {"Mind Map": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 20v-2.09c.69.13 1.39.2 2.1.2 2.65 0 4.9-1.57 5.9-3.79l-1.74-.89c-.61 1.34-2.29 2.47-4.16 2.47-.64 0-1.26-.08-1.85-.23l.65-1.29H20v-2h-3.3l-2-4H18v-2h-3.41l-1.7-3.41c.33-.09.67-.14 1.11-.14 2.15 0 3.93 1.25 4.69 3.01l1.74-.89C19.34 2.86 16.9 1.5 14.1 1.5c-.71 0-1.39.07-2.05.2l.9-1.8H22V2h-9.7l-2 4H7V4H5v2.29L2.71 11.5l1.74.89C5.06 10.25 6.84 9 8.9 9c.71 0 1.39.14 2 .39l1.7 3.41H9v2h3.41l2 4H11v2h3.25l-.75 1.5h-2.21l-1.74.89c.78 1.63 2.42 2.81 4.45 2.81.71 0 1.39-.09 2.05-.27l-.9 1.8H2v-2h8.34l.75-1.5z"/></svg>`, "Idea Points": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zM9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z"/></svg>`, "Writing Structure": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17h18v2H3v-2zm0-5h18v2H3v-2zm0-5h18v2H3V7zm0-5h18v2H3V2z"/></svg>`, "Useful Tips for HKDSE": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`, "Advanced Sentence Structures": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`};
+            const cardRenderers = {"Mind Map": body => `<div class="mindmap-container"><div class="mindmap">${renderListAsMindmap(body)}</div></div>`, "Idea Points": body => `<div class="planner-card-body"><div class="idea-grid">${renderListAsIdeaCards(body)}</div></div>`, "Writing Structure": body => `<div class="planner-card-body"><div class="structure-stepper">${renderListAsStepper(body)}</div></div>`, "Useful Tips for HKDSE": body => `<div class="planner-card-body"><div class="tips-grid">${renderListAsTipCards(body)}</div></div>`, "Advanced Sentence Structures": body => `<div class="planner-card-body"><div class="sentences-grid">${renderListAsSentenceCards(body)}</div></div>`};
+            resultsElement.innerHTML = `<div class="results-header"><h3>Your AI Writing Plan</h3><div class="export-buttons"></div></div><div id="planner-content-container"></div>`;
+            const container = document.getElementById('planner-content-container');
+            const sections = content.split(/###\s*(.*?)\s*###/).filter(s => s.trim());
+            for (let i = 0; i < sections.length; i += 2) {
+                const title = sections[i], body = sections[i + 1]; const card = document.createElement('div'); card.className = 'planner-card'; card.style.animationDelay = `${i * 50}ms`;
+                const renderer = cardRenderers[title] || (b => `<div class="planner-card-body">${b.replace(/\n/g, '<br>')}</div>`);
+                card.innerHTML = `<div class="planner-card-header">${iconMap[title] || ''}<h3>${title}</h3></div>${renderer(body)}`; container.appendChild(card);
+            }
+            const contentGenerator = () => { const element = document.getElementById('planner-content-container'); const clone = element.cloneNode(true); clone.querySelectorAll('.mindmap, .structure-stepper').forEach(el => el.classList.remove(el.classList[0])); const htmlString = `<h1>Writing Plan: ${topic}</h1>${clone.innerHTML}`; return { element, htmlString }; };
+            setupExportButtons('planner-results', contentGenerator, fileName);
+        }
+        function parseList(text) { const lines = text.split('\n').filter(line => line.trim()); const items = []; let currentSubheading = ''; lines.forEach(line => { if (!line.startsWith('-') && line.endsWith(':')) { currentSubheading = line.slice(0, -1); } else if (line.trim().startsWith('-')) { const content = line.trim().substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); items.push({ content, subheading: currentSubheading }); } }); return items; }
+        function renderListAsMindmap(text) { const lines = text.split('\n').filter(line => line.trim().startsWith('-')); let html = '<ul>'; let lastIndent = -1; lines.forEach(line => { const indent = line.search(/\S/); const content = line.trim().substring(2); if (indent > lastIndent) html += '<ul>'; else if (indent < lastIndent) html += '</li></ul>'.repeat((lastIndent - indent) / 2); else if (lastIndent !== -1) html += '</li>'; html += `<li>${content}`; lastIndent = indent; }); if (lines.length > 0) html += '</li>' + '</ul>'.repeat(lastIndent / 2 + 1); else html += '</ul>'; return html; }
+        function renderListAsIdeaCards(text) { return parseList(text).map(item => { let type = 'neutral'; if (/for|advantages/i.test(item.subheading)) type = 'for'; if (/against|disadvantages|rebuttal/i.test(item.subheading)) type = 'against'; return `<div class="idea-card ${type}"><div class="idea-card-title">${item.subheading}</div><p>${item.content}</p></div>`; }).join(''); }
+        function renderListAsStepper(text) { return parseList(text).map((item, index) => { const [title, ...descParts] = item.content.split(':'); return `<div class="step"><div class="step-number">${index + 1}</div><div class="step-content"><strong>${title}</strong><p>${descParts.join(':').trim()}</p></div></div>`; }).join(''); }
+        function renderListAsTipCards(text) { const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`; return parseList(text).map(item => `<div class="tip-card">${icon}<div>${item.content}</div></div>`).join(''); }
+        function renderListAsSentenceCards(text) { const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>`; return text.split('\n').filter(l => l.trim()).map(item => `<div class="sentence-card">${icon}<div>${item.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div></div>`).join(''); }
+
+        // --- GRAMMAR CHECKER ---
+        const checkerBtn = document.getElementById('checker-btn');
+        checkerBtn.addEventListener('click', () => {
+            const text = document.getElementById('checker-text').value; 
+            if (!text.trim()) { alert('Please enter text to check.'); return; }
+            const prompt = `You are a meticulous HKDSE English examiner. Review the user's text and provide corrections. You MUST respond with a single, valid JSON object ONLY. The JSON object must have this exact structure: { "full_corrected_text": "The complete, corrected version...", "changes": [ { "original_phrase": "...", "corrected_phrase": "...", "error_type": "One of: 'Grammar', 'Typo', 'Punctuation', 'Fluency', 'Style'", "explanation": "A concise explanation." } ] }. If the text is perfect, return an empty "changes" array. Now, analyze: --- ${text} ---`;
+            const payload = { model: 'openai', messages: [{ role: 'user', content: prompt }], response_format: { "type": "json_object" } };
+            callApi(payload, document.getElementById('checker-loader'), checkerBtn, document.getElementById('checker-results'), (json, el) => displayComparisonResults(json, el, 'checker'));
+        });
+
+        // --- TEXT ENHANCER (V3) ---
+        const enhancerBtn = document.getElementById('enhancer-btn');
+        enhancerBtn.addEventListener('click', () => {
+            const text = document.getElementById('enhancer-text').value;
+            if (!text.trim()) { alert('Please enter text to enhance.'); return; }
+            const prompt = `You are an expert editor. Enhance the user's text by improving vocabulary, sentence structure, and flow, without changing the original meaning. You MUST respond with a single, valid JSON object ONLY. The JSON object must have this structure: { "full_enhanced_text": "The complete, polished version...", "enhancements": [ { "original_phrase": "...", "enhanced_phrase": "...", "enhancement_type": "One of: 'Vocabulary', 'Fluency', 'Clarity', 'Conciseness'", "explanation": "A brief explanation." } ] }. If no enhancements are needed, return an empty "enhancements" array. Now, enhance: --- ${text} ---`;
+            const payload = { model: 'openai', messages: [{ role: 'user', content: prompt }], response_format: { "type": "json_object" } };
+            callApi(payload, document.getElementById('enhancer-loader'), enhancerBtn, document.getElementById('enhancer-results'), (json, el) => displayComparisonResults(json, el, 'enhancer'));
+        });
+
+        // --- UNIFIED A/B COMPARISON RENDERER (V3) ---
+        function displayComparisonResults(jsonString, resultsElement, mode) {
+            try {
+                const data = JSON.parse(jsonString);
+                const isChecker = mode === 'checker';
+                const originalText = document.getElementById(isChecker ? 'checker-text' : 'enhancer-text').value;
+                const modifiedText = isChecker ? data.full_corrected_text : data.full_enhanced_text;
+                const changes = isChecker ? (data.changes || []) : (data.enhancements || []);
+                const changeKey = isChecker ? 'error_type' : 'enhancement_type';
+
+                let originalHTML = escapeHtml(originalText);
+                let modifiedHTML = escapeHtml(modifiedText);
+
+                changes.forEach((change, index) => {
+                    const originalPhraseEscaped = escapeHtml(change.original_phrase);
+                    const modifiedPhraseEscaped = escapeHtml(isChecker ? change.corrected_phrase : change.enhanced_phrase);
+                    if (originalPhraseEscaped === "" || modifiedPhraseEscaped === "") return;
+                    
+                    const type = (change[changeKey] || 'style').toLowerCase();
+                    const typeClass = isChecker ? `feedback-${type}` : 'enhancement';
+
+                    originalHTML = originalHTML.replace(originalPhraseEscaped, `<del class="change-span ${typeClass}" data-change-id="${index}">${originalPhraseEscaped}</del>`);
+                    modifiedHTML = modifiedHTML.replace(modifiedPhraseEscaped, `<ins class="change-span ${typeClass}" data-change-id="${index}">${modifiedPhraseEscaped}</ins>`);
+                });
+
+                const processLines = (htmlContent, isOriginal) => {
+                    return htmlContent.split('\n').map(line => {
+                        if (line.trim() === '') return line;
+                        const hasChange = isOriginal ? /<del class="change-span"/.test(line) : /<ins class="change-span"/.test(line);
+                        const mark = hasChange ? (isChecker ? '<span class="incorrect-mark">✗ </span>' : '<span class="enhancement-mark">✨ </span>') : '<span class="correct-mark">✓ </span>';
+                        return mark + line;
+                    }).join('\n');
+                };
+
+                resultsElement.innerHTML = `
+                    <div class="results-header"><h3>${isChecker ? "Examiner's Review" : "Enhanced Version"}</h3></div>
+                    <div class="comparison-container">
+                        <div class="comparison-panel">
+                            <h4>Original Text</h4>
+                            <div class="comparison-panel-content">${processLines(originalHTML, true)}</div>
+                        </div>
+                        <div class="comparison-panel">
+                            <h4>${isChecker ? "Suggested Version" : "Enhanced Version"}</h4>
+                            <div class="comparison-panel-content">${processLines(modifiedHTML, false)}</div>
+                        </div>
+                    </div>`;
+                
+                document.querySelectorAll('.change-span').forEach(span => {
+                    span.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const changeId = event.target.dataset.changeId;
+                        showPopover(event.target, changes[changeId], mode);
+                    });
+                });
+            } catch (e) {
+                console.error("Parsing/Rendering Error:", e, jsonString);
+                displayErrorCard("The AI returned data in an unexpected format. This might be a temporary issue.", resultsElement);
+            }
+        }
+        
+        // --- POPOVER (V3) ---
+        function showPopover(targetElement, changeData, mode) {
+            const isChecker = mode === 'checker';
+            const typeKey = isChecker ? 'error_type' : 'enhancement_type';
+            const type = changeData[typeKey] || (isChecker ? 'Style' : 'Clarity');
+            const typeClass = isChecker ? `feedback-${type.toLowerCase()}` : 'enhancement';
+
+            const popover = document.getElementById('explanation-popover');
+            popover.className = `popover visible ${typeClass}`;
+            
+            popover.innerHTML = `
+                <div class="popover-header"><span class="type-badge ${typeClass}">${type}</span></div>
+                <div class="popover-body">
+                    <p>${changeData.explanation}</p>
+                    <p><strong>Original:</strong> <del>${escapeHtml(changeData.original_phrase)}</del></p>
+                    <p><strong>Suggestion:</strong> <span class="suggestion">${escapeHtml(isChecker ? changeData.corrected_phrase : changeData.enhanced_phrase)}</span></p>
+                </div>
+                ${isChecker ? `<div class="popover-actions"><button class="btn btn-secondary" style="width: 100%;" id="add-to-notebook-btn">Add to Mistake Notebook</button></div>` : ''}
+            `;
+            
+            if (isChecker) {
+                popover.querySelector('#add-to-notebook-btn').onclick = () => {
+                    saveToNotebook(changeData); popover.classList.remove('visible');
+                    alert('Added to your notebook!');
+                };
+            }
+            
+            const rect = targetElement.getBoundingClientRect();
+            popover.style.left = `${Math.min(rect.left + window.scrollX, window.innerWidth - 360)}px`;
+            popover.style.top = `${rect.bottom + window.scrollY + 10}px`;
+        }
+
+        document.addEventListener('click', (e) => {
+            const popover = document.getElementById('explanation-popover');
+            if (popover && popover.classList.contains('visible') && !popover.contains(e.target) && !e.target.classList.contains('change-span')) {
+                popover.classList.remove('visible');
+            }
+        });
+
+        // --- IMAGE TO TEXT (OCR) ---
+        const ocrInput = document.getElementById('ocr-input'), cropperImage = document.getElementById('cropper-image'), cropperContainer = document.getElementById('cropper-container'), ocrBtn = document.getElementById('ocr-btn');
+        ocrInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (cropper) cropper.destroy();
+                    cropperImage.src = event.target.result; cropperContainer.querySelector('span').style.display = 'none';
+                    cropper = new Cropper(cropperImage, { viewMode: 1, background: false, autoCropArea: 0.8, responsive: true });
+                    ocrBtn.disabled = false;
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+        ocrBtn.addEventListener('click', () => {
+            if (!cropper) return;
+            const base64Canvas = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+            const prompt = "Analyze this image and extract all visible text. Return only the raw, transcribed text and nothing else.";
+            const payload = { model: "openai", messages: [ { "role": "user", "content": [ { "type": "text", "text": prompt }, { "type": "image_url", "image_url": { "url": base64Canvas } } ] } ] };
+            callApi(payload, document.getElementById('ocr-loader'), ocrBtn, document.getElementById('ocr-results'), displayOcrResults);
+        });
+        function displayOcrResults(text, resultsElement) {
+            const fileName = `ocr-export-${Date.now()}`;
+            resultsElement.innerHTML = `<div class="results-header"><h3 style="font-size: 1.2rem;">Extracted Text</h3><div class="export-buttons" id="ocr-export-buttons"></div></div><textarea id="ocr-content" class="textarea-field" style="height: 300px; font-family: var(--font-mono);">${text.trim()}</textarea>`;
+            const contentGenerator = () => { const element = document.getElementById('ocr-content'); const value = element.value; const htmlString = `<p>${value.replace(/\n/g, '</p><p>')}</p>`; return { element, htmlString, plainText: value }; };
+            setupExportButtons('ocr-results', contentGenerator, fileName);
+            const txtBtn = document.createElement('button'); txtBtn.className = 'btn btn-secondary'; txtBtn.textContent = 'TXT';
+            txtBtn.onclick = () => { const { plainText } = contentGenerator(); const blob = new Blob([plainText], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${fileName}.txt`; a.click(); URL.revokeObjectURL(url); };
+            document.getElementById('ocr-export-buttons').appendChild(txtBtn);
+            const copyBtn = document.createElement('button'); copyBtn.className = 'btn btn-secondary'; copyBtn.textContent = 'Copy All';
+            copyBtn.onclick = (e) => { const { plainText } = contentGenerator(); navigator.clipboard.writeText(plainText).then(() => { e.target.textContent = 'Copied!'; setTimeout(() => { e.target.textContent = 'Copy All'; }, 2000); }); };
+            document.getElementById('ocr-export-buttons').appendChild(copyBtn);
+        }
+        
+        // --- MISTAKE NOTEBOOK (V3) ---
+        function getNotebook() { return JSON.parse(localStorage.getItem('mistakeNotebook') || '[]'); }
+        function saveToNotebook(changeData) { const notebook = getNotebook(); notebook.unshift({ ...changeData, id: Date.now() }); localStorage.setItem('mistakeNotebook', JSON.stringify(notebook)); }
+        function deleteFromNotebook(id) { let notebook = getNotebook(); notebook = notebook.filter(e => e.id !== id); localStorage.setItem('mistakeNotebook', JSON.stringify(notebook)); renderNotebook(); }
+        function renderNotebook() {
+            const container = document.getElementById('notebook-container');
+            const notebook = getNotebook();
+            container.innerHTML = '';
+            notebook.forEach(entry => {
+                const entryEl = document.createElement('div');
+                const typeClass = `feedback-${(entry.error_type || 'style').toLowerCase()}`;
+                entryEl.className = 'notebook-entry';
+                entryEl.style.borderColor = `var(--color-${typeClass}, var(--color-primary))`;
+                entryEl.innerHTML = `
+                    <button class="delete-btn" title="Delete this entry">&times;</button>
+                    <p><strong class="notebook-type" style="color: var(--color-${typeClass}, var(--color-text))">${entry.error_type}</strong></p>
+                    <p><strong>Original:</strong> <del>${escapeHtml(entry.original_phrase)}</del></p>
+                    <p><strong>Correction:</strong> <ins>${escapeHtml(entry.corrected_phrase)}</ins></p>
+                    <p><strong>Reason:</strong> ${entry.explanation}</p>`;
+                entryEl.querySelector('.delete-btn').addEventListener('click', () => deleteFromNotebook(entry.id));
+                container.appendChild(entryEl);
+            });
+        }
+        
+        function escapeHtml(unsafe) { return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+        // Initial render on load
+        renderNotebook();
+    });
+</script>
+</body>
+</html>
