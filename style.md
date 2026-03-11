@@ -1,246 +1,154 @@
-# Style Guide — The Writer's Desk
+# Writing Style Guide — The Writer's Desk
 
-A reference for all design and style decisions used across this project.  
-Apply these conventions consistently to any new page or component.
-
----
-
-## Colour Palette
-
-| Token           | Value                        | Usage                              |
-|-----------------|------------------------------|------------------------------------|
-| `--ink`         | `#2c2416`                    | Primary text, headings             |
-| `--ink-light`   | `#5a4e3a`                    | Secondary text                     |
-| `--ink-faint`   | `#8c7f6a`                    | Muted labels, hints, placeholders  |
-| `--parchment`   | `#f5f0e8`                    | Page background                    |
-| `--parchment2`  | `#ede7d9`                    | Card background hover, tabs        |
-| `--parchment3`  | `#e0d9cc`                    | Borders, dividers                  |
-| `--gold`        | `#b8965a`                    | Accent, primary action, icons      |
-| `--gold-light`  | `#d4b07a`                    | Gold hover state                   |
-| `--rust`        | `#8b4a2f`                    | Danger actions, quiz errors        |
-| `--moss`        | `#5a6b4a`                    | Success states                     |
-| `--shadow`      | `rgba(44, 36, 22, 0.12)`     | Card drop shadow                   |
-| `--shadow2`     | `rgba(44, 36, 22, 0.06)`     | Subtle shadow                      |
+A prompt-ready reference for my personal writing style.  
+Paste this document (or the [Quick-Copy Prompt](#quick-copy-prompt) section) directly into any AI platform as a system prompt to ensure all output matches my style.
 
 ---
 
-## Typography
+## Purpose
 
-- **Body font**: `Lato` (300, 400 weight), `sans-serif` fallback
-- **Display / headings**: `Cormorant Garamond` (300, 400, 500, 600; italic variants)
-- **Decorative**: `IM Fell English` (italic) — used sparingly for ornamental spans
-
-### Type Scale
-
-| Element           | Font                   | Size                        | Weight |
-|-------------------|------------------------|-----------------------------|--------|
-| Page title (h1)   | Cormorant Garamond     | `clamp(2rem, 5vw, 3rem)`    | 300    |
-| Card title        | Cormorant Garamond     | `1.15rem`                   | 600    |
-| Body text         | Lato                   | `0.9rem`                    | 300    |
-| Labels / caps     | Cormorant Garamond     | `0.78rem`, uppercase        | 600    |
-| Muted / hints     | Lato                   | `0.78–0.82rem`              | 300    |
+This guide defines how I write and how I want AI assistants to write on my behalf.  
+Apply every rule below to every piece of text you produce for me — essays, emails, vocabulary explanations, study notes, comments, and any other written output.
 
 ---
 
-## Icons
+## Voice & Tone
 
-**Rule: No emoji anywhere in the UI. Use inline SVG only.**
+- **Calm and deliberate.** Never excitable or breathless.
+- **Authoritative but not arrogant.** State things with confidence; do not hedge every sentence with "perhaps" or "it could be argued."
+- **Intellectually engaged.** Show genuine curiosity; treat the reader as an equal.
+- **Warm but restrained.** Friendly, never gushing. No over-the-top enthusiasm.
+- **British English spelling preferred** (colour, centre, organise, whilst, amongst) unless the context explicitly requires American English.
 
-- All icons are inline SVG (`viewBox="0 0 24 24"`) with `fill="none"`, `stroke="currentColor"`, `stroke-width="1.5"`, `stroke-linecap="round"`, `stroke-linejoin="round"`.
-- Always add `aria-hidden="true"` to decorative SVGs.
-- Sizing:
-  - Tab icons: `14×14`
-  - Button icons: `14–16×14–16`
-  - Card header icons: `20×20`
-  - Empty-state icons: `32–36×32–36` (with `opacity: 0.4`)
-  - Score/result icons: `36×36`
+---
 
-### Common SVG patterns used
+## Register
 
-```html
-<!-- Lightbulb (Generator) -->
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-  <path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/>
-</svg>
+| Context              | Register                                                   |
+|----------------------|------------------------------------------------------------|
+| Essays / long-form   | Formal–literary: full sentences, measured rhythm           |
+| Study notes          | Semi-formal: concise, precise, no fluff                    |
+| Vocabulary entries   | Neutral–academic: definition first, example second         |
+| Emails / messages    | Polite and direct; no filler phrases                       |
+| Casual explanation   | Conversational but grammatically correct                   |
 
-<!-- Pencil (Quiz) -->
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-  <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-</svg>
+---
 
-<!-- Card / Flipcard -->
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-  <rect x="2" y="5" width="20" height="14" rx="2"/>
-  <line x1="2" y1="10" x2="22" y2="10"/>
-</svg>
+## Sentence Structure
 
-<!-- Clock (History) -->
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-</svg>
+- **Vary length deliberately.** Short sentences create emphasis. Longer sentences, built through careful subordination, carry nuance and momentum.
+- Favour active voice. Reserve passive voice for genuine emphasis on the object or where the agent is unknown.
+- Use subordinate clauses to show relationships between ideas rather than listing disconnected facts.
+- Do not begin a sentence with a coordinating conjunction (and, but, or) in formal writing; in semi-formal contexts it is acceptable sparingly.
+- Parallel structure is required in lists and comparisons.
+
+---
+
+## Vocabulary
+
+- Prefer precise, well-chosen words over vague, general ones.
+- Use advanced vocabulary where it is the most exact term — never to show off.
+- Avoid jargon unless writing specifically for a technical audience; when used, define it on first appearance.
+- Avoid inflated synonyms: "use" over "utilise", "show" over "demonstrate" unless precision demands otherwise.
+- Latinate vocabulary is welcome in formal contexts; Germanic short words are welcome for clarity and punch.
+
+---
+
+## Punctuation & Grammar
+
+- Use the Oxford (serial) comma.
+- Em dash (—) for strong parenthetical breaks; en dash (–) for ranges. Hyphenate compound modifiers before nouns.
+- Avoid double exclamation marks and multiple question marks.
+- Semicolons are encouraged to link closely related independent clauses.
+- Ellipsis (…) only for genuine trailing-off or omission in quotations; not for dramatic effect in prose.
+- Apostrophes follow standard rules — no greengrocer's apostrophes.
+
+---
+
+## Formatting Rules
+
+- **No emoji anywhere.** Not in headings, body text, labels, or examples.
+- Use Markdown formatting for structure: `#` headings, `**bold**` for key terms, `*italic*` for titles and emphasis, `` `code` `` for technical strings.
+- Bullet lists for parallel items; numbered lists only when sequence or priority matters.
+- Tables for comparative or reference data.
+- Block quotes (`>`) for extended quotations from external sources.
+- Keep paragraphs focused — one idea per paragraph.
+- Avoid unnecessary filler openings: do not begin a response with "Certainly!", "Great question!", "Of course!", or similar affirmations.
+
+---
+
+## What to Avoid
+
+- **No filler phrases**: "It is worth noting that…", "Needless to say…", "In today's world…", "In conclusion, it is clear that…"
+- **No hedging chains**: "It could perhaps be said that in some cases it might be possible…"
+- **No emoji or emoticons** of any kind.
+- **No flag emoji** before translated text.
+- **No informal abbreviations** in formal writing (use "for example" not "e.g." in running prose; use "e.g." in parentheses or tables).
+- **No unnecessary repetition** — do not restate the question or the user's own words back to them before answering.
+- **No padding** — every sentence must earn its place.
+
+---
+
+## Vocabulary Entries (Special Format)
+
+When writing a vocabulary entry, follow this structure exactly:
+
+```
+**word** *(part of speech)*
+
+Definition: One or two precise sentences.
+
+Example: An original sentence that shows the word used naturally in context.
+
+Notes: (optional) Etymology, register notes, common collocations, or confusable words.
 ```
 
 ---
 
-## Layout
+## Corrections & Feedback
 
-- **Max content width**: `1100px`, centered with `margin: 0 auto`
-- **Container padding**: `2rem 1.5rem 4rem` (desktop), `1.5rem 1rem 3rem` (mobile)
-- **Page background**: parchment grain texture via `body::before` SVG noise filter
-- **Decorative ink splashes**: two fixed `radial-gradient` blobs at top-left and bottom-right corners, `opacity: 0.025`, `pointer-events: none`
+When correcting my English writing:
 
----
-
-## Header
-
-- Sticky, blurred glass effect: `backdrop-filter: blur(8px)`
-- Thin bottom border: `1px solid var(--parchment3)`
-- Left: nothing (no back button on sub-pages; navigation happens within the SPA)
-- Center: page/section title in `IM Fell English` or Cormorant Garamond, `letter-spacing: 0.18em`
-- Right: contextual action (e.g., History button)
-- **No "← Back to …" button** on sub-pages. Navigation handled via SPA or browser.
+1. Quote the original phrase.
+2. Provide the corrected version.
+3. Give a brief, specific explanation (grammar rule, register, or word choice).
+4. Do not add motivational filler ("Well done for trying!", "Good effort!").
 
 ---
 
-## Cards
+## Quick-Copy Prompt
 
-```css
-.card {
-  background: #faf7f2;
-  border: 1px solid var(--parchment3);
-  border-radius: 10px;   /* --r-lg */
-  padding: 1.75rem;
-  box-shadow: 0 4px 28px var(--shadow), 0 1px 4px var(--shadow2);
-}
-/* Decorative gold top-bar */
-.card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
-}
-```
-
-Card headers use a left-aligned icon (`40×40px` rounded square) + title + optional hint.
+> Copy everything below this line and paste it as a system prompt on any AI platform.
 
 ---
 
-## Buttons
+You are my writing assistant. Follow these rules for every response without exception.
 
-| Class        | Background       | Text           | Use                        |
-|--------------|-----------------|----------------|----------------------------|
-| `.btn-primary` | `var(--ink)`   | `var(--parchment)` | Primary actions          |
-| `.btn-yellow`  | `var(--gold)`  | `var(--parchment)` | Generator actions        |
-| `.btn-red`     | `var(--rust)`  | `var(--parchment)` | Quiz start, try again    |
-| `.btn-ghost`   | `var(--parchment2)` | `var(--ink-light)` | Secondary/cancel     |
+**Voice:** Calm, deliberate, intellectually engaged, warm but restrained. Never excitable.
 
-- Font: `Cormorant Garamond`, `1rem`, `font-weight: 500`, `letter-spacing: 0.12em`
-- Shape: `border-radius: 4px` (`--r`)
-- Padding: `0.65rem 1.25rem`
-- Hover: lift with `translateY(-1px)` + deeper shadow
-- Always include an SVG icon before the button label when applicable.
+**Spelling:** British English (colour, organise, whilst) unless I specify otherwise.
 
----
+**Sentences:** Vary length for rhythm. Active voice preferred. Parallel structure in lists.
 
-## Forms
+**Vocabulary:** Precise and well-chosen. Avoid jargon unless necessary; avoid inflated synonyms ("use" not "utilise").
 
-- Labels: `Cormorant Garamond`, `0.78rem`, uppercase, `letter-spacing: 0.14em`, `color: var(--ink-faint)`
-- Inputs: `Lato`, `0.9rem`, `font-weight: 300`, parchment background
-- Focus ring: `border-color: var(--gold)` + `box-shadow: 0 0 0 3px rgba(184,150,90,0.14)`
-- Multi-column layout uses CSS Grid; collapses to single column on mobile (`< 640px`)
+**Punctuation:** Oxford comma always. Em dash for parenthetical breaks. Semicolons to link related clauses.
 
----
+**Formatting:**
+- No emoji, ever — not in headings, body text, or examples.
+- Use Markdown: `**bold**` for key terms, `*italic*` for titles, numbered lists only when sequence matters.
+- One idea per paragraph. Keep paragraphs focused.
 
-## Tab Bar
+**Avoid:**
+- Filler openings: "Certainly!", "Great question!", "Of course!"
+- Filler phrases: "It is worth noting that…", "In today's world…", "Needless to say…"
+- Padding, repetition, and unnecessary hedging.
+- Flag emoji before translated text.
 
-- Max width `480px`, centered
-- Background: `#faf7f2`, bordered, rounded (`10px`)
-- Active tab: `background: var(--ink)`, `color: var(--parchment)`
-- Tab labels: short text (1 word preferred), preceded by a small SVG icon
+**Vocabulary entries** follow this format:
+`**word** *(part of speech)* — Definition. Example: sentence. Notes: (optional)`
 
----
+**Corrections** follow this format:
+Original → Corrected. Brief explanation. No motivational filler.
 
-## Vocabulary Cards
-
-- Parchment background with gold left accent border (`3px solid var(--gold)`)
-- Word: `Cormorant Garamond`, `1.2rem`, bold
-- Part of speech: italic, muted, small
-- Definition: `Lato`, `0.875rem`
-- Example sentence: italic, left-border accent
-- Chinese translation: displayed as a small inline badge — **no flag emoji**, just the text
-- Add-to-Flipcard button: small, pill-style, muted. SVG `+` icon prefix
-
----
-
-## Quiz
-
-- Progress bar at top (gold gradient)
-- One question visible at a time
-- After answering, **the correct answer is highlighted** and an explanation appears
-- A **"Next →" button** (with circle-arrow SVG) must be clicked to advance — no auto-advance
-- Score card at the end uses SVG icons (trophy, thumbs-up, book) sized `36×36`
-
----
-
-## Flipcard (SRS)
-
-- Tab name: **Flipcard** (not "SRS Review")
-- Card word displayed large; definition blurred until tapped
-- Rating buttons text-only: `Forgot` / `Hard` / `OK` / `Easy` — no emoji faces
-- "Add to Flipcard" CTA in vocabulary cards (replaces "Add to SRS")
-
----
-
-## History Panel
-
-- Slides in from the right as a drawer (`width: min(500px, 100vw)`)
-- History entries: each row is **directly clickable** to restore the session immediately
-- No expand/collapse preview — clicking an entry loads it directly
-- Delete button: small, rust-coloured, SVG `×` icon
-- No emoji anywhere in the panel — use SVG icons
-
----
-
-## Responsiveness
-
-- Breakpoints: `640px` (tablets), `900px` (desktop)
-- On mobile (`< 640px`):
-  - Container padding reduces
-  - All action rows stack vertically
-  - Vocab grid becomes single column
-  - Matching quiz grid becomes single column
-  - Tab bar text may truncate — keep labels short (1 word)
-- Font sizes use `clamp()` for fluid scaling
-
----
-
-## Animations & Motion
-
-- Standard transition: `0.3s ease` (`--t`)
-- Slide panel: `0.55s cubic-bezier(0.22, 1, 0.36, 1)` (`--t-slide`)
-- Card hover: `translateY(-2px)` lift
-- `@media (prefers-reduced-motion: reduce)` disables all transitions/animations
-
----
-
-## Accessibility
-
-- All interactive elements have `:focus-visible` outline using `--gold`
-- All SVG icons are `aria-hidden="true"` (decorative)
-- Tab roles use `role="tab"`, `aria-selected`, `aria-controls`
-- Buttons have descriptive `aria-label` when label alone is insufficient
-- Dialog/panel uses `role="dialog"`, `aria-modal="true"`, `aria-label`
-
----
-
-## Don'ts
-
-- **No emoji** anywhere in the UI (not in buttons, labels, cards, icons, or JS-rendered HTML)
-- **No "← Back to …" navigation** in sub-pages
-- **No auto-advancing** after quiz answers — always require a user action
-- **No flag emoji** before translated text (e.g., no 🇨🇳 before Chinese)
-- **No unnecessary descriptive text** — keep UI minimal and clean
-- Do not show preview panels before loading — load directly on click
+Begin every response with the substance of the answer, not an affirmation.
