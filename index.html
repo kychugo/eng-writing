@@ -190,13 +190,13 @@ html, body {
   cursor: pointer;
   color: #d4b07a;
   transition: border-color 0.2s, color 0.2s;
-  animation: breathe-glow 3s ease-in-out infinite;
+  animation: breathe-glow 6s ease-in-out infinite;
 }
 .mobile-menu-btn:hover { border-color: rgba(212, 176, 122, 0.75); color: #f0d090; }
 
 @keyframes breathe-glow {
-  0%, 100% { box-shadow: 0 0 3px rgba(184, 150, 90, 0.2),  0 0 0 1px rgba(184, 150, 90, 0.1); }
-  50%       { box-shadow: 0 0 16px rgba(184, 150, 90, 0.65), 0 0 6px  rgba(212, 176, 122, 0.35); }
+  0%, 100% { box-shadow: 0 0 2px rgba(184, 150, 90, 0.12), 0 0 0 1px rgba(184, 150, 90, 0.06); }
+  50%       { box-shadow: 0 0 8px rgba(184, 150, 90, 0.35), 0 0 3px rgba(212, 176, 122, 0.18); }
 }
 
 /* ===== Mobile nav overlay (bottom sheet) ===== */
@@ -296,7 +296,16 @@ html, body {
 @media (max-width: 768px) {
   html, body { overflow: auto; }
   #app-wrapper { flex-direction: column; height: auto; min-height: 100vh; overflow: visible; }
-  #sidebar { width: 100%; min-width: unset; flex-direction: row; flex-wrap: nowrap; height: 62px; min-height: 62px; align-items: center; overflow: hidden; }
+  #sidebar {
+    width: 100%; min-width: unset; flex-direction: row; flex-wrap: nowrap;
+    height: 62px; min-height: 62px; align-items: center; overflow: hidden;
+    position: sticky; top: 0; z-index: 200;
+    transition: height 0.35s ease, box-shadow 0.35s ease;
+  }
+  #sidebar.sidebar-shrunk {
+    height: 52px; min-height: 52px;
+    box-shadow: 0 2px 12px rgba(44,36,22,0.28);
+  }
   .sidebar-header {
     padding: 0.75rem 1rem;
     flex: 1;
@@ -309,6 +318,191 @@ html, body {
   .mobile-menu-btn { display: flex; }
   #main-content { overflow-y: visible; }
   .desk-panel { min-height: auto; }
+  /* Views now start just below the sticky sidebar; adjust offset dynamically via JS */
+  .view { top: 62px; }
+}
+
+
+/* ============================================================
+   SECTION 1b: HOME PANEL
+   ============================================================ */
+
+#panel-home {
+  display: none;
+  min-height: 100%;
+  background: #f5f0e8;
+  overflow-y: auto;
+}
+
+.home-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 5rem;
+}
+
+/* Hero */
+.home-hero {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.home-hero-ornament {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.82rem;
+  color: #b8965a;
+  letter-spacing: 0.28em;
+  opacity: 0.8;
+  margin-bottom: 1.1rem;
+  text-transform: uppercase;
+}
+
+.home-hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  font-weight: 300;
+  color: #2c2416;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.9rem;
+}
+.home-hero-title em {
+  font-style: italic;
+  color: #b8965a;
+}
+
+.home-hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #8c7f6a;
+  letter-spacing: 0.04em;
+  max-width: 500px;
+  margin: 0 auto 2.2rem;
+  line-height: 1.6;
+}
+
+.home-hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 360px;
+  margin: 0 auto;
+  opacity: 0.35;
+}
+.home-hero-divider::before,
+.home-hero-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #b8965a;
+}
+.home-hero-divider-symbol {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.9rem;
+  color: #b8965a;
+  white-space: nowrap;
+  letter-spacing: 0.2em;
+}
+
+/* Feature cards grid */
+.home-section-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8c7f6a;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.home-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e0d9cc;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.home-card {
+  background: #faf7f2;
+  border: 1px solid #e0d9cc;
+  border-radius: 10px;
+  padding: 1.4rem 1.5rem 1.3rem;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #b8965a, #d4b07a, #b8965a);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.home-card:hover {
+  box-shadow: 0 6px 24px rgba(44,36,22,0.13);
+  transform: translateY(-2px);
+  border-color: #d4b07a;
+}
+.home-card:hover::before { opacity: 1; }
+
+.home-card-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.home-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #2c2416;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.home-card-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: #8c7f6a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.home-card-arrow {
+  margin-top: auto;
+  font-size: 0.78rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #b8965a;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+@media (max-width: 768px) {
+  .home-wrap { padding: 2rem 1.1rem 4rem; }
+  .home-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .home-hero { margin-bottom: 2.2rem; }
+}
+
+@media (max-width: 480px) {
+  .home-grid { grid-template-columns: 1fr; }
 }
 
 /* ============================================================
@@ -592,7 +786,7 @@ html, body {
       align-items: center;
       justify-content: center;
       gap: 0.55rem;
-      background: var(--ink);
+      background: var(--gold);
       color: var(--parchment);
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.1rem;
@@ -607,7 +801,7 @@ html, body {
       box-shadow: 0 2px 8px var(--shadow);
     }
     .btn-generate:hover:not(:disabled) {
-      background: var(--ink-light);
+      background: var(--gold-light);
       transform: translateY(-1px);
       box-shadow: 0 4px 16px var(--shadow);
     }
@@ -2627,8 +2821,13 @@ html, body {
     </div>
     <nav>
       <div class="nav-section">
+        <div class="nav-section-label">🏠 Home</div>
+        <a class="nav-item" data-panel="panel-home"
+           onclick="showPanel('panel-home'); return false;" href="#">Home</a>
+      </div>
+      <div class="nav-section">
         <div class="nav-section-label">📝 Generate</div>
-        <a class="nav-item active" data-panel="panel-generate"
+        <a class="nav-item" data-panel="panel-generate"
            onclick="showPanel('panel-generate'); return false;" href="#">Writing Questions</a>
       </div>
       <div class="nav-section">
@@ -2663,6 +2862,97 @@ html, body {
        ║                  MAIN CONTENT                          ║
        ╚═════════════════════════════════════════════════════════╝ -->
   <div id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════
+         PANEL 0: Home (landing page)
+         ═══════════════════════════════════════════════════════ -->
+    <div id="panel-home" class="desk-panel">
+      <div class="home-wrap">
+
+        <!-- Hero -->
+        <div class="home-hero">
+          <p class="home-hero-ornament">✦ &nbsp; HKDSE English Platform &nbsp; ✦</p>
+          <h1 class="home-hero-title">The Writer's<br><em>Desk</em></h1>
+          <p class="home-hero-sub">A suite of AI-powered tools to help you master HKDSE English Writing — from brainstorming to polished prose.</p>
+          <div class="home-hero-divider"><span class="home-hero-divider-symbol">✒ &nbsp; Begin writing &nbsp; ✒</span></div>
+        </div>
+
+        <!-- Generate section -->
+        <p class="home-section-label">📝 Generate</p>
+        <div class="home-grid" style="margin-bottom:1.8rem">
+          <div class="home-card" data-panel="panel-generate" role="button" tabindex="0">
+            <div class="home-card-icon">✒</div>
+            <h3 class="home-card-title">Writing Questions</h3>
+            <p class="home-card-desc">Generate tailored HKDSE writing prompts and sentence patterns for focused practice.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+        </div>
+
+        <!-- Write section -->
+        <p class="home-section-label">✍️ Write</p>
+        <div class="home-grid" style="margin-bottom:1.8rem">
+          <div class="home-card" data-panel="panel-planner" role="button" tabindex="0">
+            <div class="home-card-icon">📋</div>
+            <h3 class="home-card-title">Writing Planner</h3>
+            <p class="home-card-desc">Get a complete AI-driven essay plan — outline, arguments, and structure — in seconds.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+          <div class="home-card" data-panel="panel-grammar" role="button" tabindex="0">
+            <div class="home-card-icon">🔍</div>
+            <h3 class="home-card-title">Grammar Check</h3>
+            <p class="home-card-desc">Detect grammar mistakes, typos, and fluency issues with a detailed A/B comparison.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+          <div class="home-card" data-panel="panel-enhancer" role="button" tabindex="0">
+            <div class="home-card-icon">✨</div>
+            <h3 class="home-card-title">Text Enhancer</h3>
+            <p class="home-card-desc">Elevate your vocabulary, sentence variety, and overall writing flow automatically.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+          <div class="home-card" data-panel="panel-ocr" role="button" tabindex="0">
+            <div class="home-card-icon">📷</div>
+            <h3 class="home-card-title">OCR</h3>
+            <p class="home-card-desc">Upload an image of any text, crop the area, and extract it as editable text instantly.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+        </div>
+
+        <!-- Learn section -->
+        <p class="home-section-label">📚 Learn</p>
+        <div class="home-grid" style="margin-bottom:1.8rem">
+          <div class="home-card" data-panel="panel-vocab" role="button" tabindex="0">
+            <div class="home-card-icon">💡</div>
+            <h3 class="home-card-title">Vocabulary Generator</h3>
+            <p class="home-card-desc">Generate topic-specific vocabulary lists with definitions, examples, and collocations.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+          <div class="home-card" data-panel="panel-quiz" role="button" tabindex="0">
+            <div class="home-card-icon">📝</div>
+            <h3 class="home-card-title">Vocabulary Quiz</h3>
+            <p class="home-card-desc">Test your word knowledge with interactive multiple-choice and fill-in-the-blank quizzes.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+          <div class="home-card" data-panel="panel-srs" role="button" tabindex="0">
+            <div class="home-card-icon">🃏</div>
+            <h3 class="home-card-title">Flipcard Review</h3>
+            <p class="home-card-desc">Reinforce vocabulary with spaced-repetition flashcards for long-term retention.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+        </div>
+
+        <!-- Notebook section -->
+        <p class="home-section-label">📓 Notebook</p>
+        <div class="home-grid">
+          <div class="home-card" data-panel="panel-notebook" role="button" tabindex="0">
+            <div class="home-card-icon">📓</div>
+            <h3 class="home-card-title">Mistake Notebook</h3>
+            <p class="home-card-desc">Save and review your corrected mistakes from the Grammar Checker to avoid repeating them.</p>
+            <span class="home-card-arrow">Open &rsaquo;</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /#panel-home -->
 
     <!-- ═══════════════════════════════════════════════════════
          PANEL 1: Writing Questions (from index.html)
@@ -3072,6 +3362,8 @@ html, body {
       <span class="mobile-nav-title">Functions</span>
       <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close">✕</button>
     </div>
+    <div class="mobile-nav-section-label">Home</div>
+    <a class="mobile-nav-link" data-panel="panel-home" href="#">Home</a>
     <div class="mobile-nav-section-label">Generate</div>
     <a class="mobile-nav-link" data-panel="panel-generate" href="#">Writing Questions</a>
     <div class="mobile-nav-section-label">Write</div>
@@ -5153,8 +5445,26 @@ function switchTab(name, fromGen) {
 // INITIALIZATION: Show default panel on load
 // ============================================================
 (function initWritersDesk() {
-  // Show the Writing Questions panel by default
-  showPanel('panel-generate');
+  // Show the Home panel by default
+  showPanel('panel-home');
+
+  // Attach click + keyboard handlers to all home-card elements via JS
+  var homePanel = document.getElementById('panel-home');
+  if (homePanel) {
+    function handleHomeCard(e) {
+      var card = e.target.closest('.home-card');
+      if (!card) return;
+      var panelId = card.dataset.panel;
+      if (panelId) showPanel(panelId);
+    }
+    homePanel.addEventListener('click', handleHomeCard);
+    homePanel.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        var card = e.target.closest('.home-card');
+        if (card) { e.preventDefault(); handleHomeCard(e); }
+      }
+    });
+  }
 })();
 
 
@@ -5195,6 +5505,30 @@ function switchTab(name, fromGen) {
       }
     });
   });
+})();
+
+// ============================================================
+// MOBILE SIDEBAR SMOOTH SCROLL-SHRINK
+// ============================================================
+(function initSidebarShrink() {
+  var sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  // Cache view elements once to avoid repeated DOM queries on every scroll
+  var views = document.querySelectorAll('.view');
+  var wasShrunk = false;
+
+  function applyShrunk(shrunk) {
+    if (shrunk === wasShrunk) return; // no change, skip DOM work
+    wasShrunk = shrunk;
+    var h = shrunk ? '52px' : '62px';
+    sidebar.classList.toggle('sidebar-shrunk', shrunk);
+    views.forEach(function(v) { v.style.top = h; });
+  }
+
+  window.addEventListener('scroll', function() {
+    if (window.innerWidth > 768) return;
+    applyShrunk(window.scrollY > 20);
+  }, { passive: true });
 })();
 
 </script>
