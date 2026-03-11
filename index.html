@@ -318,6 +318,9 @@ html, body {
   .mobile-menu-btn { display: flex; }
   #main-content { overflow-y: visible; }
   .desk-panel { min-height: auto; }
+  /* #panel-home has a higher-specificity ID rule that sets overflow-y:auto and min-height:100%,
+     which traps content in an inner scroll container on mobile. Override it here so the body scrolls. */
+  #panel-home { overflow-y: visible; min-height: auto; }
   /* Views now start just below the sticky sidebar; adjust offset dynamically via JS */
   .view { top: 62px; }
 }
@@ -2821,17 +2824,17 @@ html, body {
     </div>
     <nav>
       <div class="nav-section">
-        <div class="nav-section-label">🏠 Home</div>
+        <div class="nav-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.85em" height="0.85em" style="vertical-align:middle;margin-right:0.3em" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
         <a class="nav-item" data-panel="panel-home"
            onclick="showPanel('panel-home'); return false;" href="#">Home</a>
       </div>
       <div class="nav-section">
-        <div class="nav-section-label">📝 Generate</div>
+        <div class="nav-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.85em" height="0.85em" style="vertical-align:middle;margin-right:0.3em" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4L16.5 3.5z"/></svg>Generate</div>
         <a class="nav-item" data-panel="panel-generate"
            onclick="showPanel('panel-generate'); return false;" href="#">Writing Questions</a>
       </div>
       <div class="nav-section">
-        <div class="nav-section-label">✍️ Write</div>
+        <div class="nav-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.85em" height="0.85em" style="vertical-align:middle;margin-right:0.3em" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Write</div>
         <a class="nav-item" data-panel="panel-planner"
            onclick="showPanel('panel-planner'); return false;" href="#">Planner</a>
         <a class="nav-item" data-panel="panel-grammar"
@@ -2842,7 +2845,7 @@ html, body {
            onclick="showPanel('panel-ocr'); return false;" href="#">OCR</a>
       </div>
       <div class="nav-section">
-        <div class="nav-section-label">📚 Learn</div>
+        <div class="nav-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.85em" height="0.85em" style="vertical-align:middle;margin-right:0.3em" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Learn</div>
         <a class="nav-item" data-panel="panel-vocab"
            onclick="showPanel('panel-vocab'); return false;" href="#">Vocabulary Generator</a>
         <a class="nav-item" data-panel="panel-quiz"
@@ -2851,7 +2854,7 @@ html, body {
            onclick="showPanel('panel-srs'); return false;" href="#">Flipcard</a>
       </div>
       <div class="nav-section">
-        <div class="nav-section-label">📓 Notebook</div>
+        <div class="nav-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.85em" height="0.85em" style="vertical-align:middle;margin-right:0.3em" aria-hidden="true"><path d="M4 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 2v20"/></svg>Notebook</div>
         <a class="nav-item" data-panel="panel-notebook"
            onclick="showPanel('panel-notebook'); return false;" href="#">Mistake Notebook</a>
       </div>
@@ -2871,17 +2874,17 @@ html, body {
 
         <!-- Hero -->
         <div class="home-hero">
-          <p class="home-hero-ornament">✦ &nbsp; HKDSE English Platform &nbsp; ✦</p>
+          <p class="home-hero-ornament"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="0.8em" height="0.8em" style="vertical-align:middle" aria-hidden="true"><polygon points="12 2 13.8 9.2 21 8 15.5 13 18.2 20 12 16 5.8 20 8.5 13 3 8 10.2 9.2"/></svg> &nbsp; HKDSE English Platform &nbsp; <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="0.8em" height="0.8em" style="vertical-align:middle" aria-hidden="true"><polygon points="12 2 13.8 9.2 21 8 15.5 13 18.2 20 12 16 5.8 20 8.5 13 3 8 10.2 9.2"/></svg></p>
           <h1 class="home-hero-title">The Writer's<br><em>Desk</em></h1>
           <p class="home-hero-sub">A suite of AI-powered tools to help you master HKDSE English Writing — from brainstorming to polished prose.</p>
-          <div class="home-hero-divider"><span class="home-hero-divider-symbol">✒ &nbsp; Begin writing &nbsp; ✒</span></div>
+          <div class="home-hero-divider"><span class="home-hero-divider-symbol"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg> &nbsp; Begin writing &nbsp; <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg></span></div>
         </div>
 
         <!-- Generate section -->
-        <p class="home-section-label">📝 Generate</p>
+        <p class="home-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4L16.5 3.5z"/></svg> Generate</p>
         <div class="home-grid" style="margin-bottom:1.8rem">
           <div class="home-card" data-panel="panel-generate" role="button" tabindex="0">
-            <div class="home-card-icon">✒</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg></div>
             <h3 class="home-card-title">Writing Questions</h3>
             <p class="home-card-desc">Generate tailored HKDSE writing prompts and sentence patterns for focused practice.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
@@ -2889,28 +2892,28 @@ html, body {
         </div>
 
         <!-- Write section -->
-        <p class="home-section-label">✍️ Write</p>
+        <p class="home-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg> Write</p>
         <div class="home-grid" style="margin-bottom:1.8rem">
           <div class="home-card" data-panel="panel-planner" role="button" tabindex="0">
-            <div class="home-card-icon">📋</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
             <h3 class="home-card-title">Writing Planner</h3>
             <p class="home-card-desc">Get a complete AI-driven essay plan — outline, arguments, and structure — in seconds.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
           </div>
           <div class="home-card" data-panel="panel-grammar" role="button" tabindex="0">
-            <div class="home-card-icon">🔍</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <h3 class="home-card-title">Grammar Check</h3>
             <p class="home-card-desc">Detect grammar mistakes, typos, and fluency issues with a detailed A/B comparison.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
           </div>
           <div class="home-card" data-panel="panel-enhancer" role="button" tabindex="0">
-            <div class="home-card-icon">✨</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
             <h3 class="home-card-title">Text Enhancer</h3>
             <p class="home-card-desc">Elevate your vocabulary, sentence variety, and overall writing flow automatically.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
           </div>
           <div class="home-card" data-panel="panel-ocr" role="button" tabindex="0">
-            <div class="home-card-icon">📷</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
             <h3 class="home-card-title">OCR</h3>
             <p class="home-card-desc">Upload an image of any text, crop the area, and extract it as editable text instantly.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
@@ -2918,22 +2921,22 @@ html, body {
         </div>
 
         <!-- Learn section -->
-        <p class="home-section-label">📚 Learn</p>
+        <p class="home-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Learn</p>
         <div class="home-grid" style="margin-bottom:1.8rem">
           <div class="home-card" data-panel="panel-vocab" role="button" tabindex="0">
-            <div class="home-card-icon">💡</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
             <h3 class="home-card-title">Vocabulary Generator</h3>
             <p class="home-card-desc">Generate topic-specific vocabulary lists with definitions, examples, and collocations.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
           </div>
           <div class="home-card" data-panel="panel-quiz" role="button" tabindex="0">
-            <div class="home-card-icon">📝</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
             <h3 class="home-card-title">Vocabulary Quiz</h3>
             <p class="home-card-desc">Test your word knowledge with interactive multiple-choice and fill-in-the-blank quizzes.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
           </div>
           <div class="home-card" data-panel="panel-srs" role="button" tabindex="0">
-            <div class="home-card-icon">🃏</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
             <h3 class="home-card-title">Flipcard Review</h3>
             <p class="home-card-desc">Reinforce vocabulary with spaced-repetition flashcards for long-term retention.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
@@ -2941,10 +2944,10 @@ html, body {
         </div>
 
         <!-- Notebook section -->
-        <p class="home-section-label">📓 Notebook</p>
+        <p class="home-section-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="0.9em" height="0.9em" style="vertical-align:middle" aria-hidden="true"><path d="M4 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 2v20"/></svg> Notebook</p>
         <div class="home-grid">
           <div class="home-card" data-panel="panel-notebook" role="button" tabindex="0">
-            <div class="home-card-icon">📓</div>
+            <div class="home-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.6rem" height="1.6rem" aria-hidden="true"><path d="M4 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 2v20"/><line x1="12" y1="7" x2="18" y2="7"/><line x1="12" y1="12" x2="18" y2="12"/><line x1="12" y1="17" x2="18" y2="17"/></svg></div>
             <h3 class="home-card-title">Mistake Notebook</h3>
             <p class="home-card-desc">Save and review your corrected mistakes from the Grammar Checker to avoid repeating them.</p>
             <span class="home-card-arrow">Open &rsaquo;</span>
@@ -2970,7 +2973,7 @@ html, body {
 
       <!-- Header -->
       <header class="site-header">
-        <p class="header-ornament">✦ &nbsp; The Writer's Desk &nbsp; ✦</p>
+        <p class="header-ornament"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="0.8em" height="0.8em" style="vertical-align:middle" aria-hidden="true"><polygon points="12 2 13.8 9.2 21 8 15.5 13 18.2 20 12 16 5.8 20 8.5 13 3 8 10.2 9.2"/></svg> &nbsp; The Writer's Desk &nbsp; <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="0.8em" height="0.8em" style="vertical-align:middle" aria-hidden="true"><polygon points="12 2 13.8 9.2 21 8 15.5 13 18.2 20 12 16 5.8 20 8.5 13 3 8 10.2 9.2"/></svg></p>
         <h1 class="site-title">English Writing<br /><em>Question Generator</em></h1>
       </header>
 
@@ -3008,7 +3011,7 @@ html, body {
 
           <!-- Generate button -->
           <button type="submit" class="btn-generate" id="generateBtn">
-            <span aria-hidden="true">✒</span>
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.1em"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg></span>
             Generate
           </button>
 
@@ -3049,7 +3052,7 @@ html, body {
           <span aria-hidden="true">◻</span> Ref
         </button>
         <button class="btn-action" id="copyBtn" type="button" aria-label="Copy prompt">
-          <span aria-hidden="true">⎘</span> Copy
+          <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.1em"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Copy
         </button>
       </div>
     </div>
@@ -3076,7 +3079,7 @@ html, body {
     <div class="type-picker-sheet">
       <div class="type-picker-header">
         <h3>Writing Type</h3>
-        <button type="button" class="btn-close-picker" id="typePickerClose" aria-label="Close">✕</button>
+        <button type="button" class="btn-close-picker" id="typePickerClose" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
       <div class="type-picker-list" id="typePickerList" role="listbox" aria-label="Select writing type"></div>
     </div>
@@ -3092,7 +3095,7 @@ html, body {
       <div class="ink-ring"></div>
       <div class="ink-ring"></div>
       <div class="ink-ring"></div>
-      <div class="ink-ring-center">✒</div>
+      <div class="ink-ring-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="1.2em" height="1.2em" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg></div>
     </div>
     <p class="loading-phrase" id="loadingPhrase"></p>
     <button class="btn-cancel-loading" id="cancelBtn" type="button">Cancel</button>
@@ -3106,7 +3109,7 @@ html, body {
   <div class="ref-modal" id="refModal" role="dialog" aria-label="Reference questions" aria-modal="true">
     <div class="ref-modal-header">
       <h3>Reference Questions</h3>
-      <button class="btn-close-modal" id="refModalClose" type="button" aria-label="Close">✕</button>
+      <button class="btn-close-modal" id="refModalClose" type="button" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="ref-modal-body" id="refModalList"></div>
   </div>
@@ -3120,7 +3123,7 @@ html, body {
     <div class="history-handle" aria-hidden="true"></div>
     <div class="history-drawer-header">
       <h3>History</h3>
-      <button class="btn-close-drawer" id="historyCloseBtn" type="button" aria-label="Close history">✕</button>
+      <button class="btn-close-drawer" id="historyCloseBtn" type="button" aria-label="Close history"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="history-list" id="historyList"></div>
   </div>
@@ -3360,7 +3363,7 @@ html, body {
     <div class="mobile-nav-handle" aria-hidden="true"></div>
     <div class="mobile-nav-header">
       <span class="mobile-nav-title">Functions</span>
-      <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close">✕</button>
+      <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="mobile-nav-section-label">Home</div>
     <a class="mobile-nav-link" data-panel="panel-home" href="#">Home</a>
@@ -3502,7 +3505,7 @@ function showPanel(panelId) {
       warn:  'color:#8b4a2f',
       info:  'color:#5a4e3a;font-size:11px',
     };
-    console.log('%c✒  Writer\'s Desk — Debug Console', C.title);
+    console.log('%c[nib]  Writer\'s Desk — Debug Console', C.title);
     console.log('%c' + '─'.repeat(44), C.sep);
     console.log('%cModel info will appear here during generation.', C.faint);
     console.log('%c' + '─'.repeat(44), C.sep);
@@ -3862,24 +3865,24 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         });
         if (!resp.ok) {
           const errText = await resp.text().catch(() => '');
-          console.warn(`%c  ✗ ${model} failed (${resp.status})`, C.warn, errText);
+          console.warn(`%c  [x] ${model} failed (${resp.status})`, C.warn, errText);
           return callAI(messages, modelIndex + 1);
         }
         const data = await resp.json();
         const content = data?.choices?.[0]?.message?.content;
         if (!content || content.trim() === '') {
-          console.warn(`%c  ✗ ${model} returned empty content`, C.warn);
+          console.warn(`%c  [x] ${model} returned empty content`, C.warn);
           return callAI(messages, modelIndex + 1);
         }
-        console.log(`%c  ✓ Success — ${model}`, C.ok);
+        console.log(`%c  [ok] Success — ${model}`, C.ok);
         console.log('%c' + '─'.repeat(44), C.sep);
         return { content: content.trim(), model };
       } catch (err) {
         if (err.name === 'AbortError') {
-          console.info('%c  ✕ Request cancelled by user', C.faint);
+          console.info('%c  [x] Request cancelled by user', C.faint);
           throw err;
         }
-        console.warn(`%c  ✗ ${model} error: ${err.message}`, C.warn);
+        console.warn(`%c  [x] ${model} error: ${err.message}`, C.warn);
         return callAI(messages, modelIndex + 1);
       }
     }
@@ -4089,7 +4092,7 @@ The "example" for each selected pattern must be a NEW sentence directly related 
       ];
 
       console.log('%c' + '─'.repeat(44), C.sep);
-      console.log(`%c  ✒ Generating "${textType}"${topic ? ' · ' + topic : ''}`, C.info);
+      console.log(`%c  [gen] Generating "${textType}"${topic ? ' · ' + topic : ''}`, C.info);
 
       try {
         const { content, model } = await callAI(messages);
@@ -4126,12 +4129,12 @@ The "example" for each selected pattern must be a NEW sentence directly related 
       if (!currentPrompt) return;
       const reset = () => {
         copyBtn.classList.remove('success');
-        copyBtn.innerHTML = '<span aria-hidden="true">⎘</span> Copy';
+        copyBtn.innerHTML = '<span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.1em"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Copy';
       };
       try {
         await navigator.clipboard.writeText(currentPrompt);
         copyBtn.classList.add('success');
-        copyBtn.innerHTML = '<span aria-hidden="true">✓</span> Copied';
+        copyBtn.innerHTML = '<span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.1em"><polyline points="20 6 9 17 4 12"/></svg></span> Copied';
         setTimeout(reset, 2000);
       } catch {
         const ta = document.createElement('textarea');
@@ -4142,7 +4145,7 @@ The "example" for each selected pattern must be a NEW sentence directly related 
         document.execCommand('copy');
         document.body.removeChild(ta);
         copyBtn.classList.add('success');
-        copyBtn.textContent = '✓ Copied';
+        copyBtn.innerHTML = '<span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.1em"><polyline points="20 6 9 17 4 12"/></svg></span> Copied';
         setTimeout(reset, 2000);
       }
     });
@@ -4366,10 +4369,15 @@ Before finalizing, self-review to ensure all five '###' sections are present and
                 });
 
                 const processLines = (htmlContent, isOriginal) => {
+                    const svgX = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><line x1=\'18\' y1=\'6\' x2=\'6\' y2=\'18\'/><line x1=\'6\' y1=\'6\' x2=\'18\' y2=\'18\'/></svg>';
+                    const svgStar = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><polygon points=\'12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\'/></svg>';
+                    const svgCheck = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><polyline points=\'20 6 9 17 4 12\'/></svg>';
                     return htmlContent.split('\n').map(line => {
                         if (line.trim() === '') return line;
                         const hasChange = isOriginal ? /<del class="change-span"/.test(line) : /<ins class="change-span"/.test(line);
-                        const mark = hasChange ? (isChecker ? '<span class="incorrect-mark">✗ </span>' : '<span class="enhancement-mark">✨ </span>') : '<span class="correct-mark">✓ </span>';
+                        const mark = hasChange
+                            ? (isChecker ? `<span class="incorrect-mark">${svgX} </span>` : `<span class="enhancement-mark">${svgStar} </span>`)
+                            : `<span class="correct-mark">${svgCheck} </span>`;
                         return mark + line;
                     }).join('\n');
                 };

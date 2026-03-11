@@ -546,10 +546,15 @@ Before finalizing, self-review to ensure all five '###' sections are present and
                 });
 
                 const processLines = (htmlContent, isOriginal) => {
+                    const svgX = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><line x1=\'18\' y1=\'6\' x2=\'6\' y2=\'18\'/><line x1=\'6\' y1=\'6\' x2=\'18\' y2=\'18\'/></svg>';
+                    const svgStar = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><polygon points=\'12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\'/></svg>';
+                    const svgCheck = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\' width=\'0.85em\' height=\'0.85em\' style=\'vertical-align:-0.05em\' aria-hidden=\'true\'><polyline points=\'20 6 9 17 4 12\'/></svg>';
                     return htmlContent.split('\n').map(line => {
                         if (line.trim() === '') return line;
                         const hasChange = isOriginal ? /<del class="change-span"/.test(line) : /<ins class="change-span"/.test(line);
-                        const mark = hasChange ? (isChecker ? '<span class="incorrect-mark">✗ </span>' : '<span class="enhancement-mark">✨ </span>') : '<span class="correct-mark">✓ </span>';
+                        const mark = hasChange
+                            ? (isChecker ? `<span class="incorrect-mark">${svgX} </span>` : `<span class="enhancement-mark">${svgStar} </span>`)
+                            : `<span class="correct-mark">${svgCheck} </span>`;
                         return mark + line;
                     }).join('\n');
                 };
