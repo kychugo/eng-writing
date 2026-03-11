@@ -176,18 +176,137 @@ html, body {
   padding: 1.5rem;
 }
 
+/* ===== Mobile menu button (book icon) ===== */
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: 1.5px solid rgba(212, 176, 122, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #d4b07a;
+  transition: border-color 0.2s, color 0.2s;
+  animation: breathe-glow 3s ease-in-out infinite;
+}
+.mobile-menu-btn:hover { border-color: rgba(212, 176, 122, 0.75); color: #f0d090; }
+
+@keyframes breathe-glow {
+  0%, 100% { box-shadow: 0 0 3px rgba(184, 150, 90, 0.2),  0 0 0 1px rgba(184, 150, 90, 0.1); }
+  50%       { box-shadow: 0 0 16px rgba(184, 150, 90, 0.65), 0 0 6px  rgba(212, 176, 122, 0.35); }
+}
+
+/* ===== Mobile nav overlay (bottom sheet) ===== */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 36, 22, 0.55);
+  z-index: 9100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-nav-overlay.mn-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-nav-sheet {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #faf7f2;
+  border-radius: 14px 14px 0 0;
+  max-height: 82vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mobile-nav-overlay.mn-open .mobile-nav-sheet {
+  transform: translateY(0);
+}
+.mobile-nav-handle {
+  width: 36px; height: 4px;
+  background: rgba(44, 36, 22, 0.15);
+  border-radius: 2px;
+  margin: 0.65rem auto 0;
+}
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem 0.65rem;
+  border-bottom: 1px solid #e0d9cc;
+}
+.mobile-nav-title {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c2416;
+  letter-spacing: 0.04em;
+}
+.mobile-nav-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #8c7f6a;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.mobile-nav-close:hover { color: #2c2416; }
+.mobile-nav-section-label {
+  font-size: 0.6rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(44, 36, 22, 0.38);
+  padding: 0.85rem 1.5rem 0.2rem;
+}
+.mobile-nav-link {
+  display: block;
+  padding: 0.7rem 1.5rem 0.7rem 1.9rem;
+  font-size: 0.95rem;
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  color: #5a4e3a;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+.mobile-nav-link:hover {
+  color: #b8965a;
+  background: rgba(212, 176, 122, 0.08);
+  border-left-color: rgba(212, 176, 122, 0.4);
+}
+.mobile-nav-link.active {
+  color: #b8965a;
+  background: rgba(212, 176, 122, 0.12);
+  border-left-color: #d4b07a;
+  font-weight: 500;
+}
+.mobile-nav-footer { height: env(safe-area-inset-bottom, 12px); min-height: 12px; }
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   html, body { overflow: auto; }
   #app-wrapper { flex-direction: column; height: auto; min-height: 100vh; overflow: visible; }
-  #sidebar { width: 100%; min-width: unset; flex-direction: row; flex-wrap: wrap; height: auto; }
-  .sidebar-header { padding: 0.75rem 1rem; flex: 0 0 auto; }
+  #sidebar { width: 100%; min-width: unset; flex-direction: row; flex-wrap: wrap; height: auto; align-items: center; }
+  .sidebar-header {
+    padding: 0.75rem 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .sidebar-header .subtitle { display: none; }
-  #sidebar nav { display: flex; flex-wrap: wrap; padding: 0.25rem 0.5rem; flex: 1; overflow: visible; }
-  .nav-section { display: flex; align-items: center; flex-wrap: wrap; margin: 0; }
-  .nav-section-label { display: none; }
-  .nav-item { padding: 0.4rem 0.55rem; border-left: none; border-bottom: 2px solid transparent; font-size: 0.78rem; }
-  .nav-item.active { border-bottom-color: #d4b07a; border-left: none; background: rgba(212,176,122,0.11); }
+  #sidebar nav { display: none; }
+  .mobile-menu-btn { display: flex; }
   #main-content { overflow-y: visible; }
   .desk-panel { min-height: auto; }
 }
@@ -2486,8 +2605,18 @@ html, body {
        ╚═════════════════════════════════════════════════════════╝ -->
   <div id="sidebar">
     <div class="sidebar-header">
-      <h1>The Writer's Desk</h1>
-      <div class="subtitle">HKDSE English Platform</div>
+      <div>
+        <h1>The Writer's Desk</h1>
+        <div class="subtitle">HKDSE English Platform</div>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn"
+        aria-label="Functions" aria-expanded="false" aria-controls="mobileNavOverlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+          stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </button>
     </div>
     <nav>
       <div class="nav-section">
@@ -2928,6 +3057,31 @@ html, body {
      GLOBAL OVERLAYS (fixed-position, outside app-wrapper)
      ═══════════════════════════════════════════════════════════ -->
 
+<!-- Mobile nav overlay — bottom sheet (mobile only) -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true" role="dialog" aria-label="Functions" aria-modal="true">
+  <div class="mobile-nav-sheet">
+    <div class="mobile-nav-handle" aria-hidden="true"></div>
+    <div class="mobile-nav-header">
+      <span class="mobile-nav-title">Functions</span>
+      <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="mobile-nav-section-label">Generate</div>
+    <a class="mobile-nav-link active" data-panel="panel-generate" href="#">Writing Questions</a>
+    <div class="mobile-nav-section-label">Write</div>
+    <a class="mobile-nav-link" data-panel="panel-planner" href="#">Planner</a>
+    <a class="mobile-nav-link" data-panel="panel-grammar" href="#">Grammar Check</a>
+    <a class="mobile-nav-link" data-panel="panel-enhancer" href="#">Text Enhancer</a>
+    <a class="mobile-nav-link" data-panel="panel-ocr" href="#">OCR</a>
+    <div class="mobile-nav-section-label">Learn</div>
+    <a class="mobile-nav-link" data-panel="panel-vocab" href="#">Vocabulary Generator</a>
+    <a class="mobile-nav-link" data-panel="panel-quiz" href="#">Vocabulary Quiz</a>
+    <a class="mobile-nav-link" data-panel="panel-srs" href="#">Flipcard</a>
+    <div class="mobile-nav-section-label">Notebook</div>
+    <a class="mobile-nav-link" data-panel="panel-notebook" href="#">Mistake Notebook</a>
+    <div class="mobile-nav-footer"></div>
+  </div>
+</div>
+
 <!-- Orionai explanation popover -->
 <div class="popover" id="explanation-popover"></div>
 
@@ -2985,12 +3139,17 @@ function showPanel(panelId) {
   var panel = document.getElementById(panelId);
   if (panel) panel.style.display = 'block';
 
-  // Update nav active state
+  // Update nav active state (sidebar)
   document.querySelectorAll('.nav-item').forEach(function(i) {
     i.classList.remove('active');
   });
-  var navItem = document.querySelector('[data-panel="' + panelId + '"]');
+  var navItem = document.querySelector('.nav-item[data-panel="' + panelId + '"]');
   if (navItem) navItem.classList.add('active');
+
+  // Update mobile nav active state
+  document.querySelectorAll('.mobile-nav-link').forEach(function(i) {
+    i.classList.toggle('active', i.dataset.panel === panelId);
+  });
 
   // Panel-specific initialization
   if (panelId === 'panel-notebook') {
@@ -4991,6 +5150,47 @@ function switchTab(name, fromGen) {
   showPanel('panel-generate');
 })();
 
+
+// ============================================================
+// MOBILE NAV OVERLAY
+// ============================================================
+(function initMobileNav() {
+  var btn     = document.getElementById('mobileMenuBtn');
+  var overlay = document.getElementById('mobileNavOverlay');
+  var closeBtn = document.getElementById('mobileNavClose');
+  if (!btn || !overlay) return;
+
+  function openMobileNav() {
+    overlay.classList.add('mn-open');
+    overlay.removeAttribute('aria-hidden');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMobileNav() {
+    overlay.classList.remove('mn-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', openMobileNav);
+  if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeMobileNav();
+  });
+
+  overlay.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var panelId = link.dataset.panel;
+      if (panelId) {
+        showPanel(panelId);
+        closeMobileNav();
+      }
+    });
+  });
+})();
+
 </script>
+
 </body>
 </html>
