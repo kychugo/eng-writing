@@ -318,6 +318,9 @@ html, body {
   .mobile-menu-btn { display: flex; }
   #main-content { overflow-y: visible; }
   .desk-panel { min-height: auto; }
+  /* #panel-home has a higher-specificity ID rule that sets overflow-y:auto and min-height:100%,
+     which traps content in an inner scroll container on mobile. Override it here so the body scrolls. */
+  #panel-home { overflow-y: visible; min-height: auto; }
   /* Views now start just below the sticky sidebar; adjust offset dynamically via JS */
   .view { top: 62px; }
 }
