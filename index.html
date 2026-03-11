@@ -437,6 +437,26 @@ html, body {
     select:invalid, select option[value=""] { color: var(--ink-faint); }
     select option { color: var(--ink); }
 
+    .topic-textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      background: var(--parchment2);
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-md);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .topic-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.14);
+    }
+
     /* ── Generate button ──────────────────────────────────────── */
     .btn-generate {
       width: 100%;
@@ -1275,6 +1295,7 @@ html, body {
     .input-field, .textarea-field { width: 100%; padding: 0.8rem 1rem; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--border-radius); color: var(--color-text); font-family: var(--font-main); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
     .input-field:focus, .textarea-field:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.18); }
     .textarea-field { min-height: 200px; resize: vertical; }
+    .textarea-field-compact { min-height: 100px; }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background-color: var(--color-text); color: var(--color-bg); border: none; border-radius: var(--border-radius); cursor: pointer; font-family: var(--font-serif); font-size: 1.05rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: background-color 0.3s, transform 0.2s; box-shadow: var(--shadow-sm); }
     .btn:hover { background-color: var(--color-text-muted); transform: translateY(-1px); }
     .btn:disabled { background-color: var(--color-border); color: var(--color-text-muted); cursor: not-allowed; transform: none; }
@@ -2551,11 +2572,11 @@ html, body {
             <textarea
               id="topic"
               name="topic"
+              class="topic-textarea"
               placeholder="e.g. climate change…"
               maxlength="120"
               autocomplete="off"
               rows="3"
-              style="resize:vertical;min-height:80px;width:100%;padding:0.65rem 0.9rem;background:var(--parchment2);border:1px solid var(--parchment3);border-radius:var(--r-md);font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--ink);line-height:1.5;"
             ></textarea>
           </div>
 
@@ -2689,7 +2710,7 @@ html, body {
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Get a complete, AI-driven plan for your essay based on your topic.</p>
             <div class="form-group">
                 <label for="planner-topic">Writing Topic or Question</label>
-                <textarea id="planner-topic" class="textarea-field" rows="4" placeholder="e.g., 'The advantages and disadvantages of online learning'" style="min-height:100px;resize:vertical;"></textarea>
+                <textarea id="planner-topic" class="textarea-field textarea-field-compact" rows="4" placeholder="e.g., 'The advantages and disadvantages of online learning'"></textarea>
             </div>
             <button id="planner-btn" class="btn">Generate Plan</button>
             <div id="planner-loader" class="loader-container"><div class="loader"></div><p>Building your strategic plan...</p></div>
@@ -3038,7 +3059,6 @@ function showPanel(panelId) {
     let phraseIdx      = 0;
     let selectedType   = '';
     let abortController = null;
-    let currentGenId   = 0;
 
     /* ── DOM refs ───────────────────────────────────────────── */
     const viewForm           = document.getElementById('viewForm');
@@ -3483,7 +3503,6 @@ Write ONE original, engaging writing prompt of the type "${textType}".
 
     /* ── Display result ─────────────────────────────────────── */
     function displayResult(prompt, textType, patterns) {
-      ++currentGenId;
 
       resultBadge.textContent = textType;
       resultLabel.textContent = textType;
