@@ -437,6 +437,26 @@ html, body {
     select:invalid, select option[value=""] { color: var(--ink-faint); }
     select option { color: var(--ink); }
 
+    .topic-textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      background: var(--parchment2);
+      border: 1px solid var(--parchment3);
+      border-radius: var(--r-md);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .topic-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.14);
+    }
+
     /* ── Generate button ──────────────────────────────────────── */
     .btn-generate {
       width: 100%;
@@ -1057,14 +1077,20 @@ html, body {
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--t);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
     }
     .type-picker-overlay.tp-open { opacity: 1; pointer-events: auto; }
     .type-picker-sheet {
-      position: absolute;
-      inset: 0;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      max-height: 80vh;
       background: var(--parchment);
       display: flex;
       flex-direction: column;
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
       transform: translateY(100%);
       transition: transform var(--t-slide);
     }
@@ -1099,42 +1125,50 @@ html, body {
       overflow-y: auto;
       flex: 1;
       -webkit-overflow-scrolling: touch;
-      padding: 0.5rem 0 env(safe-area-inset-bottom, 1.5rem);
+      padding: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+      align-content: start;
+      padding-bottom: env(safe-area-inset-bottom, 1.5rem);
     }
     .type-picker-item {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--parchment2);
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 0.5rem;
+      border: 1px solid var(--parchment2);
+      border-radius: var(--r-md);
       cursor: pointer;
-      transition: background var(--t);
+      transition: background var(--t), border-color var(--t);
+      text-align: center;
     }
-    .type-picker-item:last-child { border-bottom: none; }
-    .type-picker-item:hover { background: var(--parchment2); }
-    .type-picker-item.tp-selected { background: #fdf9f4; }
+    .type-picker-item:hover { background: var(--parchment2); border-color: var(--parchment3); }
+    .type-picker-item.tp-selected { background: #fdf9f4; border-color: var(--gold); }
     .type-picker-item-icon {
-      width: 22px; height: 22px;
+      width: 24px; height: 24px;
       color: var(--ink-faint);
       flex-shrink: 0;
-      display: flex; align-items: center;
+      display: flex; align-items: center; justify-content: center;
     }
     .type-picker-item-icon svg { width: 100%; height: 100%; }
     .type-picker-item.tp-selected .type-picker-item-icon { color: var(--gold); }
     .type-picker-item-text {
-      flex: 1;
       font-family: 'Lato', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       color: var(--ink-light);
       font-weight: 300;
       letter-spacing: 0.02em;
+      line-height: 1.2;
     }
-    .type-picker-item.tp-selected .type-picker-item-text { color: var(--ink); font-weight: 400; }
+    .type-picker-item.tp-selected .type-picker-item-text { color: var(--ink); font-weight: 600; }
     .type-picker-item-check {
-      width: 16px; height: 16px;
+      width: 14px; height: 14px;
       color: var(--gold);
       flex-shrink: 0;
-      display: none; align-items: center;
+      display: none; align-items: center; justify-content: center;
     }
     .type-picker-item-check svg { width: 100%; height: 100%; }
     .type-picker-item.tp-selected .type-picker-item-check { display: flex; }
@@ -1261,6 +1295,7 @@ html, body {
     .input-field, .textarea-field { width: 100%; padding: 0.8rem 1rem; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--border-radius); color: var(--color-text); font-family: var(--font-main); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
     .input-field:focus, .textarea-field:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.18); }
     .textarea-field { min-height: 200px; resize: vertical; }
+    .textarea-field-compact { min-height: 100px; }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background-color: var(--color-text); color: var(--color-bg); border: none; border-radius: var(--border-radius); cursor: pointer; font-family: var(--font-serif); font-size: 1.05rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: background-color 0.3s, transform 0.2s; box-shadow: var(--shadow-sm); }
     .btn:hover { background-color: var(--color-text-muted); transform: translateY(-1px); }
     .btn:disabled { background-color: var(--color-border); color: var(--color-text-muted); cursor: not-allowed; transform: none; }
@@ -2469,7 +2504,7 @@ html, body {
         <a class="nav-item" data-panel="panel-enhancer"
            onclick="showPanel('panel-enhancer'); return false;" href="#">Text Enhancer</a>
         <a class="nav-item" data-panel="panel-ocr"
-           onclick="showPanel('panel-ocr'); return false;" href="#">Image → Text</a>
+           onclick="showPanel('panel-ocr'); return false;" href="#">OCR</a>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">📚 Learn</div>
@@ -2478,7 +2513,7 @@ html, body {
         <a class="nav-item" data-panel="panel-quiz"
            onclick="showPanel('panel-quiz'); return false;" href="#">Vocabulary Quiz</a>
         <a class="nav-item" data-panel="panel-srs"
-           onclick="showPanel('panel-srs'); return false;" href="#">SRS Review</a>
+           onclick="showPanel('panel-srs'); return false;" href="#">Flipcard</a>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">📓 Notebook</div>
@@ -2534,14 +2569,15 @@ html, body {
           <!-- Topic -->
           <div class="form-group" style="margin-bottom:1.4rem">
             <label for="topic">Topic <span class="lbl-optional">(optional)</span></label>
-            <input
-              type="text"
+            <textarea
               id="topic"
               name="topic"
+              class="topic-textarea"
               placeholder="e.g. climate change…"
               maxlength="120"
               autocomplete="off"
-            />
+              rows="3"
+            ></textarea>
           </div>
 
           <!-- Generate button -->
@@ -2674,10 +2710,10 @@ html, body {
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Get a complete, AI-driven plan for your essay based on your topic.</p>
             <div class="form-group">
                 <label for="planner-topic">Writing Topic or Question</label>
-                <input type="text" id="planner-topic" class="input-field" placeholder="e.g., 'The advantages and disadvantages of online learning'">
+                <textarea id="planner-topic" class="textarea-field textarea-field-compact" rows="4" placeholder="e.g., 'The advantages and disadvantages of online learning'"></textarea>
             </div>
             <button id="planner-btn" class="btn">Generate Plan</button>
-            <div id="planner-loader" class="loader-container"><div class="loader"></div><p>Orion is building your strategic plan...</p></div>
+            <div id="planner-loader" class="loader-container"><div class="loader"></div><p>Building your strategic plan...</p></div>
             <div id="planner-results" class="results-area"></div>
         </div>
       </div>
@@ -2693,7 +2729,7 @@ html, body {
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Paste your text for an A/B comparison and detailed analysis.</p>
             <div class="form-group"><label for="checker-text">Your Text</label><textarea id="checker-text" class="textarea-field" placeholder="Enter your text here..."></textarea></div>
             <button id="checker-btn" class="btn">Check Text</button>
-            <div id="checker-loader" class="loader-container"><div class="loader"></div><p>Orion is meticulously reviewing your text...</p></div>
+            <div id="checker-loader" class="loader-container"><div class="loader"></div><p>Meticulously reviewing your text...</p></div>
             <div id="checker-results" class="results-area"></div>
         </div>
       </div>
@@ -2709,7 +2745,7 @@ html, body {
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Paste your text to improve vocabulary, sentence structure, and overall flow.</p>
             <div class="form-group"><label for="enhancer-text">Your Text</label><textarea id="enhancer-text" class="textarea-field" placeholder="Enter text to enhance... e.g., 'The man was sad because his cat ran away. It was a bad day.'"></textarea></div>
             <button id="enhancer-btn" class="btn">Enhance Text</button>
-            <div id="enhancer-loader" class="loader-container"><div class="loader"></div><p>Orion is elevating your language...</p></div>
+            <div id="enhancer-loader" class="loader-container"><div class="loader"></div><p>Elevating your language...</p></div>
             <div id="enhancer-results" class="results-area"></div>
         </div>
       </div>
@@ -2721,7 +2757,7 @@ html, body {
     <div id="panel-ocr" class="desk-panel">
       <div class="container">
 <div id="ocr-tool" class="orionai-panel" >
-            <h2>Image to Text</h2>
+            <h2>OCR</h2>
             <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Upload an image of a document, crop the desired area, and extract the text.</p>
             <div class="ocr-container">
                 <div class="ocr-image-area">
@@ -2914,9 +2950,6 @@ html, body {
 <!-- ═══════════════════════════════════════════════════════════
      CDN SCRIPTS
      ═══════════════════════════════════════════════════════════ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://unpkg.com/html-to-docx-js@1.3.0/dist/html-to-docx.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -3026,7 +3059,6 @@ function showPanel(panelId) {
     let phraseIdx      = 0;
     let selectedType   = '';
     let abortController = null;
-    let currentGenId   = 0;
 
     /* ── DOM refs ───────────────────────────────────────────── */
     const viewForm           = document.getElementById('viewForm');
@@ -3470,8 +3502,7 @@ Write ONE original, engaging writing prompt of the type "${textType}".
     historyBackdrop.addEventListener('click', closeHistory);
 
     /* ── Display result ─────────────────────────────────────── */
-    function displayResult(prompt, textType) {
-      const genId = ++currentGenId;
+    function displayResult(prompt, textType, patterns) {
 
       resultBadge.textContent = textType;
       resultLabel.textContent = textType;
@@ -3491,19 +3522,13 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         refBtn.style.display = 'none';
       }
 
-      // Show patterns section with loading state while fetching topic-specific patterns
-      patternsList.innerHTML = '<li class="patterns-item patterns-loading">Finding patterns for this topic…</li>';
-      patternsSection.removeAttribute('hidden');
-
-      fetchTopicPatterns(prompt, textType, currentTopic)
-        .then(patterns => {
-          if (currentGenId !== genId) return; // stale result, ignore
-          renderPatternsList(patterns);
-        })
-        .catch(() => {
-          if (currentGenId !== genId) return;
-          renderPatternsList(randomPatterns());
-        });
+      // Render patterns immediately (already fetched before displaying results)
+      if (patterns && patterns.length) {
+        renderPatternsList(patterns);
+        patternsSection.removeAttribute('hidden');
+      } else {
+        patternsSection.setAttribute('hidden', '');
+      }
 
       showResultView();
     }
@@ -3616,9 +3641,17 @@ The "example" for each selected pattern must be a NEW sentence directly related 
 
         saveHistory({ type: textType, topic, prompt: content, ts: Date.now() });
 
+        // Fetch patterns in parallel while still showing loading overlay
+        let patterns;
+        try {
+          patterns = await fetchTopicPatterns(content, textType, topic);
+        } catch {
+          patterns = randomPatterns();
+        }
+
         stopLoading();
         generateBtn.disabled = false;
-        displayResult(content, textType);
+        displayResult(content, textType, patterns);
       } catch (err) {
         stopLoading();
         generateBtn.disabled = false;
@@ -3688,7 +3721,6 @@ The "example" for each selected pattern must be a NEW sentence directly related 
     let ocrCropper = null; // OCR tool's Cropper.js instance (was: cropper)
 
     document.addEventListener('DOMContentLoaded', () => {
-        const { jsPDF } = window.jspdf;
 
         // --- NAVIGATION & GENERAL SETUP ---
         const tabs = document.querySelectorAll('.nav-tab');
@@ -3778,31 +3810,6 @@ The "example" for each selected pattern must be a NEW sentence directly related 
                 </div>`;
         }
         
-        // --- EXPORT FUNCTION ---
-        function setupExportButtons(containerId, contentGenerator, fileName) {
-            const exportContainer = document.querySelector(`#${containerId} .export-buttons`);
-            if (!exportContainer) return;
-            exportContainer.innerHTML = '';
-            const pdfBtn = document.createElement('button');
-            pdfBtn.className = 'btn btn-secondary'; pdfBtn.textContent = 'PDF';
-            pdfBtn.onclick = () => {
-                const { element } = contentGenerator();
-                const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
-                doc.html(element, { callback: (doc) => doc.save(`${fileName}.pdf`), margin: [40, 40, 40, 40], autoPaging: 'text', width: 515, windowWidth: element.scrollWidth });
-            };
-            exportContainer.appendChild(pdfBtn);
-            const docxBtn = document.createElement('button');
-            docxBtn.className = 'btn btn-secondary'; docxBtn.textContent = 'DOCX';
-            docxBtn.onclick = () => {
-                const { htmlString } = contentGenerator();
-                const blob = htmlToDocx.asBlob(htmlString, { orientation: 'portrait', margins: { top: 720, right: 720, bottom: 720, left: 720 } });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `${fileName}.docx`;
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            };
-            exportContainer.appendChild(docxBtn);
-        }
-
         // --- WRITING PLANNER (V3 PROMPT UPGRADE) ---
         const plannerBtn = document.getElementById('planner-btn');
         plannerBtn.addEventListener('click', () => {
@@ -3837,11 +3844,9 @@ Before finalizing, self-review to ensure all five '###' sections are present and
         }
 
         function displayPlannerResults(content, resultsElement) {
-            const topic = document.getElementById('planner-topic').value;
-            const fileName = (topic.substring(0, 30) || 'writing-plan').replace(/\s+/g, '-').toLowerCase();
             const iconMap = {"Mind Map": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 20v-2.09c.69.13 1.39.2 2.1.2 2.65 0 4.9-1.57 5.9-3.79l-1.74-.89c-.61 1.34-2.29 2.47-4.16 2.47-.64 0-1.26-.08-1.85-.23l.65-1.29H20v-2h-3.3l-2-4H18v-2h-3.41l-1.7-3.41c.33-.09.67-.14 1.11-.14 2.15 0 3.93 1.25 4.69 3.01l1.74-.89C19.34 2.86 16.9 1.5 14.1 1.5c-.71 0-1.39.07-2.05.2l.9-1.8H22V2h-9.7l-2 4H7V4H5v2.29L2.71 11.5l1.74.89C5.06 10.25 6.84 9 8.9 9c.71 0 1.39.14 2 .39l1.7 3.41H9v2h3.41l2 4H11v2h3.25l-.75 1.5h-2.21l-1.74.89c.78 1.63 2.42 2.81 4.45 2.81.71 0 1.39-.09 2.05-.27l-.9 1.8H2v-2h8.34l.75-1.5z"/></svg>`, "Idea Points": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zM9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z"/></svg>`, "Writing Structure": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17h18v2H3v-2zm0-5h18v2H3v-2zm0-5h18v2H3V7zm0-5h18v2H3V2z"/></svg>`, "Useful Tips for HKDSE": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`, "Advanced Sentence Structures": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`};
             const cardRenderers = {"Mind Map": body => `<div class="mindmap-container"><div class="mindmap">${renderListAsMindmap(body)}</div></div>`, "Idea Points": body => `<div class="planner-card-body"><div class="idea-grid">${renderListAsIdeaCards(body)}</div></div>`, "Writing Structure": body => `<div class="planner-card-body"><div class="structure-stepper">${renderListAsStepper(body)}</div></div>`, "Useful Tips for HKDSE": body => `<div class="planner-card-body"><div class="tips-grid">${renderListAsTipCards(body)}</div></div>`, "Advanced Sentence Structures": body => `<div class="planner-card-body"><div class="sentences-grid">${renderListAsSentenceCards(body)}</div></div>`};
-            resultsElement.innerHTML = `<div class="results-header"><h3>Your AI Writing Plan</h3><div class="export-buttons"></div></div><div id="planner-content-container"></div>`;
+            resultsElement.innerHTML = `<div class="results-header"><h3>Your AI Writing Plan</h3></div><div id="planner-content-container"></div>`;
             const container = document.getElementById('planner-content-container');
             const sections = content.split(/###\s*(.*?)\s*###/).filter(s => s.trim());
             for (let i = 0; i < sections.length; i += 2) {
@@ -3849,8 +3854,6 @@ Before finalizing, self-review to ensure all five '###' sections are present and
                 const renderer = cardRenderers[title] || (b => `<div class="planner-card-body">${b.replace(/\n/g, '<br>')}</div>`);
                 card.innerHTML = `<div class="planner-card-header">${iconMap[title] || ''}<h3>${title}</h3></div>${renderer(body)}`; container.appendChild(card);
             }
-            const contentGenerator = () => { const element = document.getElementById('planner-content-container'); const clone = element.cloneNode(true); clone.querySelectorAll('.mindmap, .structure-stepper').forEach(el => el.classList.remove(el.classList[0])); const htmlString = `<h1>Writing Plan: ${topic}</h1>${clone.innerHTML}`; return { element, htmlString }; };
-            setupExportButtons('planner-results', contentGenerator, fileName);
         }
         function parseList(text) { const lines = text.split('\n').filter(line => line.trim()); const items = []; let currentSubheading = ''; lines.forEach(line => { if (!line.startsWith('-') && line.endsWith(':')) { currentSubheading = line.slice(0, -1); } else if (line.trim().startsWith('-')) { const content = line.trim().substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); items.push({ content, subheading: currentSubheading }); } }); return items; }
         function renderListAsMindmap(text) { const lines = text.split('\n').filter(line => line.trim().startsWith('-')); let html = '<ul>'; let lastIndent = -1; lines.forEach(line => { const indent = line.search(/\S/); const content = line.trim().substring(2); if (indent > lastIndent) html += '<ul>'; else if (indent < lastIndent) html += '</li></ul>'.repeat((lastIndent - indent) / 2); else if (lastIndent !== -1) html += '</li>'; html += `<li>${content}`; lastIndent = indent; }); if (lines.length > 0) html += '</li>' + '</ul>'.repeat(lastIndent / 2 + 1); else html += '</ul>'; return html; }
@@ -4001,16 +4004,7 @@ Before finalizing, self-review to ensure all five '###' sections are present and
             callApi(payload, document.getElementById('ocr-loader'), ocrBtn, document.getElementById('ocr-results'), displayOcrResults);
         });
         function displayOcrResults(text, resultsElement) {
-            const fileName = `ocr-export-${Date.now()}`;
-            resultsElement.innerHTML = `<div class="results-header"><h3 style="font-size: 1.2rem;">Extracted Text</h3><div class="export-buttons" id="ocr-export-buttons"></div></div><textarea id="ocr-content" class="textarea-field" style="height: 300px; font-family: var(--font-mono);">${text.trim()}</textarea>`;
-            const contentGenerator = () => { const element = document.getElementById('ocr-content'); const value = element.value; const htmlString = `<p>${value.replace(/\n/g, '</p><p>')}</p>`; return { element, htmlString, plainText: value }; };
-            setupExportButtons('ocr-results', contentGenerator, fileName);
-            const txtBtn = document.createElement('button'); txtBtn.className = 'btn btn-secondary'; txtBtn.textContent = 'TXT';
-            txtBtn.onclick = () => { const { plainText } = contentGenerator(); const blob = new Blob([plainText], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${fileName}.txt`; a.click(); URL.revokeObjectURL(url); };
-            document.getElementById('ocr-export-buttons').appendChild(txtBtn);
-            const copyBtn = document.createElement('button'); copyBtn.className = 'btn btn-secondary'; copyBtn.textContent = 'Copy All';
-            copyBtn.onclick = (e) => { const { plainText } = contentGenerator(); navigator.clipboard.writeText(plainText).then(() => { e.target.textContent = 'Copied!'; setTimeout(() => { e.target.textContent = 'Copy All'; }, 2000); }); };
-            document.getElementById('ocr-export-buttons').appendChild(copyBtn);
+            resultsElement.innerHTML = `<div class="results-header"><h3 style="font-size: 1.2rem;">Extracted Text</h3></div><textarea id="ocr-content" class="textarea-field" style="height: 300px; font-family: var(--font-mono);">${text.trim()}</textarea>`;
         }
         
         // --- MISTAKE NOTEBOOK (V3) ---
