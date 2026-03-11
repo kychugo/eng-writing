@@ -5693,6 +5693,76 @@ function switchTab(name, fromGen) {
   db.ref('stats/lastVisit').set(isoStamp).catch(function(err) {
     console.warn('[Firebase] lastVisit write failed:', err.message);
   });
+
+  // ── School Usage Analytics ──────────────────────────────────
+  // Persistent visitor ID (approximates unique visitors without login)
+  var VISITOR_ID_KEY = 'wd_visitor_id';
+  var visitorId = localStorage.getItem(VISITOR_ID_KEY);
+  if (!visitorId) {
+    visitorId = 'v_' + now + '_' + Math.random().toString(36).slice(2, 9);
+    localStorage.setItem(VISITOR_ID_KEY, visitorId);
+  }
+
+  var dateStr  = new Date(now).toISOString().slice(0, 10); // YYYY-MM-DD
+  var monthStr = new Date(now).toISOString().slice(0, 7);  // YYYY-MM
+  var yearStr  = String(new Date(now).getFullYear());       // YYYY
+  var sessionStart = now;
+
+  // Push a session record; update durationMs periodically
+  var sessionPushRef = db.ref('schoolUsage/sessions').push({
+    visitorId: visitorId,
+    date:  dateStr,
+    month: monthStr,
+    year:  yearStr,
+    startEpochMs: now,
+    durationMs: 0,
+    path: location.pathname
+  });
+  var schoolSessionKey = null;
+  sessionPushRef.then(function(ref) { schoolSessionKey = ref.key; })
+    .catch(function(err) { console.warn('[Firebase] schoolUsage session push failed:', err.message); });
+
+  // Increment visit counters (one per session, reliable)
+  function incr(path) {
+    db.ref(path).transaction(function(v) { return (v || 0) + 1; });
+  }
+  incr('schoolUsage/daily/'   + dateStr  + '/visits');
+  incr('schoolUsage/monthly/' + monthStr + '/visits');
+  incr('schoolUsage/yearly/'  + yearStr  + '/visits');
+
+  // Track unique visitor per day — atomic transaction prevents double-counting
+  // if the same visitor opens multiple tabs simultaneously
+  var vKey = visitorId.replace(/[.#$/\[\]]/g, '_');
+  db.ref('schoolUsage/dailyVisitors/' + dateStr + '/' + vKey).transaction(
+    function(current) {
+      // Return undefined to abort (no write) if already recorded; true to set if new
+      return current === null ? true : undefined;
+    },
+    function(err, committed) {
+      if (committed) {
+        incr('schoolUsage/daily/'   + dateStr  + '/uniqueVisitors');
+        incr('schoolUsage/monthly/' + monthStr + '/uniqueVisitors');
+        incr('schoolUsage/yearly/'  + yearStr  + '/uniqueVisitors');
+      }
+    }
+  );
+
+  // Update session duration record every 60 s so admin can aggregate
+  var durTimer = setInterval(function() {
+    if (!schoolSessionKey) return;
+    db.ref('schoolUsage/sessions/' + schoolSessionKey + '/durationMs')
+      .set(Date.now() - sessionStart)
+      .catch(function() {});
+  }, 60000);
+
+  // Best-effort final duration update on page close
+  window.addEventListener('beforeunload', function() {
+    clearInterval(durTimer);
+    if (!schoolSessionKey) return;
+    db.ref('schoolUsage/sessions/' + schoolSessionKey + '/durationMs')
+      .set(Date.now() - sessionStart)
+      .catch(function() {});
+  });
 })();
 </script>
 
