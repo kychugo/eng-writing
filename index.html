@@ -5550,5 +5550,74 @@ function switchTab(name, fromGen) {
     <div class="footer-copyright">Copyright © 2026 Hugo Wong. All rights reserved.</div>
 </footer>
 
+<!-- Firebase SDKs (compat build — no bundler required) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+// ============================================================
+// FIREBASE — Analytics & Visit Tracking
+// NOTE: Protect /visits and /stats with Firebase Security Rules
+//       so only legitimate clients can write to those paths.
+// ============================================================
+(function initFirebase() {
+  var firebaseConfig = {
+    apiKey:            "AIzaSyCS4mHPTa3DZ3CVO11fdKLce5_wMKuHIOk",
+    authDomain:        "login-system-2-b511c.firebaseapp.com",
+    databaseURL:       "https://login-system-2-b511c-default-rtdb.firebaseio.com",
+    projectId:         "login-system-2-b511c",
+    storageBucket:     "login-system-2-b511c.firebasestorage.app",
+    messagingSenderId: "352631619492",
+    appId:             "1:352631619492:web:a6b0d08ffba37073ddcb31",
+    measurementId:     "G-8MW5XEQMRZ"
+  };
+
+  // Initialize app (guard against double-init during hot reloads)
+  var app = firebase.apps.length
+    ? firebase.app()
+    : firebase.initializeApp(firebaseConfig);
+
+  // ── Analytics (automatic page-view tracking) ──────────────
+  firebase.analytics(app);
+
+  // ── Realtime Database visit tracking ─────────────────────
+  // Record only one visit per browser session to avoid inflating
+  // counts on page refreshes.
+  var SESSION_KEY = 'wd_visit_recorded';
+  if (sessionStorage.getItem(SESSION_KEY)) return;
+  sessionStorage.setItem(SESSION_KEY, '1');
+
+  var db       = firebase.database(app);
+  var now      = Date.now();
+  var isoStamp = new Date(now).toISOString();
+
+  // 1. Append an individual visit record
+  db.ref('visits').push({
+    timestamp: isoStamp,
+    epochMs:   now,
+    userAgent: navigator.userAgent,
+    language:  navigator.language || 'unknown',
+    referrer:  document.referrer  || 'direct',
+    path:      location.pathname
+  }).catch(function(err) {
+    console.warn('[Firebase] visit record write failed:', err.message);
+  });
+
+  // 2. Atomically increment the total-visit counter
+  db.ref('stats/totalVisits').transaction(
+    function(current) { return (current || 0) + 1; },
+    function(err) {
+      if (err) console.warn('[Firebase] totalVisits transaction failed:', err.message);
+    }
+  );
+
+  // 3. Update the "last seen" timestamp
+  db.ref('stats/lastVisit').set(isoStamp).catch(function(err) {
+    console.warn('[Firebase] lastVisit write failed:', err.message);
+  });
+})();
+</script>
+
 </body>
 </html>
