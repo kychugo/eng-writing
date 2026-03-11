@@ -196,8 +196,9 @@ html, body {
    SECTION 2: WRITING QUESTION GENERATOR (index.html)
    ============================================================ */
 
-    /* ── Design tokens ────────────────────────────────────────── */
+    /* ── Design tokens (consolidated from all three source files) ── */
     :root {
+      /* Core palette */
       --ink:        #2c2416;
       --ink-light:  #5a4e3a;
       --ink-faint:  #8c7f6a;
@@ -214,6 +215,50 @@ html, body {
       --r-lg:       10px;
       --t:          0.3s ease;
       --t-slide:    0.55s cubic-bezier(0.22, 1, 0.36, 1);
+
+      /* Orionai.html aliases */
+      --color-bg:             #f5f0e8;
+      --color-surface:        #ede7d9;
+      --color-primary:        #b8965a;
+      --color-primary-light:  #d4b07a;
+      --color-text:           #2c2416;
+      --color-text-muted:     #8c7f6a;
+      --color-border:         #e0d9cc;
+      --color-success:        #5a6b4a;
+      --color-error:          #8b4a2f;
+      --font-main:            'Lato', sans-serif;
+      --font-serif:           'Cormorant Garamond', serif;
+      --font-mono:            'Roboto Mono', monospace;
+      --shadow-sm:            0 2px 4px rgba(44, 36, 22, 0.06);
+      --shadow-md:            0 4px 12px rgba(44, 36, 22, 0.12);
+      --border-radius:        10px;
+      /* V3 Feedback Colors */
+      --color-enhancement:        #1976d2;
+      --color-feedback-grammar:   #c0392b;
+      --color-feedback-typo:      #d35400;
+      --color-feedback-fluency:   #27ae60;
+      --color-feedback-punctuation: #b7950b;
+      --color-feedback-style:     #8e44ad;
+
+      /* vocab.html compat aliases */
+      --primary:        #b8965a;
+      --primary-hover:  #9a7a42;
+      --primary-light:  #faf6ec;
+      --secondary:      #8b4a2f;
+      --secondary-light: #fdf0eb;
+      --yellow:         #b8965a;
+      --yellow-light:   #faf6ec;
+      --red:            #8b4a2f;
+      --red-light:      #fdf0eb;
+      --green:          #5a6b4a;
+      --green-light:    #eef5ea;
+      --card-bg:        #faf7f2;
+      --text:           #2c2416;
+      --text-muted:     #8c7f6a;
+      --text-secondary: #5a4e3a;
+      --border:         #e0d9cc;
+      --radius:         10px;
+      --radius-sm:      4px;
     }
 
     /* ── Reset ────────────────────────────────────────────────── */
@@ -1173,40 +1218,6 @@ html, body {
    SECTION 3: ADVANCED HKDSE SUITE (Orionai.html)
    ============================================================ */
 
-    /* CSS RESET */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    /* FONTS */
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Lato:wght@300;400;500;600&family=Roboto+Mono&display=swap');
-
-    /* VARIABLES */
-    :root {
-        --color-bg: #f5f0e8;
-        --color-surface: #ede7d9;
-        --color-primary: #b8965a;
-        --color-primary-light: #d4b07a;
-        --color-text: #2c2416;
-        --color-text-muted: #8c7f6a;
-        --color-border: #e0d9cc;
-        --color-success: #5a6b4a;
-        --color-error: #8b4a2f;
-        --font-main: 'Lato', sans-serif;
-        --font-serif: 'Cormorant Garamond', serif;
-        --font-mono: 'Roboto Mono', monospace;
-        --shadow-sm: 0 2px 4px rgba(44, 36, 22, 0.06);
-        --shadow-md: 0 4px 12px rgba(44, 36, 22, 0.12);
-        --border-radius: 10px;
-
-        /* V3 Feedback Colors */
-        --color-enhancement: #1976d2;          /* Blue for Enhancements */
-        --color-feedback-grammar: #c0392b;     /* Red for Grammar */
-        --color-feedback-typo: #d35400;        /* Orange for Typo */
-        --color-feedback-fluency: #27ae60;     /* Green for Fluency */
-        --color-feedback-punctuation: #b7950b; /* Dark gold for Punctuation */
-        --color-feedback-style: #8e44ad;       /* Purple for Style */
-    }
-
     /* GENERAL STYLES */
     body {
         font-family: var(--font-main);
@@ -1393,57 +1404,7 @@ html, body {
 /* ============================================================
    SECTION 4: VOCABULARY TOOLS (vocab.html)
    ============================================================ */
-
-    /* ── Design tokens ────────────────────────────────────────── */
-    :root {
-      --ink:        #2c2416;
-      --ink-light:  #5a4e3a;
-      --ink-faint:  #8c7f6a;
-      --parchment:  #f5f0e8;
-      --parchment2: #ede7d9;
-      --parchment3: #e0d9cc;
-      --gold:       #b8965a;
-      --gold-light: #d4b07a;
-      --rust:       #8b4a2f;
-      --moss:       #5a6b4a;
-      --shadow:     rgba(44, 36, 22, 0.12);
-      --shadow2:    rgba(44, 36, 22, 0.06);
-      --r:          4px;
-      --r-lg:       10px;
-      --t:          0.3s ease;
-      --t-slide:    0.55s cubic-bezier(0.22, 1, 0.36, 1);
-
-      /* Compat aliases so JS-generated HTML (which references these vars) still renders correctly */
-      --primary:        #b8965a;
-      --primary-hover:  #9a7a42;
-      --primary-light:  #faf6ec;
-      --secondary:      #8b4a2f;
-      --secondary-light: #fdf0eb;
-      --yellow:         #b8965a;
-      --yellow-light:   #faf6ec;
-      --red:            #8b4a2f;
-      --red-light:      #fdf0eb;
-      --green:          #5a6b4a;
-      --green-light:    #eef5ea;
-      --card-bg:        #faf7f2;
-      --text:           #2c2416;
-      --text-muted:     #8c7f6a;
-      --text-secondary: #5a4e3a;
-      --border:         #e0d9cc;
-      --radius:         10px;
-      --radius-sm:      4px;
-    }
-
-    /* ── Reset ────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Lato', sans-serif;
-      background: var(--parchment);
-      color: var(--ink);
-      min-height: 100vh;
-      line-height: 1.7;
-    }
+    /* (Design tokens and reset consolidated into Section 1 :root block above) */
 
     /* ── Paper grain texture ──────────────────────────────────── */
     body::before {
@@ -2964,6 +2925,20 @@ html, body {
 <script>
 
 // ============================================================
+// SHARED UTILITIES (global scope — used across all sections)
+// ============================================================
+
+/** HTML-escape a string to prevent XSS in template literals */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// ============================================================
 // SECTION 1: PANEL NAVIGATION (must come first)
 // ============================================================
 
@@ -3316,13 +3291,7 @@ function showPanel(panelId) {
       return shuffled(pool).slice(0, n);
     }
 
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
+    // escapeHtml is defined globally (see SHARED UTILITIES at top of script)
 
     function renderPrompt(text) {
       const blocks = text.split(/\n{2,}/);
@@ -3716,7 +3685,7 @@ The "example" for each selected pattern must be a NEW sentence directly related 
 // SECTION 3: ADVANCED HKDSE SUITE (from Orionai.html)
 // ============================================================
 
-    let cropper = null; 
+    let ocrCropper = null; // OCR tool's Cropper.js instance (was: cropper)
 
     document.addEventListener('DOMContentLoaded', () => {
         const { jsPDF } = window.jspdf;
@@ -3738,6 +3707,8 @@ The "example" for each selected pattern must be a NEW sentence directly related 
         // --- API & ERROR HANDLING ---
         const API_URL = 'https://gen.pollinations.ai/v1/chat/completions';
         const API_KEY = 'sk_svDIS85ASPKBX9Fu8JrCEHY5TWtVm6Sq';
+        // MODELS (Section 3): Write/Generate tools — prioritise openai-fast with retry.
+        // FALLBACK_MODELS (Section 4): Vocab tools — broader list via separate API key.
         const MODELS  = ['openai-fast', 'gemini-search', 'openai-fast', 'openai']; // openai-fast repeated for extra retry
 
         /* Call AI with model fallback (mirrors index.html pattern) */
@@ -4014,17 +3985,17 @@ Before finalizing, self-review to ensure all five '###' sections are present and
             if (files && files.length > 0) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    if (cropper) cropper.destroy();
+                    if (ocrCropper) ocrCropper.destroy();
                     cropperImage.src = event.target.result; cropperContainer.querySelector('span').style.display = 'none';
-                    cropper = new Cropper(cropperImage, { viewMode: 1, background: false, autoCropArea: 0.8, responsive: true });
+                    ocrCropper = new Cropper(cropperImage, { viewMode: 1, background: false, autoCropArea: 0.8, responsive: true });
                     ocrBtn.disabled = false;
                 };
                 reader.readAsDataURL(files[0]);
             }
         });
         ocrBtn.addEventListener('click', () => {
-            if (!cropper) return;
-            const base64Canvas = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+            if (!ocrCropper) return;
+            const base64Canvas = ocrCropper.getCroppedCanvas().toDataURL('image/jpeg');
             const prompt = "Analyze this image and extract all visible text. Return only the raw, transcribed text and nothing else.";
             const payload = { model: "openai", messages: [ { "role": "user", "content": [ { "type": "text", "text": prompt }, { "type": "image_url", "image_url": { "url": base64Canvas } } ] } ] };
             callApi(payload, document.getElementById('ocr-loader'), ocrBtn, document.getElementById('ocr-results'), displayOcrResults);
@@ -4066,7 +4037,7 @@ Before finalizing, self-review to ensure all five '###' sections are present and
             });
         }
         
-        function escapeHtml(unsafe) { return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+        // escapeHtml is defined globally above.
 
         // Initial render on load
         renderNotebook();
@@ -4200,13 +4171,7 @@ Before finalizing, self-review to ensure all five '###' sections are present and
                 </div>`).join('')}</div>`;
         }
 
-        function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
+        // escapeHtml is shared — defined once in Section 3 above.
 
         document.getElementById('genForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -4989,7 +4954,12 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
 
 // ============================================================
 // OVERRIDE: switchTab navigation (must come AFTER vocab JS)
-// Replaces the original vocab.html switchTab with our panel nav
+// Replaces the original vocab.html switchTab with our panel nav.
+// @param {string} name     - Logical tab name: 'generator' | 'quiz' | 'srs'
+// @param {boolean} fromGen - When true (called after vocab generation), copies
+//                            topic/level from the generator form to the quiz form
+//                            and triggers SRS refresh for the 'srs' tab.
+// panelMap: maps vocab.html tab names to unified panel IDs.
 // ============================================================
 function switchTab(name, fromGen) {
   const panelMap = {
