@@ -114,28 +114,6 @@
       opacity: 0.8;
     }
 
-    /* ── Back button ──────────────────────────────────────────── */
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-family: 'Lato', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 300;
-      letter-spacing: 0.06em;
-      color: var(--ink-light);
-      background: none;
-      border: 1px solid var(--parchment3);
-      border-radius: 99px;
-      padding: 0.28em 0.95em;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background var(--t), border-color var(--t);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .btn-back:hover { background: var(--parchment2); border-color: var(--ink-faint); }
-
     /* ── History button ───────────────────────────────────────── */
     .btn-history {
       display: inline-flex;
@@ -469,8 +447,9 @@
     }
 
     .empty-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: center;
     }
 
     /* ── Vocab grid & cards ───────────────────────────────────── */
@@ -729,9 +708,6 @@
       align-items: center;
       justify-content: center;
       margin: 0 auto 1rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      font-weight: 600;
     }
 
     .score-great { background: #eef5ea; color: var(--moss); border: 2px solid var(--moss); }
@@ -1106,6 +1082,11 @@
       .match-grid { grid-template-columns: 1fr; }
     }
 
+
+    /* ── Quiz next button ─────────────────────────────────────── */
+    .quiz-next-btn {
+      margin-top: 1rem;
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -1123,12 +1104,11 @@
   <!-- ===== Header ===== -->
   <header class="site-header">
     <div class="header-inner">
-      <a id="back-btn-link" href="./index.html" class="btn-back">← Back to The Writer's Desk</a>
       <div class="header-center">
-        <span class="header-ornament">✦ &nbsp; Vocabulary Tools &nbsp; ✦</span>
+        <span class="header-ornament">Vocabulary Tools</span>
       </div>
       <button onclick="openVocabHistory()" class="btn-history" aria-label="View vocabulary history">
-        ◷ History
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> History
       </button>
     </div>
   </header>
@@ -1138,9 +1118,7 @@
 
     <!-- Hero -->
     <div class="hero">
-      <p class="header-ornament">✦ &nbsp; The Writer's Desk &nbsp; ✦</p>
       <h1 class="site-title">Vocabulary <em>Tools</em></h1>
-      <p class="site-subtitle">Generate word lists and test your knowledge with AI-powered quizzes</p>
     </div>
 
     <!-- Tab bar -->
@@ -1148,17 +1126,17 @@
       <button class="tab-btn active" id="tab-generator" role="tab"
               aria-selected="true" aria-controls="panel-generator"
               onclick="switchTab('generator')">
-        💡 Generator
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generator
       </button>
       <button class="tab-btn" id="tab-quiz" role="tab"
               aria-selected="false" aria-controls="panel-quiz"
               onclick="switchTab('quiz')">
-        ✏️ Quiz
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Quiz
       </button>
       <button class="tab-btn" id="tab-srs" role="tab"
               aria-selected="false" aria-controls="panel-srs"
               onclick="switchTab('srs')">
-        🧠 SRS Review
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Flipcard
       </button>
     </div>
 
@@ -1168,10 +1146,10 @@
     <div class="tab-panel active" id="panel-generator" role="tabpanel" aria-labelledby="tab-generator">
       <div class="card">
         <div class="card-header">
-          <div class="card-icon icon-yellow">💡</div>
+          <div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg></div>
           <div>
             <div class="card-title">Vocabulary Generator</div>
-            <div class="card-hint">Pick a topic and level — AI builds your word list</div>
+
           </div>
         </div>
 
@@ -1205,12 +1183,9 @@
 
           <div class="action-row" style="margin-top:0.75rem;">
             <button type="submit" id="genBtn" class="btn btn-yellow">
-              💡 Generate Vocabulary
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary
             </button>
-            <button type="button" id="startQuizFromGenBtn" class="btn btn-ghost hidden"
-                    onclick="switchTab('quiz', true)">
-              ✏️ Quiz These Words
-            </button>
+
           </div>
         </form>
       </div>
@@ -1218,7 +1193,7 @@
       <!-- Output -->
       <div id="genOutput">
         <div class="empty-state">
-          <div class="empty-icon">📖</div>
+          <div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg></div>
           <p>Fill in a topic and click <strong>Generate Vocabulary</strong> to get started</p>
         </div>
       </div>
@@ -1230,10 +1205,10 @@
     <div class="tab-panel hidden" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
       <div class="card">
         <div class="card-header">
-          <div class="card-icon icon-red">✏️</div>
+          <div class="card-icon icon-red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
           <div>
             <div class="card-title">Vocabulary Quiz</div>
-            <div class="card-hint">Test your knowledge with AI-generated questions</div>
+
           </div>
         </div>
 
@@ -1258,14 +1233,14 @@
           <div class="form-group" style="margin-top:0.75rem;">
             <label>Quiz Type</label>
             <div class="quiz-type-row" id="quizTypeRow" role="group" aria-label="Quiz type">
-              <button type="button" class="quiz-type-btn active" data-type="mcq" onclick="setQuizType('mcq',this)">🔤 Multiple Choice</button>
-              <button type="button" class="quiz-type-btn" data-type="sc" onclick="setQuizType('sc',this)">✍️ Sentence Completion</button>
-              <button type="button" class="quiz-type-btn" data-type="match" onclick="setQuizType('match',this)">🔗 Matching</button>
+              <button type="button" class="quiz-type-btn active" data-type="mcq" onclick="setQuizType('mcq',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Multiple Choice</button>
+              <button type="button" class="quiz-type-btn" data-type="sc" onclick="setQuizType('sc',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg> Sentence Completion</button>
+              <button type="button" class="quiz-type-btn" data-type="match" onclick="setQuizType('match',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Matching</button>
             </div>
           </div>
           <div class="action-row" style="margin-top:0.75rem;">
             <button type="submit" id="quizStartBtn" class="btn btn-red">
-              🚀 Start Quiz
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz
             </button>
           </div>
         </form>
@@ -1274,7 +1249,7 @@
       <!-- Quiz output -->
       <div id="quizOutput">
         <div class="empty-state">
-          <div class="empty-icon">🎯</div>
+          <div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
           <p>Fill in a topic and click <strong>Start Quiz</strong> to begin</p>
         </div>
       </div>
@@ -1284,7 +1259,7 @@
          TAB 3: SRS Review
          ============================================================ -->
     <div class="tab-panel hidden" id="panel-srs" role="tabpanel" aria-labelledby="tab-srs">
-      <div class="empty-state"><div class="empty-icon">🧠</div><p>Loading SRS data…</p></div>
+      <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div><p>Loading SRS data…</p></div>
     </div>
 
   </main>
@@ -1411,10 +1386,10 @@
                 <div class="vocab-card">
                     <div class="vocab-word">${escapeHtml(w.word || '')}</div>
                     ${w.pos ? `<div class="vocab-pos">(${escapeHtml(w.pos)})</div>` : ''}
-                    ${w.def ? `<div class="vocab-def">📌 ${escapeHtml(w.def)}</div>` : ''}
+                    ${w.def ? `<div class="vocab-def">${escapeHtml(w.def)}</div>` : ''}
                     ${w.example ? `<div class="vocab-example">"${escapeHtml(w.example)}"</div>` : ''}
-                    ${w.cn ? `<span class="vocab-cn">🇨🇳 ${escapeHtml(w.cn)}</span>` : ''}
-                    <button class="add-srs-btn" id="srs-add-${i}" onclick="handleAddSRS(${i})" aria-label="Add ${escapeHtml(w.word||'')} to SRS review">📌 Add to SRS</button>
+                    ${w.cn ? `<span class="vocab-cn">${escapeHtml(w.cn)}</span>` : ''}
+                    <button class="add-srs-btn" id="srs-add-${i}" onclick="handleAddSRS(${i})" aria-label="Add ${escapeHtml(w.word||'')} to SRS review"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add to Flipcard</button>
                 </div>`).join('')}</div>`;
         }
 
@@ -1433,10 +1408,8 @@
             const count = parseInt(document.getElementById('genCount').value, 10);
             const genBtn = document.getElementById('genBtn');
             const genOut = document.getElementById('genOutput');
-            const quizFromGenBtn = document.getElementById('startQuizFromGenBtn');
 
             setLoading(genBtn, true, 'Generating…');
-            quizFromGenBtn.classList.add('hidden');
             genOut.innerHTML = `<div class="loading-text"><span class="spinner spinner-dark"></span> Generating ${count} vocabulary words on "${topic}"…</div>`;
 
             const prompt =
@@ -1456,7 +1429,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             if (!raw) {
                 genOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Failed to generate vocabulary. Please try again.</p></div>`;
                 setLoading(genBtn, false);
-                genBtn.innerHTML = '💡 Generate Vocabulary';
+                genBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary';
                 return;
             }
 
@@ -1464,7 +1437,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             genOut.innerHTML = `
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-icon icon-yellow">📚</div>
+                        <div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg></div>
                         <div>
                             <div class="card-title">${count} Words: ${escapeHtml(topic)}</div>
                             <div class="card-hint">${level} level</div>
@@ -1477,8 +1450,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             saveHistoryLocal(topic, level, raw.substring(0, 3000));
 
             setLoading(genBtn, false);
-            genBtn.innerHTML = '💡 Generate Vocabulary';
-            quizFromGenBtn.classList.remove('hidden');
+            genBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary';
         });
 
         // ====================================================
@@ -1532,7 +1504,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
                             </button>`).join('')}
                     </div>
                     <div class="quiz-explanation" id="explanation">
-                        💡 ${escapeHtml(q.explanation || '')}
+                        ${escapeHtml(q.explanation || '')}
                     </div>
                 </div>`;
         }
@@ -1552,28 +1524,33 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             if (selectedIdx === correct) score++;
             explanationEl.classList.add('show');
 
-            // Auto-advance after delay
-            setTimeout(() => {
+            // Show next button instead of auto-advancing
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-primary quiz-next-btn';
+            nextBtn.style.cssText = 'margin-top:1rem;display:flex;align-items:center;gap:.5rem';
+            nextBtn.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
+            nextBtn.onclick = function() {
                 currentQ++;
                 renderQuestion(currentQ);
-            }, 2200);
+            };
+            explanationEl.parentElement.appendChild(nextBtn);
         }
 
         function renderScore() {
             const total = quizQuestions.length;
             const pct = Math.round((score / total) * 100);
-            let cls = 'score-low', emoji = '📖', msg = 'Keep practising!';
-            if (pct >= 80) { cls = 'score-great'; emoji = '🏆'; msg = 'Excellent work!'; }
-            else if (pct >= 60) { cls = 'score-good'; emoji = '👏'; msg = 'Good effort!'; }
+            let cls = 'score-low', scoreIcon = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg>', msg = 'Keep practising!';
+            if (pct >= 80) { cls = 'score-great'; scoreIcon = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16M9 22v-4.5M15 22v-4.5"/><rect x="6" y="2" width="12" height="13" rx="3"/></svg>'; msg = 'Excellent work!'; }
+            else if (pct >= 60) { cls = 'score-good'; scoreIcon = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>'; msg = 'Good effort!'; }
 
             document.getElementById('quizOutput').innerHTML = `
                 <div class="card score-card">
-                    <div class="score-circle ${cls}">${emoji}</div>
+                    <div class="score-circle ${cls}">${scoreIcon}</div>
                     <div class="score-title">${score} / ${total}</div>
                     <div class="score-subtitle">${pct}% correct &nbsp;·&nbsp; ${msg}</div>
                     <div class="action-row" style="justify-content:center;">
-                        <button class="btn btn-red" onclick="restartQuiz()">🔄 Try Again</button>
-                        <button class="btn btn-ghost" onclick="switchTab('generator')">💡 Generate Vocabulary</button>
+                        <button class="btn btn-red" onclick="restartQuiz()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Try Again</button>
+                        <button class="btn btn-ghost" onclick="switchTab('generator')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary</button>
                     </div>
                 </div>`;
         }
@@ -1661,10 +1638,10 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             if (!all.length) {
                 panel.innerHTML = `
                     <div class="card">
-                        <div class="card-header"><div class="card-icon icon-yellow">🧠</div>
-                        <div><div class="card-title">Spaced Repetition Review</div>
-                        <div class="card-hint">No words yet – generate vocabulary and add words with 📌 Add to SRS</div></div></div>
-                        <div class="empty-state"><div class="empty-icon">📭</div>
+                        <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div>
+                        <div><div class="card-title">Flipcard</div>
+                        <div class="card-hint">No words yet — generate vocabulary and add words to Flipcard</div></div></div>
+                        <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></div>
                         <p>Add vocabulary words from the <strong>Generator</strong> tab to start reviewing.</p></div>
                     </div>`;
                 return;
@@ -1680,11 +1657,11 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             if (!due.length) {
                 panel.innerHTML = `
                     <div class="card">
-                        <div class="card-header"><div class="card-icon icon-green">✅</div>
+                        <div class="card-header"><div class="card-icon icon-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/><circle cx="12" cy="12" r="10" stroke-width="1.5"/></svg></div>
                         <div><div class="card-title">All Caught Up!</div>
                         <div class="card-hint">Great job! Come back tomorrow for more reviews.</div></div></div>
                         ${stats}
-                        <div class="empty-state"><div class="empty-icon">🎉</div><p>No words due for review today.</p></div>
+                        <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16M9 22v-4.5M15 22v-4.5"/><rect x="6" y="2" width="12" height="13" rx="3"/></svg></div><p>No words due for review today.</p></div>
                     </div>`;
                 return;
             }
@@ -1692,9 +1669,9 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             srsQueue = shuffle(due);
             srsIdx = 0;
             panel.innerHTML = `<div class="card">
-                <div class="card-header"><div class="card-icon icon-yellow">🧠</div>
-                <div><div class="card-title">SRS Review Session</div>
-                <div class="card-hint">Rate how well you recalled each word</div></div></div>
+                <div class="card-header"><div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2a2.5 2.5 0 011.79.75M14.5 2a2.5 2.5 0 00-1.79.75M12 5v14M8.5 9a2.5 2.5 0 00-2.5 2.5v.5a2.5 2.5 0 002.5 2.5M15.5 9a2.5 2.5 0 012.5 2.5v.5a2.5 2.5 0 01-2.5 2.5M8 17c1.5.5 2.5 1.5 4 2 1.5-.5 2.5-1.5 4-2"/></svg></div>
+                <div><div class="card-title">Flipcard Session</div>
+    </div></div>
                 ${stats}
                 <div id="srs-review-area"></div>
             </div>`;
@@ -1705,11 +1682,11 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             const area = document.getElementById('srs-review-area');
             if (!area) return;
             if (srsIdx >= srsQueue.length) {
-                area.innerHTML = `<div class="empty-state"><div class="empty-icon">🎉</div>
+                area.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.4"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16M9 22v-4.5M15 22v-4.5"/><rect x="6" y="2" width="12" height="13" rx="3"/></svg></div>
                     <p style="font-weight:700;font-size:1rem;color:var(--text)">Session complete!</p>
                     <p>Reviewed ${srsQueue.length} word${srsQueue.length !== 1 ? 's' : ''}.</p>
                     <div class="action-row" style="justify-content:center;margin-top:1rem">
-                        <button class="btn btn-primary" onclick="renderSRSPanel()">🔄 New Session</button>
+                        <button class="btn btn-primary" onclick="renderSRSPanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> New Session</button>
                     </div></div>`;
                 return;
             }
@@ -1721,12 +1698,12 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
                     <div class="srs-mask srs-blur" id="srs-def-mask" onclick="revealSRS()" title="Click to reveal">
                         <div class="srs-def">${escapeHtml(card.def || 'No definition')}<br>${card.cn ? '<span style="color:var(--secondary);font-size:.85rem">'+escapeHtml(card.cn)+'</span>' : ''}</div>
                     </div>
-                    <p style="text-align:center;font-size:.8rem;color:var(--text-muted);margin-top:.3rem">Click definition to reveal</p>
+                    <p style="text-align:center;font-size:.78rem;color:var(--ink-faint);margin-top:.3rem;font-style:italic">Tap to reveal</p>
                     <div class="srs-rating" id="srs-rating-btns" style="display:none">
-                        <button class="srs-btn srs-btn-fail" onclick="rateSRS(0)">😞 Forgot</button>
-                        <button class="srs-btn srs-btn-hard" onclick="rateSRS(3)">😕 Hard</button>
-                        <button class="srs-btn srs-btn-ok"   onclick="rateSRS(4)">😊 OK</button>
-                        <button class="srs-btn srs-btn-easy" onclick="rateSRS(5)">🚀 Easy</button>
+                        <button class="srs-btn srs-btn-fail" onclick="rateSRS(0)">Forgot</button>
+                        <button class="srs-btn srs-btn-hard" onclick="rateSRS(3)">Hard</button>
+                        <button class="srs-btn srs-btn-ok"   onclick="rateSRS(4)">OK</button>
+                        <button class="srs-btn srs-btn-easy" onclick="rateSRS(5)">Easy</button>
                     </div>
                 </div>`;
         }
@@ -1752,7 +1729,7 @@ Important: Output exactly ${count} words. Use Traditional Chinese (繁體中文)
             const added = srsAddWord(w.word, w.def || '', w.cn || '');
             const btn = document.getElementById(`srs-add-${idx}`);
             if (btn) {
-                btn.textContent = added ? '✅ Added!' : '✅ Already in SRS';
+                btn.textContent = added ? 'Added' : 'Already added';
                 btn.classList.add('added');
                 btn.disabled = true;
             }
@@ -1786,7 +1763,7 @@ Return ONLY valid JSON (no other text):
 }`;
 
             const raw = await callAI(prompt);
-            setLoading(quizBtn, false); quizBtn.innerHTML = '🚀 Start Quiz';
+            setLoading(quizBtn, false); quizBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz';
             if (!raw) { quizOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Failed. Please try again.</p></div>`; return; }
             const parsed = extractJson(raw);
             if (!parsed?.questions?.length) { quizOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Could not parse quiz. Please try again.</p></div>`; return; }
@@ -1797,10 +1774,10 @@ Return ONLY valid JSON (no other text):
             function renderSCQ(idx) {
                 if (idx >= scQs.length) {
                     const pct = Math.round((scScore/scQs.length)*100);
-                    let cls='score-low',emoji='📖',msg='Keep practising!';
-                    if(pct>=80){cls='score-great';emoji='🏆';msg='Excellent!';}
-                    else if(pct>=60){cls='score-good';emoji='👏';msg='Good effort!';}
-                    quizOut.innerHTML = `<div class="card score-card"><div class="score-circle ${cls}">${emoji}</div><div class="score-title">${scScore}/${scQs.length}</div><div class="score-subtitle">${pct}% correct · ${msg}</div><div class="action-row" style="justify-content:center"><button class="btn btn-red" onclick="scRestart()">🔄 Try Again</button><button class="btn btn-ghost" onclick="switchTab('generator')">💡 Generate Vocabulary</button></div></div>`;
+                    let cls='score-low',scoreIcon='<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg>',msg='Keep practising!';
+                    if(pct>=80){cls='score-great';scoreIcon='<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16M9 22v-4.5M15 22v-4.5"/><rect x="6" y="2" width="12" height="13" rx="3"/></svg>';msg='Excellent!';}
+                    else if(pct>=60){cls='score-good';scoreIcon='<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>';msg='Good effort!';}
+                    quizOut.innerHTML = `<div class="card score-card"><div class="score-circle ${cls}">${scoreIcon}</div><div class="score-title">${scScore}/${scQs.length}</div><div class="score-subtitle">${pct}% correct · ${msg}</div><div class="action-row" style="justify-content:center"><button class="btn btn-red" onclick="scRestart()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Try Again</button><button class="btn btn-ghost" onclick="switchTab('generator')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary</button></div></div>`;
                     window.scRestart = function(){scIdx=0;scScore=0;renderSCQ(0);};
                     return;
                 }
@@ -1818,7 +1795,7 @@ Return ONLY valid JSON (no other text):
                         <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.3rem">Hint: ${escapeHtml(q.hint||'')}</p>
                         <input type="text" class="sc-input" id="sc-input-${idx}" placeholder="Type the missing word…" autocomplete="off" aria-label="Your answer">
                         <div class="action-row sc-submit">
-                            <button class="btn btn-primary" onclick="checkSC(${idx})">✓ Submit</button>
+                            <button class="btn btn-primary" onclick="checkSC(${idx})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Submit</button>
                         </div>
                         <div class="quiz-explanation" id="sc-explanation-${idx}"></div>
                     </div>`;
@@ -1836,9 +1813,14 @@ Return ONLY valid JSON (no other text):
                 input.disabled = true; if(btn) btn.disabled = true;
                 input.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)';
                 input.style.background = isCorrect ? 'var(--green-light)' : 'var(--red-light)';
-                explanation.innerHTML = `${isCorrect ? '✅' : `❌ The answer was: <strong>${escapeHtml(scQs[idx].answer)}</strong>`}<br>💡 ${escapeHtml(scQs[idx].explanation||'')}`;
+                explanation.innerHTML = `${isCorrect ? '<b>Correct!</b>' : `The answer was: <strong>${escapeHtml(scQs[idx].answer)}</strong>`}<br><i>${escapeHtml(scQs[idx].explanation||'')}</i>`;
                 explanation.classList.add('show');
-                setTimeout(() => { scIdx++; renderSCQ(scIdx); }, 2400);
+                const nextBtnSC = document.createElement('button');
+                nextBtnSC.className = 'btn btn-primary quiz-next-btn';
+                nextBtnSC.style.cssText = 'margin-top:1rem;display:flex;align-items:center;gap:.5rem';
+                nextBtnSC.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
+                nextBtnSC.onclick = function() { scIdx++; renderSCQ(scIdx); };
+                explanation.parentElement.appendChild(nextBtnSC);
             };
 
             renderSCQ(0);
@@ -1854,7 +1836,7 @@ Return ONLY valid JSON:
 }`;
 
             const raw = await callAI(prompt);
-            setLoading(quizBtn, false); quizBtn.innerHTML = '🚀 Start Quiz';
+            setLoading(quizBtn, false); quizBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz';
             if (!raw) { quizOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Failed. Please try again.</p></div>`; return; }
 
             let parsed;
@@ -1872,7 +1854,7 @@ Return ONLY valid JSON:
             function renderMatch() {
                 quizOut.innerHTML = `
                     <div class="card">
-                        <div class="card-header"><div class="card-icon icon-red">🔗</div>
+                        <div class="card-header"><div class="card-icon icon-red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
                         <div><div class="card-title">Matching Exercise</div>
                         <div class="card-hint">Click a word, then click its matching definition</div></div></div>
                         <div class="match-grid">
@@ -1915,10 +1897,10 @@ Return ONLY valid JSON:
                     document.getElementById(`md-${selectedDef}`).classList.add('matched-correct');
                     document.getElementById(`md-${selectedDef}`).disabled = true;
                     matched++;
-                    document.getElementById('match-result').textContent = `✅ Correct! ${matched}/${pairs.length} matched`;
+                    document.getElementById('match-result').textContent = `Correct! ${matched}/${pairs.length} matched`;
                     if (matched === pairs.length) {
                         setTimeout(() => {
-                            quizOut.innerHTML += `<div class="card score-card" style="margin-top:1rem"><div class="score-circle score-great">🏆</div><div class="score-title">All Matched!</div><div class="score-subtitle">Perfect score!</div><div class="action-row" style="justify-content:center"><button class="btn btn-red" onclick="renderMatch()">🔄 Shuffle Again</button><button class="btn btn-ghost" onclick="switchTab('generator')">💡 Generate Vocabulary</button></div></div>`;
+                            quizOut.innerHTML += `<div class="card score-card" style="margin-top:1rem"><div class="score-circle score-great"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16M9 22v-4.5M15 22v-4.5"/><rect x="6" y="2" width="12" height="13" rx="3"/></svg></div><div class="score-title">All Matched!</div><div class="score-subtitle">Perfect score!</div><div class="action-row" style="justify-content:center"><button class="btn btn-red" onclick="renderMatch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Shuffle Again</button><button class="btn btn-ghost" onclick="switchTab('generator')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg> Generate Vocabulary</button></div></div>`;
                         }, 600);
                     }
                 } else {
@@ -1926,7 +1908,7 @@ Return ONLY valid JSON:
                     const dBtn = document.getElementById(`md-${selectedDef}`);
                     wBtn.classList.add('matched-wrong');
                     dBtn.classList.add('matched-wrong');
-                    document.getElementById('match-result').textContent = '❌ Not a match – try again';
+                    document.getElementById('match-result').textContent = 'Not a match — try again';
                     setTimeout(() => {
                         wBtn.classList.remove('selected','matched-wrong');
                         dBtn.classList.remove('selected','matched-wrong');
@@ -1983,7 +1965,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             if (!raw) {
                 quizOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Failed to generate quiz. Please try again.</p></div>`;
                 setLoading(quizBtn, false);
-                quizBtn.innerHTML = '🚀 Start Quiz';
+                quizBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz';
                 return;
             }
 
@@ -1991,7 +1973,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             if (!parsed || !Array.isArray(parsed.questions) || !parsed.questions.length) {
                 quizOut.innerHTML = `<div class="empty-state"><p style="color:#dc2626;">Could not parse quiz. Please try again.</p></div>`;
                 setLoading(quizBtn, false);
-                quizBtn.innerHTML = '🚀 Start Quiz';
+                quizBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz';
                 return;
             }
 
@@ -1999,7 +1981,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             currentQ = 0;
             score = 0;
             setLoading(quizBtn, false);
-            quizBtn.innerHTML = '🚀 Start Quiz';
+            quizBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Start Quiz';
             renderQuestion(0);
         });
     </script>
@@ -2060,32 +2042,20 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             const preview = (s.content || '').substring(0, 300);
             const time    = _vohFmtTime(s.timestamp);
             return `<div class="voh-card" id="voh-card-${s.id}">
-                <div class="voh-card-header" onclick="_vohToggle('${s.id}')" role="button" tabindex="0"
-                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();_vohToggle('${s.id}')}">
-                    <div style="width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:var(--parchment3);flex-shrink:0;font-size:1.1rem">📚</div>
+                <div class="voh-card-header" onclick="restoreVocabSession('${s.id}')" role="button" tabindex="0"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();restoreVocabSession('${s.id}')}"
+                     style="cursor:pointer">
+                    <div style="width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:var(--parchment3);flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg></div>
                     <div style="flex:1;min-width:0">
                         <p style="font-weight:700;font-size:.8rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${_vohEsc(topic.substring(0,60))}${level ? ' · '+_vohEsc(level) : ''}</p>
                         <p style="font-size:.7rem;color:var(--text-muted);margin-top:.1rem">${_vohEsc(time)}</p>
                     </div>
                     <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">
                         <button onclick="event.stopPropagation();deleteVOHSession('${s.id}')"
-                                style="width:28px;height:28px;border-radius:var(--r);border:none;cursor:pointer;background:rgba(139,74,47,.1);color:var(--rust);font-size:.75rem;display:flex;align-items:center;justify-content:center"
-                                title="Delete" aria-label="Delete">
-                            ✕
+                                style="width:28px;height:28px;border-radius:var(--r);border:none;cursor:pointer;background:rgba(139,74,47,.1);color:var(--rust);display:flex;align-items:center;justify-content:center"
+                                title="Delete" aria-label="Delete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
-                        <span id="voh-chev-${s.id}" style="font-size:.65rem;color:var(--ink-faint);transition:transform .3s">▾</span>
-                    </div>
-                </div>
-                <div class="voh-card-body" id="voh-body-${s.id}">
-                    ${topic   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Topic</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(topic)}</p></div>` : ''}
-                    ${level   ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Level</span><p style="font-size:.8rem;color:var(--text);margin-top:.1rem">${_vohEsc(level)}</p></div>` : ''}
-                    ${preview ? `<div style="margin-bottom:.5rem"><span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Vocabulary Preview</span><p style="font-size:.78rem;color:var(--text);margin-top:.1rem;white-space:pre-wrap;max-height:160px;overflow-y:auto">${_vohEsc(preview)}</p></div>` : ''}
-                    <div style="padding-bottom:.5rem">
-                        <button onclick="restoreVocabSession('${s.id}')"
-                                style="display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .9rem;border-radius:var(--r);background:var(--gold);color:var(--parchment);border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.78rem;transition:background var(--t)"
-                                title="Restore this session">
-                            ↩ Load
-                        </button>
+                        <span style="display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--gold);font-family:'Lato',sans-serif"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></span>
                     </div>
                 </div>
             </div>`;
@@ -2095,7 +2065,7 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             const list = document.getElementById('vohList');
             if (!sessions.length) {
                 list.innerHTML = `<div style="text-align:center;padding:3rem 1rem">
-                    <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--parchment3);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.4rem">📚</div>
+                    <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--parchment3);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg></div>
                     <p style="font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">No history yet</p>
                     <p style="font-size:.78rem;color:var(--text-muted)">Generate vocabulary lists to start building history.</p>
                 </div>`;
@@ -2152,13 +2122,13 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
             if (!genOut) return;
 
             const historyBanner = `<div style="background:rgba(184,150,90,.08);border:1px solid rgba(184,150,90,.3);border-radius:4px;padding:.6rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#b8965a;display:flex;align-items:center;gap:.5rem;font-style:italic;">
-                📜 <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
+                <span>Restored from history — ${esc(topic)}${level ? ' (' + esc(level) + ')' : ''}</span>
             </div>`;
 
             if (words.length) {
                 genOut.innerHTML = historyBanner + `<div class="card">
                     <div class="card-header">
-                        <div class="card-icon icon-yellow">📚</div>
+                        <div class="card-icon icon-yellow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg></div>
                         <div>
                             <div class="card-title">${words.length} Words: ${esc(topic)}</div>
                             <div class="card-hint">${esc(level)} level — restored from history</div>
@@ -2198,26 +2168,17 @@ Mix question types: definitions, fill-in-the-blank usage, synonyms, and contextu
   <div id="vocabHistoryPanel" role="dialog" aria-modal="true" aria-label="Vocabulary history">
     <div id="vocabHistoryPanelHeader">
       <div style="display:flex;align-items:center;gap:.6rem">
-        <span style="font-size:1.1rem">📚</span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 7v13M12 7C10.5 6 8 5 4 5v13c4 0 6.5 1 8 2M12 7c1.5-1 4-2 8-2v13c-4 0-6.5 1-8 2"/></svg>
         <span class="voh-panel-title">Vocabulary History</span>
       </div>
-      <button onclick="closeVocabHistory()" class="voh-close-btn" aria-label="Close history">✕</button>
+      <button onclick="closeVocabHistory()" class="voh-close-btn" aria-label="Close history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div id="vocabHistoryPanelBody">
       <div id="vohList"></div>
     </div>
   </div>
 
-<script>
-    (function() {
-        const params = new URLSearchParams(window.location.search);
-        const back = params.get('back');
-        const link = document.getElementById('back-btn-link');
-        if (link) {
-            link.href = './index.html' + (back ? '?openSubject=' + encodeURIComponent(back) : '');
-        }
-    })();
-</script>
+
 <script>
     // Theme toggle
     function toggleTheme() {
