@@ -2967,16 +2967,9 @@ html, body {
 // SECTION 1: PANEL NAVIGATION (must come first)
 // ============================================================
 
-// Cache all desk panels at startup to avoid repeated DOM queries
-var _deskPanels = null;
-function _getDeskPanels() {
-  if (!_deskPanels) _deskPanels = document.querySelectorAll('.desk-panel');
-  return _deskPanels;
-}
-
 function showPanel(panelId) {
   // Hide all desk panels
-  _getDeskPanels().forEach(function(p) {
+  document.querySelectorAll('.desk-panel').forEach(function(p) {
     p.style.display = 'none';
   });
 
