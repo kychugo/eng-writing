@@ -103,6 +103,7 @@
     },
     "schoolUsage": {
       ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com' || (root.child('schoolUsageAdminUIDs').child(auth.uid).exists() && root.child('schoolUsageAdmins').child(root.child('schoolUsageAdminUIDs').child(auth.uid).val()).exists()))",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
       "sessions": {
         ".indexOn": ["startEpochMs", "date", "month", "year"],
         ".write": true,
