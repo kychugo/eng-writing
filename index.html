@@ -5729,6 +5729,74 @@ function switchTab(name, fromGen) {
     });
 
   // ── School Usage Analytics ──────────────────────────────────
+  // Detect device type, name, and browser from userAgent
+  function detectDevice(ua) {
+    ua = ua || '';
+    var deviceType, deviceName, browser;
+
+    // Device type & name
+    if (/iPad/i.test(ua)) {
+      deviceType = 'tablet';
+      deviceName = 'iPad';
+    } else if (/iPhone/i.test(ua)) {
+      deviceType = 'mobile';
+      deviceName = 'iPhone';
+    } else if (/Android/i.test(ua)) {
+      var androidMatch = ua.match(/Android [^;]+;\s*([^)]+)\)/);
+      var androidName = androidMatch ? androidMatch[1].trim() : null;
+      if (/Mobile/i.test(ua)) {
+        deviceType = 'mobile';
+        deviceName = androidName || 'Android Phone';
+      } else {
+        deviceType = 'tablet';
+        deviceName = androidName || 'Android Tablet';
+      }
+    } else if (/Windows Phone/i.test(ua)) {
+      deviceType = 'mobile';
+      deviceName = 'Windows Phone';
+    } else if (/Windows/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Windows PC';
+    } else if (/Macintosh|Mac OS X/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Mac';
+    } else if (/CrOS/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Chromebook';
+    } else if (/Linux/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Linux PC';
+    } else {
+      deviceType = 'unknown';
+      deviceName = 'Unknown';
+    }
+
+    // Browser detection
+    if (/Edg\//i.test(ua)) {
+      browser = 'Edge';
+    } else if (/OPR\//i.test(ua) || /Opera/i.test(ua)) {
+      browser = 'Opera';
+    } else if (/SamsungBrowser/i.test(ua)) {
+      browser = 'Samsung Browser';
+    } else if (/CriOS/i.test(ua)) {
+      browser = 'Chrome';
+    } else if (/FxiOS/i.test(ua)) {
+      browser = 'Firefox';
+    } else if (/Chrome/i.test(ua)) {
+      browser = 'Chrome';
+    } else if (/Firefox/i.test(ua)) {
+      browser = 'Firefox';
+    } else if (/Safari/i.test(ua)) {
+      browser = 'Safari';
+    } else {
+      browser = 'Other';
+    }
+
+    return { deviceType: deviceType, deviceName: deviceName, browser: browser };
+  }
+
+  var deviceInfo = detectDevice(navigator.userAgent);
+
   // Persistent visitor ID (approximates unique visitors without login)
   var VISITOR_ID_KEY = 'wd_visitor_id';
   var visitorId = localStorage.getItem(VISITOR_ID_KEY);
@@ -5744,13 +5812,16 @@ function switchTab(name, fromGen) {
 
   // Push a session record; update durationMs periodically
   var sessionPushRef = db.ref('schoolUsage/sessions').push({
-    visitorId: visitorId,
-    date:  dateStr,
-    month: monthStr,
-    year:  yearStr,
+    visitorId:  visitorId,
+    date:       dateStr,
+    month:      monthStr,
+    year:       yearStr,
     startEpochMs: now,
     durationMs: 0,
-    path: location.pathname
+    path:       location.pathname,
+    deviceType: deviceInfo.deviceType,
+    deviceName: deviceInfo.deviceName,
+    browser:    deviceInfo.browser
   });
   var schoolSessionKey = null;
   window._schoolUsageSessionKey = null;   // expose for panel-usage logging
