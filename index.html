@@ -5729,6 +5729,157 @@ function switchTab(name, fromGen) {
     });
 
   // ── School Usage Analytics ──────────────────────────────────
+  // Detect device type, specific model name, and browser from userAgent
+  function detectDevice(ua) {
+    ua = ua || '';
+    var deviceType, deviceName, browser;
+
+    // ── iOS model identification via screen dimensions ───────────
+    // Apple removed per-model tokens from UA strings in iOS 13+,
+    // so we use logical CSS pixel dimensions + devicePixelRatio as a proxy.
+    function iOSModel(isIPad) {
+      var sw = Math.min(screen.width, screen.height);  // portrait logical width
+      var sh = Math.max(screen.width, screen.height);  // portrait logical height
+      if (isIPad) {
+        if (sw >= 1024) return 'iPad Pro 12.9"';
+        if (sw >= 834)  return 'iPad Pro 11"';
+        if (sw >= 820)  return 'iPad Air (4th/5th gen) / iPad (10th gen)';
+        if (sw >= 810)  return 'iPad (9th gen)';
+        if (sw >= 768)  return 'iPad / iPad mini (5th gen)';
+        if (sw >= 744)  return 'iPad mini (6th gen)';
+        return 'iPad';
+      }
+      // iPhone — ordered by portrait width (widest/newest first)
+      if (sw === 430)              return 'iPhone 14 Pro Max / 15 Plus / 15 Pro Max';
+      if (sw === 428)              return 'iPhone 12/13 Pro Max / 14 Plus';
+      if (sw === 393)              return 'iPhone 14 Pro / 15 Pro';
+      if (sw === 390)              return 'iPhone 12 / 13 / 14 / 15';
+      if (sw === 414 && sh >= 896) return 'iPhone XR / XS Max / 11 / 11 Pro Max';
+      if (sw === 375 && sh >= 812) return 'iPhone X / XS / 11 Pro / 12 mini / 13 mini';
+      if (sw === 414)              return 'iPhone 6 Plus / 7 Plus / 8 Plus';
+      if (sw === 375)              return 'iPhone 6 / 7 / 8 / SE (2nd/3rd gen)';
+      if (sw === 320)              return 'iPhone SE (1st gen) / 5s';
+      return 'iPhone';
+    }
+
+    // ── Samsung model-code → friendly name lookup ────────────────
+    // Keys are the first 7 characters of the SM-XXXXX model code.
+    var SAMSUNG_MODELS = {
+      // Galaxy S21 series
+      'SM-G991': 'Samsung Galaxy S21',
+      'SM-G996': 'Samsung Galaxy S21+',
+      'SM-G998': 'Samsung Galaxy S21 Ultra',
+      // Galaxy S22 series
+      'SM-S901': 'Samsung Galaxy S22',
+      'SM-S906': 'Samsung Galaxy S22+',
+      'SM-S908': 'Samsung Galaxy S22 Ultra',
+      // Galaxy S23 series
+      'SM-S911': 'Samsung Galaxy S23',
+      'SM-S916': 'Samsung Galaxy S23+',
+      'SM-S918': 'Samsung Galaxy S23 Ultra',
+      // Galaxy S24 series
+      'SM-S921': 'Samsung Galaxy S24',
+      'SM-S926': 'Samsung Galaxy S24+',
+      'SM-S928': 'Samsung Galaxy S24 Ultra',
+      // Galaxy Note series
+      'SM-N970': 'Samsung Galaxy Note 10',
+      'SM-N976': 'Samsung Galaxy Note 10+',
+      'SM-N981': 'Samsung Galaxy Note 20',
+      'SM-N986': 'Samsung Galaxy Note 20 Ultra',
+      // Galaxy Z Flip series
+      'SM-F700': 'Samsung Galaxy Z Flip',
+      'SM-F711': 'Samsung Galaxy Z Flip3',
+      'SM-F721': 'Samsung Galaxy Z Flip4',
+      'SM-F731': 'Samsung Galaxy Z Flip5',
+      'SM-F741': 'Samsung Galaxy Z Flip6',
+      // Galaxy Z Fold series
+      'SM-F900': 'Samsung Galaxy Z Fold',
+      'SM-F916': 'Samsung Galaxy Z Fold2',
+      'SM-F926': 'Samsung Galaxy Z Fold3',
+      'SM-F936': 'Samsung Galaxy Z Fold4',
+      'SM-F946': 'Samsung Galaxy Z Fold5',
+      'SM-F956': 'Samsung Galaxy Z Fold6',
+      // Galaxy A series (popular mid-range)
+      'SM-A525': 'Samsung Galaxy A52',
+      'SM-A526': 'Samsung Galaxy A52 5G',
+      'SM-A536': 'Samsung Galaxy A53',
+      'SM-A546': 'Samsung Galaxy A54',
+      'SM-A556': 'Samsung Galaxy A55',
+      'SM-A566': 'Samsung Galaxy A56',
+    };
+
+    // Device type & name
+    if (/iPad/i.test(ua)) {
+      deviceType = 'tablet';
+      deviceName = iOSModel(true);
+    } else if (/iPhone/i.test(ua)) {
+      deviceType = 'mobile';
+      deviceName = iOSModel(false);
+    } else if (/Android/i.test(ua)) {
+      var androidMatch = ua.match(/Android [^;]+;\s*([^)]+)\)/);
+      var androidName = androidMatch ? androidMatch[1].trim() : null;
+      if (androidName) {
+        // Strip trailing " Build/..." that appears inside the UA parenthesis
+        androidName = androidName.replace(/\s+build\/.*/i, '').trim();
+        // Map Samsung model codes (SM-XXXXX) to friendly names via 7-char prefix
+        if (/^SM-/i.test(androidName)) {
+          var smPrefix = androidName.toUpperCase().slice(0, 7);
+          if (SAMSUNG_MODELS[smPrefix]) androidName = SAMSUNG_MODELS[smPrefix];
+        }
+      }
+      if (/Mobile/i.test(ua)) {
+        deviceType = 'mobile';
+        deviceName = androidName || 'Android Phone';
+      } else {
+        deviceType = 'tablet';
+        deviceName = androidName || 'Android Tablet';
+      }
+    } else if (/Windows Phone/i.test(ua)) {
+      deviceType = 'mobile';
+      deviceName = 'Windows Phone';
+    } else if (/Windows/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Windows PC';
+    } else if (/Macintosh|Mac OS X/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Mac';
+    } else if (/CrOS/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Chromebook';
+    } else if (/Linux/i.test(ua)) {
+      deviceType = 'desktop';
+      deviceName = 'Linux PC';
+    } else {
+      deviceType = 'unknown';
+      deviceName = 'Unknown';
+    }
+
+    // Browser detection
+    if (/Edg\//i.test(ua)) {
+      browser = 'Edge';
+    } else if (/OPR\//i.test(ua) || /Opera/i.test(ua)) {
+      browser = 'Opera';
+    } else if (/SamsungBrowser/i.test(ua)) {
+      browser = 'Samsung Browser';
+    } else if (/CriOS/i.test(ua)) {
+      browser = 'Chrome';
+    } else if (/FxiOS/i.test(ua)) {
+      browser = 'Firefox';
+    } else if (/Chrome/i.test(ua)) {
+      browser = 'Chrome';
+    } else if (/Firefox/i.test(ua)) {
+      browser = 'Firefox';
+    } else if (/Safari/i.test(ua)) {
+      browser = 'Safari';
+    } else {
+      browser = 'Other';
+    }
+
+    return { deviceType: deviceType, deviceName: deviceName, browser: browser };
+  }
+
+  var deviceInfo = detectDevice(navigator.userAgent);
+
   // Persistent visitor ID (approximates unique visitors without login)
   var VISITOR_ID_KEY = 'wd_visitor_id';
   var visitorId = localStorage.getItem(VISITOR_ID_KEY);
@@ -5744,13 +5895,16 @@ function switchTab(name, fromGen) {
 
   // Push a session record; update durationMs periodically
   var sessionPushRef = db.ref('schoolUsage/sessions').push({
-    visitorId: visitorId,
-    date:  dateStr,
-    month: monthStr,
-    year:  yearStr,
+    visitorId:  visitorId,
+    date:       dateStr,
+    month:      monthStr,
+    year:       yearStr,
     startEpochMs: now,
     durationMs: 0,
-    path: location.pathname
+    path:       location.pathname,
+    deviceType: deviceInfo.deviceType,
+    deviceName: deviceInfo.deviceName,
+    browser:    deviceInfo.browser
   });
   var schoolSessionKey = null;
   window._schoolUsageSessionKey = null;   // expose for panel-usage logging
