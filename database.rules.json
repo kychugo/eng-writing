@@ -1,0 +1,130 @@
+{
+  "rules": {
+    "assignments": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "pending_allocation": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      "$studentName": {
+        ".read": "auth != null"
+      }
+    },
+    "students": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      "$grade": {
+        "$class": {
+          "$name": {
+            ".read": "auth != null",
+            "profile": {
+              ".write": "auth != null && (data.child('uid').val() === auth.uid || newData.child('uid').val() === auth.uid || auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+            },
+            "history": {
+              ".write": "auth != null && (data.parent().child('profile/uid').val() === auth.uid || auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+            }
+          }
+        }
+      }
+    },
+    "assignments_submissions": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      "$assignmentId": {
+        "$studentName": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    },
+    "class_reports": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "config": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "archives": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "graduates": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "analytics": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      "$year": {
+        "$month": {
+          "$day": {
+            "global_summary": {
+              ".read": true,
+              ".write": true,
+              ".validate": "newData.hasChildren(['visits', 'duration'])"
+            },
+            "guests": {
+              ".read": true,
+              ".write": true
+            },
+            "global": {
+              ".write": true
+            },
+            "school": {
+              ".read": "auth != null",
+              ".write": "auth != null"
+            },
+            "classes": {
+              ".read": "auth != null",
+              ".write": "auth != null"
+            },
+            "students": {
+              ".read": "auth != null",
+              ".write": "auth != null"
+            }
+          }
+        }
+      }
+    },
+    "stats_summary": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".write": true
+    },
+    "email_mapping": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "visits": {
+      ".write": true
+    },
+    "stats": {
+      ".write": true
+    },
+    "schoolUsage": {
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      "sessions": {
+        ".write": true,
+        "$sessionKey": {
+          ".write": true
+        }
+      },
+      "daily": {
+        ".write": true
+      },
+      "monthly": {
+        ".write": true
+      },
+      "yearly": {
+        ".write": true
+      },
+      "dailyVisitors": {
+        ".write": true
+      }
+    },
+    "schoolUsageAdmins": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    }
+  }
+}
