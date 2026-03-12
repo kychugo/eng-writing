@@ -3485,6 +3485,15 @@ function showPanel(panelId) {
       try { renderSRSPanel(); } catch(e) { console.warn('renderSRSPanel error:', e); }
     }
   }
+
+  // Log which panel the user navigated to for session analytics
+  if (window._schoolUsageSessionKey && window._schoolUsageDb) {
+    window._schoolUsageDb.ref(
+      'schoolUsage/sessions/' + window._schoolUsageSessionKey + '/panels/' + panelId
+    ).set(firebase.database.ServerValue.increment(1)).catch(function(err) {
+      console.warn('Panel tracking failed:', err);
+    });
+  }
 }
 
 
@@ -5680,6 +5689,7 @@ function switchTab(name, fromGen) {
   sessionStorage.setItem(SESSION_KEY, '1');
 
   var db       = firebase.database(app);
+  window._schoolUsageDb = db;   // expose for panel-usage logging
   var now      = Date.now();
   var isoStamp = new Date(now).toISOString();
 
@@ -5743,8 +5753,10 @@ function switchTab(name, fromGen) {
     path: location.pathname
   });
   var schoolSessionKey = null;
+  window._schoolUsageSessionKey = null;   // expose for panel-usage logging
   sessionPushRef.then(function(ref) {
     schoolSessionKey = ref.key;
+    window._schoolUsageSessionKey = ref.key;
     console.log('%c  ✓  schoolUsage session created   %ckey: ' + ref.key, FB.ok, FB.info);
   }).catch(function(err) {
     console.warn('%c  ✗  schoolUsage session failed: ' + err.message, FB.err);
