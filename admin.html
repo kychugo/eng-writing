@@ -1107,11 +1107,12 @@
                 <th>時間</th>
                 <th>頁面路徑</th>
                 <th>訪問時長</th>
+                <th>使用功能</th>
                 <th>訪客 ID</th>
               </tr>
             </thead>
             <tbody id="sessions-tbody" aria-live="polite" aria-atomic="false">
-              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">載入中…</td></tr>
+              <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">載入中…</td></tr>
             </tbody>
           </table>
         </div>
@@ -1834,10 +1835,33 @@ function loadYearData() {
 // ================================================================
 // RECENT SESSIONS
 // ================================================================
+var PANEL_NAMES = {
+  'panel-home':      'Home',
+  'panel-generate':  'Writing Questions',
+  'panel-planner':   'Planner',
+  'panel-grammar':   'Grammar Check',
+  'panel-enhancer':  'Text Enhancer',
+  'panel-ocr':       'OCR',
+  'panel-vocab':     'Vocabulary Generator',
+  'panel-quiz':      'Vocabulary Quiz',
+  'panel-srs':       'Flipcard',
+  'panel-notebook':  'Mistake Notebook'
+};
+
+function formatPanels(panels) {
+  if (!panels || typeof panels !== 'object') return '—';
+  var entries = Object.keys(panels).map(function(k) {
+    var name = PANEL_NAMES[k] || k;
+    var count = panels[k];
+    return count > 1 ? name + ' ×' + count : name;
+  });
+  return entries.length ? entries.join(', ') : '—';
+}
+
 function loadSessions() {
   logInfo('Loading recent sessions (last 50)…');
   var tbody = $('sessions-tbody');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:1.5rem">載入中…</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1.5rem">載入中…</td></tr>';
 
   db.ref(USAGE_PATH + '/sessions')
     .orderByChild('startEpochMs')
@@ -1850,7 +1874,7 @@ function loadSessions() {
       logOk('Sessions loaded — ' + rows.length + ' record(s)');
 
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:1.5rem">（無工作階段紀錄）</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1.5rem">（無工作階段紀錄）</td></tr>';
         return;
       }
 
@@ -1861,6 +1885,7 @@ function loadSessions() {
         var time = ts ? ts.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) : '—';
         var path = r.path || '/';
         var dur  = r.durationMs != null ? fmtDuration(r.durationMs) : '—';
+        var panels = formatPanels(r.panels);
         var vid  = r.visitorId ? r.visitorId.slice(0, 8) + '…' : '—';
 
         var tr = document.createElement('tr');
@@ -1875,16 +1900,19 @@ function loadSessions() {
         tdPath.textContent = path;
         var tdDur = document.createElement('td');
         tdDur.innerHTML = '<span class="dur-pill">' + escHtml(dur) + '</span>';
+        var tdPanels = document.createElement('td');
+        tdPanels.style.cssText = 'font-size:.8rem;max-width:12rem';
+        tdPanels.textContent = panels;
         var tdVid = document.createElement('td');
         tdVid.style.cssText = 'font-family:monospace;font-size:.75rem;color:var(--text-muted)';
         tdVid.textContent = vid;
         tr.appendChild(tdDate); tr.appendChild(tdTime); tr.appendChild(tdPath);
-        tr.appendChild(tdDur);  tr.appendChild(tdVid);
+        tr.appendChild(tdDur);  tr.appendChild(tdPanels); tr.appendChild(tdVid);
         tbody.appendChild(tr);
       });
     }, function(err) {
       logErr('Sessions load failed: ' + err.message);
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--red);padding:1.5rem">載入失敗：' + err.message + '</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red);padding:1.5rem">載入失敗：' + err.message + '</td></tr>';
     });
 }
 
@@ -1903,12 +1931,12 @@ $('sessions-export-btn').addEventListener('click', function() {
     return;
   }
   logInfo('Exporting sessions CSV…');
-  var rows = [['日期', '時間', '頁面路徑', '時長(ms)', '訪客ID']];
+  var rows = [['日期', '時間', '頁面路徑', '時長(ms)', '使用功能', '訪客ID']];
   _sessionsSnap.forEach(function(r) {
     var ts   = r.startEpochMs ? new Date(r.startEpochMs) : null;
     var date = ts ? ts.toLocaleDateString('zh-TW') : (r.date || '');
     var time = ts ? ts.toLocaleTimeString('zh-TW') : '';
-    rows.push([date, time, r.path || '/', r.durationMs || 0, r.visitorId || '']);
+    rows.push([date, time, r.path || '/', r.durationMs || 0, formatPanels(r.panels), r.visitorId || '']);
   });
   downloadCsv('sessions_' + todayStr() + '.csv', rows);
   logOk('Sessions CSV exported (' + rows.length + ' rows)');
