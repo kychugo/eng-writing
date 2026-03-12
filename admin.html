@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>學校使用分析 — Admin</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Google Fonts (matching index.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js 4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <style>
+  /* ── Design tokens (matching index.html palette) ─────────── */
+  :root {
+    --bg:            #f5f0e8;
+    --surface:       #ede7d9;
+    --primary:       #b8965a;
+    --primary-light: #d4b07a;
+    --text:          #2c2416;
+    --text-muted:    #8c7f6a;
+    --border:        #e0d9cc;
+    --sidebar-bg:    #2c2416;
+    --sidebar-text:  #f5f0e8;
+    --green:         #5a6b4a;
+    --green-light:   #eef5ea;
+    --red:           #8b4a2f;
+    --red-light:     #fdf0eb;
+    --font-serif:    'Cormorant Garamond', 'Georgia', serif;
+    --font-sans:     'Lato', 'Helvetica Neue', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── Login Screen ─────────────────────────────────────────── */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: var(--sidebar-bg);
+  }
+
+  .auth-card {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    max-width: 380px;
+    width: 92%;
+    box-shadow: 0 10px 48px rgba(0,0,0,0.45);
+  }
+
+  .auth-card .card-brand {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .auth-card h1 {
+    font-family: var(--font-serif);
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+  }
+
+  .auth-card .card-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 2.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  #google-signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.82rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(44,36,22,0.1);
+    transition: background 0.18s, box-shadow 0.18s;
+  }
+
+  #google-signin-btn:hover {
+    background: var(--surface);
+    box-shadow: 0 2px 8px rgba(44,36,22,0.15);
+  }
+
+  /* ── Access Denied ────────────────────────────────────────── */
+  #access-denied {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: var(--sidebar-bg);
+  }
+
+  /* ── Dashboard ────────────────────────────────────────────── */
+  #dashboard { display: none; height: 100vh; }
+
+  .app-shell { display: flex; height: 100vh; }
+
+  /* Sidebar */
+  #sidebar {
+    width: 222px;
+    min-width: 222px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-shrink: 0;
+    box-shadow: 2px 0 12px rgba(44,36,22,0.22);
+  }
+
+  .sidebar-header {
+    padding: 1.5rem 1.25rem 1.1rem;
+    border-bottom: 1px solid rgba(245,240,232,0.12);
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-light);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  .sidebar-sub {
+    font-size: 0.6rem;
+    color: rgba(245,240,232,0.35);
+    margin-top: 0.25rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav { padding: 0.75rem 0; flex: 1; }
+
+  .nav-section {
+    font-size: 0.58rem;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+    padding: 0.75rem 1.25rem 0.25rem;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.62rem 1.25rem;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    color: rgba(245,240,232,0.62);
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.17s, background 0.17s, border-color 0.17s;
+  }
+
+  .nav-btn:hover { color: var(--sidebar-text); background: rgba(245,240,232,0.06); }
+
+  .nav-btn.active {
+    color: var(--primary-light);
+    background: rgba(212,176,122,0.12);
+    border-left-color: var(--primary-light);
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(245,240,232,0.1);
+    flex-shrink: 0;
+  }
+
+  .user-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(212,176,122,0.4);
+    flex-shrink: 0;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.78);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .signout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.42rem 0.7rem;
+    background: rgba(139,74,47,0.18);
+    border: 1px solid rgba(139,74,47,0.28);
+    border-radius: 6px;
+    color: rgba(245,240,232,0.65);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.17s, color 0.17s;
+  }
+
+  .signout-btn:hover { background: rgba(139,74,47,0.32); color: var(--sidebar-text); }
+
+  /* Main content */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem 2.5rem;
+    background: var(--bg);
+  }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Panel header */
+  .panel-header { margin-bottom: 1.75rem; }
+
+  .panel-title {
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .panel-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  /* Live badge */
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+    color: var(--green);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* Metrics grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem 1.25rem 1.1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+  }
+
+  .metric-value {
+    font-family: var(--font-serif);
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    min-height: 2.3rem;
+  }
+
+  .metric-unit {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* Skeleton loading */
+  .skel {
+    display: inline-block;
+    height: 2rem;
+    width: 55%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* Chart cards */
+  .chart-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-card-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .chart-wrap { position: relative; height: 280px; }
+
+  /* Section headings inside panels */
+  .section-heading {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    margin: 1.75rem 0 1rem;
+  }
+
+  /* Admin list */
+  .admins-list { list-style: none; margin-bottom: 0.5rem; }
+
+  .admin-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .admin-info { flex: 1; min-width: 0; }
+
+  .admin-email {
+    font-size: 0.86rem;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  .admin-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+    font-weight: 300;
+  }
+
+  .badge-super {
+    display: inline-block;
+    font-size: 0.6rem;
+    background: rgba(184,150,90,0.14);
+    border: 1px solid rgba(184,150,90,0.3);
+    color: var(--primary);
+    padding: 0.12rem 0.45rem;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    margin-left: 0.45rem;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .btn-remove {
+    background: rgba(139,74,47,0.09);
+    border: 1px solid rgba(139,74,47,0.22);
+    color: var(--red);
+    border-radius: 6px;
+    padding: 0.28rem 0.6rem;
+    font-size: 0.73rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 0.17s;
+    white-space: nowrap;
+    margin-left: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .btn-remove:hover { background: rgba(139,74,47,0.18); }
+
+  /* Add admin form */
+  .add-form {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-row { display: flex; gap: 0.7rem; align-items: center; }
+
+  .form-input {
+    flex: 1;
+    padding: 0.58rem 0.9rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: var(--font-sans);
+    font-size: 0.87rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.17s;
+  }
+
+  .form-input:focus { border-color: var(--primary); }
+
+  .btn-add {
+    padding: 0.58rem 1.15rem;
+    background: var(--primary);
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.87rem;
+    cursor: pointer;
+    transition: background 0.17s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn-add:hover { background: var(--primary-light); }
+
+  .feedback {
+    font-size: 0.76rem;
+    min-height: 1.2em;
+    margin-top: 0.5rem;
+  }
+
+  .feedback.ok  { color: var(--green); }
+  .feedback.err { color: var(--red); }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 1.75rem;
+    font-weight: 300;
+    transition: color 0.17s;
+  }
+
+  .back-link:hover { color: var(--primary); }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    #sidebar { width: 0; min-width: 0; overflow: hidden; }
+    #main { padding: 1.25rem; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ LOGIN SCREEN ═══════════════════════ -->
+<div id="login-screen">
+  <div class="auth-card">
+    <p class="card-brand">The Writer's Desk</p>
+    <h1>學校使用分析</h1>
+    <p class="card-sub">School Usage Analytics · Admin Panel</p>
+    <button id="google-signin-btn">
+      <!-- Google colour mark -->
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+      </svg>
+      使用 Google 帳號登入
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════ ACCESS DENIED ═══════════════════════ -->
+<div id="access-denied"
+     style="display:none;align-items:center;justify-content:center;height:100vh;background:var(--sidebar-bg);">
+  <div class="auth-card">
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#8b4a2f"
+         stroke-width="1.4" style="margin-bottom:1rem" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+    </svg>
+    <h1 style="font-size:1.4rem;margin-bottom:.45rem">存取遭拒</h1>
+    <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:1.6rem">
+      帳號 <strong id="denied-email"></strong> 未獲授權存取此頁面。
+    </p>
+    <button id="denied-signout-btn"
+            style="padding:.62rem 1.5rem;background:var(--primary);border:none;border-radius:7px;
+                   color:#fff;font-family:var(--font-sans);font-size:.87rem;cursor:pointer">
+      使用其他帳號登入
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════ DASHBOARD ═════════════════════════ -->
+<div id="dashboard">
+  <div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">學校使用分析</div>
+        <div class="sidebar-sub">School Usage Analytics</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">數據面板</div>
+        <button class="nav-btn active" data-panel="today">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          本日（實時）
+        </button>
+        <button class="nav-btn" data-panel="month">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          本月（趨勢）
+        </button>
+        <button class="nav-btn" data-panel="year">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+          本年（總覽）
+        </button>
+
+        <div class="nav-section" style="margin-top:.75rem">設定</div>
+        <button class="nav-btn" data-panel="admins">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          管理員管理
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <img id="user-avatar" class="user-avatar" src="" alt="" />
+          <span id="user-name" class="user-name">—</span>
+        </div>
+        <button class="signout-btn" id="signout-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          登出
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main id="main">
+      <a href="index.html" class="back-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        返回主平台
+      </a>
+
+      <!-- ── TODAY ───────────────────────────────────────────── -->
+      <section id="panel-today" class="panel active">
+        <div class="panel-header">
+          <h2 class="panel-title">
+            本日數據
+            <span class="live-badge"><span class="live-dot"></span>實時更新</span>
+          </h2>
+          <p class="panel-date" id="today-date-label"></p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">訪問人數</div>
+            <div class="metric-value" id="today-unique"><span class="skel"></span></div>
+            <div class="metric-unit">不重複訪客</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">訪問次數</div>
+            <div class="metric-value" id="today-visits"><span class="skel"></span></div>
+            <div class="metric-unit">工作階段</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">總訪問時長</div>
+            <div class="metric-value" id="today-total-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">平均訪問時長</div>
+            <div class="metric-value" id="today-avg-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘 / 工作階段</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── MONTH ───────────────────────────────────────────── -->
+      <section id="panel-month" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">本月趨勢</h2>
+          <p class="panel-date" id="month-label"></p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">本月訪問人數</div>
+            <div class="metric-value" id="month-unique"><span class="skel"></span></div>
+            <div class="metric-unit">不重複訪客</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">本月訪問次數</div>
+            <div class="metric-value" id="month-visits"><span class="skel"></span></div>
+            <div class="metric-unit">工作階段</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">總訪問時長</div>
+            <div class="metric-value" id="month-total-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">平均訪問時長</div>
+            <div class="metric-value" id="month-avg-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘 / 工作階段</div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-title">每日訪問趨勢</div>
+          <div class="chart-wrap"><canvas id="month-chart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- ── YEAR ────────────────────────────────────────────── -->
+      <section id="panel-year" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">本年總覽</h2>
+          <p class="panel-date" id="year-label"></p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">本年訪問人數</div>
+            <div class="metric-value" id="year-unique"><span class="skel"></span></div>
+            <div class="metric-unit">不重複訪客</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">本年訪問次數</div>
+            <div class="metric-value" id="year-visits"><span class="skel"></span></div>
+            <div class="metric-unit">工作階段</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">總訪問時長</div>
+            <div class="metric-value" id="year-total-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">平均訪問時長</div>
+            <div class="metric-value" id="year-avg-dur"><span class="skel"></span></div>
+            <div class="metric-unit">分鐘 / 工作階段</div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-title">每月訪問總覽</div>
+          <div class="chart-wrap"><canvas id="year-chart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- ── ADMINS ──────────────────────────────────────────── -->
+      <section id="panel-admins" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">管理員管理</h2>
+          <p class="panel-date">新增或移除可存取此分析面板的管理員帳號</p>
+        </div>
+
+        <h3 class="section-heading">目前管理員</h3>
+        <ul class="admins-list" id="admins-list">
+          <li style="font-size:.84rem;color:var(--text-muted);padding:.5rem">載入中…</li>
+        </ul>
+
+        <!-- Add-admin form: only shown to superadmin -->
+        <div id="add-admin-section" style="display:none">
+          <h3 class="section-heading">新增管理員</h3>
+          <div class="add-form">
+            <label class="form-label" for="new-admin-email">新管理員的 Google 電子郵件地址</label>
+            <div class="form-row">
+              <input type="email" id="new-admin-email" class="form-input"
+                     placeholder="example@gmail.com" autocomplete="off" />
+              <button class="btn-add" id="add-admin-btn">新增</button>
+            </div>
+            <p class="feedback" id="add-admin-feedback"></p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- .app-shell -->
+</div><!-- #dashboard -->
+
+<!-- ══════════════════ FIREBASE SDKs ═══════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+'use strict';
+// ================================================================
+// CONFIG
+// ================================================================
+var SUPERADMIN  = 'hugow1107@gmail.com';
+var ADMINS_PATH = 'schoolUsageAdmins';
+var USAGE_PATH  = 'schoolUsage';
+
+var firebaseConfig = {
+  apiKey:            'AIzaSyCS4mHPTa3DZ3CVO11fdKLce5_wMKuHIOk',
+  authDomain:        'login-system-2-b511c.firebaseapp.com',
+  databaseURL:       'https://login-system-2-b511c-default-rtdb.firebaseio.com',
+  projectId:         'login-system-2-b511c',
+  storageBucket:     'login-system-2-b511c.firebasestorage.app',
+  messagingSenderId: '352631619492',
+  appId:             '1:352631619492:web:a6b0d08ffba37073ddcb31',
+  measurementId:     'G-8MW5XEQMRZ'
+};
+
+firebase.initializeApp(firebaseConfig);
+var auth = firebase.auth();
+var db   = firebase.database();
+
+// ================================================================
+// HELPERS
+// ================================================================
+function $(id) { return document.getElementById(id); }
+
+/* Sanitise email for use as a Firebase key (no . # $ / [ ]) */
+function emailToKey(email) {
+  return email.toLowerCase().replace(/\./g, ',').replace(/[#$/\[\]]/g, '_');
+}
+
+function fmt(n, decimals) {
+  decimals = (decimals === undefined) ? 1 : decimals;
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  var v = Number(n).toFixed(decimals);
+  return v.replace(/\.0+$/, '');   // trim trailing ".0"
+}
+
+function minsFromMs(ms) { return ms ? ms / 60000 : 0; }
+
+function setMetric(id, text) {
+  var el = $(id);
+  if (el) el.textContent = text;
+}
+
+// ================================================================
+// SCREENS
+// ================================================================
+function showScreen(name) {
+  $('login-screen').style.display  = name === 'login'  ? 'flex'  : 'none';
+  $('access-denied').style.display = name === 'denied' ? 'flex'  : 'none';
+  $('dashboard').style.display     = name === 'dash'   ? 'block' : 'none';
+}
+
+// ================================================================
+// AUTH
+// ================================================================
+$('google-signin-btn').addEventListener('click', function() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(function(err) {
+    console.error('[Admin] Sign-in failed:', err.message);
+  });
+});
+
+$('denied-signout-btn').addEventListener('click', function() { auth.signOut(); });
+$('signout-btn').addEventListener('click',        function() { auth.signOut(); });
+
+var currentUser      = null;
+var isSuperAdmin     = false;
+var activeListeners  = [];   // { ref, handler } pairs to detach on sign-out
+
+function detachListeners() {
+  activeListeners.forEach(function(l) { l.ref.off('value', l.handler); });
+  activeListeners = [];
+}
+
+auth.onAuthStateChanged(function(user) {
+  // Detach previous real-time listeners
+  detachListeners();
+
+  if (!user) {
+    currentUser  = null;
+    isSuperAdmin = false;
+    showScreen('login');
+    return;
+  }
+
+  currentUser  = user;
+  isSuperAdmin = (user.email === SUPERADMIN);
+
+  if (isSuperAdmin) {
+    // Ensure superadmin record exists
+    var key = emailToKey(user.email);
+    db.ref(ADMINS_PATH + '/' + key).once('value').then(function(snap) {
+      if (!snap.exists()) {
+        return db.ref(ADMINS_PATH + '/' + key).set({
+          email:        user.email,
+          addedBy:      'system',
+          addedAt:      new Date().toISOString(),
+          isSuperAdmin: true
+        });
+      }
+    });
+    grantAccess(user);
+    return;
+  }
+
+  // Non-superadmin: check whitelist
+  db.ref(ADMINS_PATH + '/' + emailToKey(user.email)).once('value').then(function(snap) {
+    if (snap.exists()) {
+      grantAccess(user);
+    } else {
+      $('denied-email').textContent = user.email;
+      showScreen('denied');
+    }
+  });
+});
+
+function grantAccess(user) {
+  // Populate sidebar user info
+  var avatar = $('user-avatar');
+  if (user.photoURL) {
+    avatar.src = user.photoURL;
+    avatar.style.display = 'block';
+  } else {
+    avatar.style.display = 'none';
+  }
+  $('user-name').textContent = user.displayName || user.email;
+
+  showScreen('dash');
+  initDashboard();
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+document.querySelectorAll('.nav-btn[data-panel]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    $(('panel-' + btn.dataset.panel)).classList.add('active');
+
+    if (btn.dataset.panel === 'month')  loadMonthData();
+    if (btn.dataset.panel === 'year')   loadYearData();
+    if (btn.dataset.panel === 'admins') loadAdmins();
+  });
+});
+
+// ================================================================
+// DASHBOARD
+// ================================================================
+var monthChartInst = null;
+var yearChartInst  = null;
+
+function initDashboard() {
+  var now   = new Date();
+  var today = now.toISOString().slice(0, 10);   // YYYY-MM-DD
+  var month = now.toISOString().slice(0, 7);    // YYYY-MM
+  var year  = String(now.getFullYear());
+
+  // Date labels
+  $('today-date-label').textContent = now.toLocaleDateString('zh-TW', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+  $('month-label').textContent = now.toLocaleDateString('zh-TW', {
+    year: 'numeric', month: 'long'
+  });
+  $('year-label').textContent = year + ' 年';
+
+  // ── Today: real-time listener (visits + unique visitors) ──────
+  var todayRef = db.ref(USAGE_PATH + '/daily/' + today);
+  var todayHandler = todayRef.on('value', function(snap) {
+    var d       = snap.val() || {};
+    var visits  = d.visits         || 0;
+    var unique  = d.uniqueVisitors || 0;
+    setMetric('today-unique', unique);
+    setMetric('today-visits', visits);
+  });
+  activeListeners.push({ ref: todayRef, handler: todayHandler });
+
+  // Today duration: aggregate from individual session records (live)
+  var todaySessRef = db.ref(USAGE_PATH + '/sessions')
+    .orderByChild('date').equalTo(today);
+  var todaySessHandler = todaySessRef.on('value', function(snap) {
+    var totalMs = 0, count = 0;
+    snap.forEach(function(c) {
+      totalMs += c.val().durationMs || 0;
+      count++;
+    });
+    var avgMs = count > 0 ? totalMs / count : 0;
+    setMetric('today-total-dur', fmt(minsFromMs(totalMs)));
+    setMetric('today-avg-dur',   fmt(minsFromMs(avgMs)));
+  });
+  activeListeners.push({ ref: todaySessRef, handler: todaySessHandler });
+
+  // ── Month summary (real-time) ──────────────────────────────
+  var monthRef = db.ref(USAGE_PATH + '/monthly/' + month);
+  var monthHandler = monthRef.on('value', function(snap) {
+    var d      = snap.val() || {};
+    var visits = d.visits         || 0;
+    var unique = d.uniqueVisitors || 0;
+    setMetric('month-unique', unique);
+    setMetric('month-visits', visits);
+  });
+  activeListeners.push({ ref: monthRef, handler: monthHandler });
+
+  // Month duration: one-time read of sessions for this month
+  db.ref(USAGE_PATH + '/sessions')
+    .orderByChild('month').equalTo(month)
+    .once('value', function(snap) {
+      var totalMs = 0, count = 0;
+      snap.forEach(function(c) {
+        totalMs += c.val().durationMs || 0;
+        count++;
+      });
+      var avgMs = count > 0 ? totalMs / count : 0;
+      setMetric('month-total-dur', fmt(minsFromMs(totalMs)));
+      setMetric('month-avg-dur',   fmt(minsFromMs(avgMs)));
+    });
+
+  // ── Year summary (real-time) ───────────────────────────────
+  var yearRef = db.ref(USAGE_PATH + '/yearly/' + year);
+  var yearHandler = yearRef.on('value', function(snap) {
+    var d      = snap.val() || {};
+    var visits = d.visits         || 0;
+    var unique = d.uniqueVisitors || 0;
+    setMetric('year-unique', unique);
+    setMetric('year-visits', visits);
+  });
+  activeListeners.push({ ref: yearRef, handler: yearHandler });
+
+  // Year duration: one-time read of sessions for this year
+  db.ref(USAGE_PATH + '/sessions')
+    .orderByChild('year').equalTo(year)
+    .once('value', function(snap) {
+      var totalMs = 0, count = 0;
+      snap.forEach(function(c) {
+        totalMs += c.val().durationMs || 0;
+        count++;
+      });
+      var avgMs = count > 0 ? totalMs / count : 0;
+      setMetric('year-total-dur', fmt(minsFromMs(totalMs)));
+      setMetric('year-avg-dur',   fmt(minsFromMs(avgMs)));
+    });
+}
+
+// ================================================================
+// CHART HELPERS
+// ================================================================
+var COLORS = {
+  primary:      'rgba(184,150,90,1)',
+  primaryAlpha: 'rgba(212,176,122,0.7)',
+  primaryFill:  'rgba(212,176,122,0.13)',
+  green:        'rgba(90,107,74,1)',
+  greenFill:    'rgba(90,107,74,0.1)'
+};
+
+function chartOptions(yLabel) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: { family: "'Lato',sans-serif", size: 11 },
+          color: '#8c7f6a', boxWidth: 12, padding: 16
+        }
+      },
+      tooltip: {
+        backgroundColor: '#2c2416',
+        titleFont: { family: "'Cormorant Garamond',serif", size: 13 },
+        bodyFont:  { family: "'Lato',sans-serif",           size: 11 },
+        padding: 10, cornerRadius: 6
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(224,217,204,0.4)' },
+        ticks: { font: { family: "'Lato',sans-serif", size: 10 }, color: '#8c7f6a' }
+      },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(224,217,204,0.4)' },
+        ticks: { font: { family: "'Lato',sans-serif", size: 10 }, color: '#8c7f6a' },
+        title: {
+          display: !!yLabel,
+          text: yLabel || '',
+          font: { family: "'Lato',sans-serif", size: 10 }, color: '#8c7f6a'
+        }
+      }
+    }
+  };
+}
+
+// ================================================================
+// MONTH CHART
+// ================================================================
+function loadMonthData() {
+  var now   = new Date();
+  var year  = now.getFullYear();
+  var mon   = String(now.getMonth() + 1).padStart(2, '0');
+  var prefix = year + '-' + mon;
+  var days   = new Date(year, now.getMonth() + 1, 0).getDate();
+
+  db.ref(USAGE_PATH + '/daily')
+    .orderByKey()
+    .startAt(prefix + '-01')
+    .endAt(prefix + '-31')
+    .once('value', function(snap) {
+      var data   = snap.val() || {};
+      var labels = [], visits = [], unique = [];
+
+      for (var d = 1; d <= days; d++) {
+        var key = prefix + '-' + String(d).padStart(2, '0');
+        labels.push(d + '日');
+        visits.push((data[key] && data[key].visits)         || 0);
+        unique.push((data[key] && data[key].uniqueVisitors) || 0);
+      }
+
+      if (monthChartInst) monthChartInst.destroy();
+      var ctx = $('month-chart').getContext('2d');
+      monthChartInst = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '訪問次數',
+              data: visits,
+              borderColor: COLORS.primary,
+              backgroundColor: COLORS.primaryFill,
+              fill: true, tension: 0.35,
+              pointRadius: 3, pointHoverRadius: 5
+            },
+            {
+              label: '訪問人數',
+              data: unique,
+              borderColor: COLORS.green,
+              backgroundColor: COLORS.greenFill,
+              fill: true, tension: 0.35,
+              pointRadius: 3, pointHoverRadius: 5
+            }
+          ]
+        },
+        options: chartOptions('次數 / 人數')
+      });
+    });
+}
+
+// ================================================================
+// YEAR CHART
+// ================================================================
+function loadYearData() {
+  var year = String(new Date().getFullYear());
+
+  db.ref(USAGE_PATH + '/monthly')
+    .orderByKey()
+    .startAt(year + '-01')
+    .endAt(year + '-12')
+    .once('value', function(snap) {
+      var data   = snap.val() || {};
+      var labels = ['1月','2月','3月','4月','5月','6月',
+                    '7月','8月','9月','10月','11月','12月'];
+      var visits = [], unique = [];
+
+      for (var m = 1; m <= 12; m++) {
+        var key = year + '-' + String(m).padStart(2, '0');
+        visits.push((data[key] && data[key].visits)         || 0);
+        unique.push((data[key] && data[key].uniqueVisitors) || 0);
+      }
+
+      if (yearChartInst) yearChartInst.destroy();
+      var ctx = $('year-chart').getContext('2d');
+      yearChartInst = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '訪問次數',
+              data: visits,
+              backgroundColor: COLORS.primaryAlpha,
+              borderColor: COLORS.primary,
+              borderWidth: 1, borderRadius: 4
+            },
+            {
+              label: '訪問人數',
+              data: unique,
+              backgroundColor: COLORS.greenFill,
+              borderColor: COLORS.green,
+              borderWidth: 1, borderRadius: 4
+            }
+          ]
+        },
+        options: chartOptions('次數 / 人數')
+      });
+    });
+}
+
+// ================================================================
+// ADMIN MANAGEMENT
+// ================================================================
+function loadAdmins() {
+  // Show add-form only for superadmin
+  $('add-admin-section').style.display = isSuperAdmin ? 'block' : 'none';
+
+  var list = $('admins-list');
+  list.innerHTML = '<li style="font-size:.84rem;color:var(--text-muted);padding:.5rem">載入中…</li>';
+
+  db.ref(ADMINS_PATH).once('value').then(function(snap) {
+    var admins = snap.val() || {};
+    var entries = Object.entries(admins);
+    entries.sort(function(a, b) {
+      return (a[1].email || '').localeCompare(b[1].email || '');
+    });
+
+    if (!entries.length) {
+      list.innerHTML = '<li style="font-size:.84rem;color:var(--text-muted);padding:.5rem">（無管理員記錄）</li>';
+      return;
+    }
+
+    list.innerHTML = '';
+    entries.forEach(function(pair) {
+      var key  = pair[0];
+      var info = pair[1];
+      var isSuper = info.isSuperAdmin || info.email === SUPERADMIN;
+      var canRemove = isSuperAdmin && !isSuper;
+
+      var li = document.createElement('li');
+      li.className = 'admin-item';
+
+      var safeEmail = (info.email || '').replace(/</g, '&lt;');
+      var safeMeta  = '';
+      if (info.addedAt) {
+        safeMeta += '新增時間：' + new Date(info.addedAt).toLocaleString('zh-TW');
+      }
+      if (info.addedBy && info.addedBy !== 'system') {
+        safeMeta += ' · 由 ' + info.addedBy.replace(/</g, '&lt;') + ' 新增';
+      }
+
+      li.innerHTML =
+        '<div class="admin-info">' +
+          '<span class="admin-email">' + safeEmail +
+            (isSuper ? '<span class="badge-super">超級管理員</span>' : '') +
+          '</span>' +
+          (safeMeta ? '<div class="admin-meta">' + safeMeta + '</div>' : '') +
+        '</div>';
+
+      if (canRemove) {
+        var rmBtn = document.createElement('button');
+        rmBtn.className = 'btn-remove';
+        rmBtn.textContent = '移除';
+        rmBtn.dataset.key   = key;
+        rmBtn.dataset.email = info.email;
+        rmBtn.addEventListener('click', function() {
+          removeAdmin(this.dataset.key, this.dataset.email);
+        });
+        li.appendChild(rmBtn);
+      }
+
+      list.appendChild(li);
+    });
+  });
+}
+
+$('add-admin-btn').addEventListener('click', addAdmin);
+$('new-admin-email').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addAdmin();
+});
+
+function addAdmin() {
+  if (!isSuperAdmin) return;
+  var input    = $('new-admin-email');
+  var feedback = $('add-admin-feedback');
+  var email    = (input.value || '').trim().toLowerCase();
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    feedback.textContent = '請輸入有效的電子郵件地址。';
+    feedback.className = 'feedback err';
+    return;
+  }
+
+  var key = emailToKey(email);
+  db.ref(ADMINS_PATH + '/' + key).once('value').then(function(snap) {
+    if (snap.exists()) {
+      feedback.textContent = email + ' 已是管理員。';
+      feedback.className = 'feedback err';
+      return;
+    }
+    return db.ref(ADMINS_PATH + '/' + key).set({
+      email:        email,
+      addedBy:      currentUser.email,
+      addedAt:      new Date().toISOString(),
+      isSuperAdmin: false
+    }).then(function() {
+      feedback.textContent = '✓ 已成功新增 ' + email + ' 為管理員。';
+      feedback.className = 'feedback ok';
+      input.value = '';
+      loadAdmins();
+    });
+  }).catch(function(err) {
+    feedback.textContent = '新增失敗：' + err.message;
+    feedback.className = 'feedback err';
+  });
+}
+
+function removeAdmin(key, email) {
+  if (!isSuperAdmin) return;
+  if (!confirm('確定要移除 ' + email + ' 的管理員權限嗎？')) return;
+  db.ref(ADMINS_PATH + '/' + key).remove().then(function() {
+    loadAdmins();
+  }).catch(function(err) {
+    alert('移除失敗：' + err.message);
+  });
+}
+</script>
+
+</body>
+</html>
