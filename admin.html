@@ -530,11 +530,239 @@
 
   .back-link:hover { color: var(--primary); }
 
+  /* ── Sessions table ──────────────────────────────────────── */
+  .sessions-table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .sessions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: #fff;
+  }
+
+  .sessions-table thead th {
+    background: var(--surface);
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .sessions-table tbody td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(224,217,204,0.45);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .sessions-table tbody tr:last-child td { border-bottom: none; }
+  .sessions-table tbody tr:hover td { background: var(--surface); }
+
+  .dur-pill {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    background: rgba(184,150,90,0.1);
+    color: var(--primary);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .path-cell {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Export & action buttons ─────────────────────────────── */
+  .panel-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+
+  .btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.48rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.17s, color 0.17s;
+    white-space: nowrap;
+  }
+
+  .btn-export:hover { background: var(--border); color: var(--text); }
+
+  .btn-refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.48rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.17s, color 0.17s;
+    white-space: nowrap;
+  }
+
+  .btn-refresh:hover { background: var(--border); color: var(--text); }
+  .btn-refresh.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Date range picker ───────────────────────────────────── */
+  .date-range-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .date-range-row label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .date-range-row input[type="date"] {
+    padding: 0.4rem 0.7rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.17s;
+  }
+
+  .date-range-row input[type="date"]:focus { border-color: var(--primary); }
+
+  .btn-query {
+    padding: 0.44rem 0.9rem;
+    background: var(--primary);
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.17s;
+    white-space: nowrap;
+  }
+
+  .btn-query:hover { background: var(--primary-light); }
+
+  /* ── Mobile Hamburger & Overlay ──────────────────────────── */
+  #sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--sidebar-bg);
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    color: var(--sidebar-text);
+    flex-shrink: 0;
+  }
+
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.52);
+    z-index: 150;
+  }
+
+  #sidebar-overlay.open { display: block; }
+
   /* ── Responsive ───────────────────────────────────────────── */
   @media (max-width: 640px) {
-    #sidebar { width: 0; min-width: 0; overflow: hidden; }
-    #main { padding: 1.25rem; }
+    /* Hamburger visible */
+    #sidebar-toggle { display: flex; }
+
+    /* Sidebar becomes a slide-in drawer */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 160;
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 240px !important;
+      min-width: 240px !important;
+    }
+
+    #sidebar.open { transform: translateX(0); }
+
+    /* Push main content down so hamburger doesn't overlap header */
+    #main {
+      padding: 1rem 1rem 4rem;
+      padding-top: 3.5rem;
+    }
+
     .metrics-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Reduce chart height on mobile */
+    .chart-wrap { height: 200px; }
+
+    /* Stack add-admin form on mobile */
+    .form-row { flex-direction: column; }
+    .btn-add  { width: 100%; }
+
+    /* Stack date range picker */
+    .date-range-row { flex-direction: column; align-items: flex-start; }
+    .date-range-row input[type="date"] { width: 100%; }
+    .btn-query { width: 100%; }
+
+    /* Larger tap targets */
+    .nav-btn { padding: 0.82rem 1.25rem; font-size: 0.95rem; }
+    .signout-btn { padding: 0.6rem 0.7rem; font-size: 0.82rem; }
+    .btn-remove { padding: 0.45rem 0.8rem; font-size: 0.82rem; }
+
+    /* Make back link bigger on mobile */
+    .back-link { font-size: 0.88rem; margin-bottom: 1.25rem; }
+
+    /* Panel title smaller */
+    .panel-title { font-size: 1.3rem; }
+  }
+
+  @media (max-width: 380px) {
+    .metrics-grid { grid-template-columns: 1fr; }
   }
   </style>
 </head>
@@ -582,6 +810,20 @@
 
 <!-- ════════════════════════ DASHBOARD ═════════════════════════ -->
 <div id="dashboard">
+
+  <!-- Mobile hamburger button (only shown on small screens via CSS) -->
+  <button id="sidebar-toggle" aria-label="開啟選單">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Backdrop to close sidebar on mobile -->
+  <div id="sidebar-overlay"></div>
+
   <div class="app-shell">
 
     <!-- ── Sidebar ── -->
@@ -613,6 +855,29 @@
             <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
           </svg>
           本年（總覽）
+        </button>
+
+        <button class="nav-btn" data-panel="sessions">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          最近工作階段
+        </button>
+
+        <button class="nav-btn" data-panel="custom">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          自訂日期範圍
         </button>
 
         <div class="nav-section" style="margin-top:.75rem">設定</div>
@@ -665,6 +930,27 @@
           <p class="panel-date" id="today-date-label"></p>
         </div>
 
+        <div class="panel-actions">
+          <button class="btn-refresh" id="today-refresh-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            重新整理
+          </button>
+          <button class="btn-export" id="today-export-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            匯出 CSV
+          </button>
+        </div>
+
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-label">訪問人數</div>
@@ -694,6 +980,18 @@
         <div class="panel-header">
           <h2 class="panel-title">本月趨勢</h2>
           <p class="panel-date" id="month-label"></p>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn-export" id="month-export-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            匯出 CSV
+          </button>
         </div>
 
         <div class="metrics-grid">
@@ -732,6 +1030,18 @@
           <p class="panel-date" id="year-label"></p>
         </div>
 
+        <div class="panel-actions">
+          <button class="btn-export" id="year-export-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            匯出 CSV
+          </button>
+        </div>
+
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-label">本年訪問人數</div>
@@ -759,6 +1069,108 @@
           <div class="chart-card-title">每月訪問總覽</div>
           <div class="chart-wrap"><canvas id="year-chart"></canvas></div>
         </div>
+      </section>
+
+      <!-- ── SESSIONS ───────────────────────────────────────── -->
+      <section id="panel-sessions" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">最近工作階段</h2>
+          <p class="panel-date">最近 50 筆工作階段紀錄（依時間排序）</p>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn-refresh" id="sessions-refresh-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            重新整理
+          </button>
+          <button class="btn-export" id="sessions-export-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            匯出 CSV
+          </button>
+        </div>
+
+        <div class="sessions-table-wrap">
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>時間</th>
+                <th>頁面路徑</th>
+                <th>訪問時長</th>
+                <th>訪客 ID</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-tbody" aria-live="polite" aria-atomic="false">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">載入中…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── CUSTOM DATE ─────────────────────────────────────── -->
+      <section id="panel-custom" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">自訂日期範圍</h2>
+          <p class="panel-date">查詢任意日期區間的訪問數據</p>
+        </div>
+
+        <div class="date-range-row">
+          <label for="custom-start">開始日期</label>
+          <input type="date" id="custom-start" />
+          <label for="custom-end">結束日期</label>
+          <input type="date" id="custom-end" />
+          <button class="btn-query" id="custom-query-btn">查詢</button>
+          <button class="btn-export" id="custom-export-btn" style="display:none">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            匯出 CSV
+          </button>
+        </div>
+
+        <div id="custom-result" style="display:none">
+          <div class="metrics-grid" id="custom-metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">訪問次數</div>
+              <div class="metric-value" id="custom-visits">—</div>
+              <div class="metric-unit">工作階段</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">訪問人數（估計）</div>
+              <div class="metric-value" id="custom-unique">—</div>
+              <div class="metric-unit">每日不重複訪客之總和</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">活躍天數</div>
+              <div class="metric-value" id="custom-days">—</div>
+              <div class="metric-unit">天（有訪問紀錄）</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">日均訪問次數</div>
+              <div class="metric-value" id="custom-avg">—</div>
+              <div class="metric-unit">次 / 天</div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">日期區間訪問趨勢</div>
+            <div class="chart-wrap"><canvas id="custom-chart"></canvas></div>
+          </div>
+        </div>
+        <p id="custom-feedback" class="feedback" style="margin-top:0"></p>
       </section>
 
       <!-- ── ADMINS ──────────────────────────────────────────── -->
@@ -800,6 +1212,35 @@
 <script>
 'use strict';
 // ================================================================
+// CONSOLE LOGGING STYLES
+// ================================================================
+var LOG = {
+  banner: 'background:#2c2416;color:#d4b07a;font-weight:bold;padding:3px 10px;border-radius:4px;font-size:13px;letter-spacing:.04em',
+  sep:    'color:#8c7f6a;font-size:10px',
+  title:  'color:#b8965a;font-weight:bold;font-size:11px',
+  info:   'color:#5a6b4a;font-size:11px',
+  ok:     'color:#5a6b4a;font-weight:bold;font-size:11px',
+  err:    'color:#8b4a2f;font-weight:bold;font-size:11px',
+  warn:   'color:#b8965a;font-size:11px',
+  auth:   'color:#4285F4;font-weight:bold;font-size:11px',
+  data:   'color:#2c2416;font-size:11px',
+  faint:  'color:#8c7f6a;font-style:italic;font-size:10px',
+  badge:  'background:#5a6b4a;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px'
+};
+
+function logSep()       { console.log('%c' + '─'.repeat(44), LOG.sep); }
+function logOk(msg)     { console.log('%c  ✓  ' + msg, LOG.ok); }
+function logErr(msg)    { console.log('%c  ✗  ' + msg, LOG.err); }
+function logInfo(msg)   { console.log('%c  ℹ  ' + msg, LOG.info); }
+function logWarn(msg)   { console.warn('%c  ⚠  ' + msg, LOG.warn); }
+function logData(k, v)  { console.log('%c  ·  ' + k + ': %c' + v, LOG.faint, LOG.data); }
+
+// Startup banner
+console.log('%c 📊 Admin Panel — 學校使用分析 ', LOG.banner);
+logSep();
+logInfo('Initialising Firebase…');
+
+// ================================================================
 // CONFIG
 // ================================================================
 var SUPERADMIN  = 'hugow1107@gmail.com';
@@ -820,6 +1261,8 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
 var db   = firebase.database();
+logOk('Firebase app initialised');
+logSep();
 
 // ================================================================
 // HELPERS
@@ -845,6 +1288,27 @@ function setMetric(id, text) {
   if (el) el.textContent = text;
 }
 
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function fmtDuration(ms) {
+  if (!ms || ms < 1000) return '< 1 秒';
+  var s = Math.round(ms / 1000);
+  if (s < 60) return s + ' 秒';
+  var m = Math.floor(s / 60), rem = s % 60;
+  return m + ' 分' + (rem ? ' ' + rem + ' 秒' : '');
+}
+
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function monthStr() { return new Date().toISOString().slice(0, 7); }
+function yearStr()  { return String(new Date().getFullYear()); }
+
 // ================================================================
 // SCREENS
 // ================================================================
@@ -852,37 +1316,72 @@ function showScreen(name) {
   $('login-screen').style.display  = name === 'login'  ? 'flex'  : 'none';
   $('access-denied').style.display = name === 'denied' ? 'flex'  : 'none';
   $('dashboard').style.display     = name === 'dash'   ? 'block' : 'none';
+  logInfo('Screen → ' + name);
 }
+
+// ================================================================
+// MOBILE SIDEBAR TOGGLE
+// ================================================================
+var sidebarOpen = false;
+
+function openSidebar() {
+  $('sidebar').classList.add('open');
+  $('sidebar-overlay').classList.add('open');
+  sidebarOpen = true;
+}
+
+function closeSidebar() {
+  $('sidebar').classList.remove('open');
+  $('sidebar-overlay').classList.remove('open');
+  sidebarOpen = false;
+}
+
+$('sidebar-toggle').addEventListener('click', function() {
+  sidebarOpen ? closeSidebar() : openSidebar();
+});
+
+$('sidebar-overlay').addEventListener('click', closeSidebar);
 
 // ================================================================
 // AUTH
 // ================================================================
 $('google-signin-btn').addEventListener('click', function() {
+  logInfo('Google sign-in popup opening…');
   var provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider).catch(function(err) {
-    console.error('[Admin] Sign-in failed:', err.message);
+    logErr('Sign-in failed: ' + err.message);
+    console.error('[Admin] Sign-in error:', err);
   });
 });
 
-$('denied-signout-btn').addEventListener('click', function() { auth.signOut(); });
-$('signout-btn').addEventListener('click',        function() { auth.signOut(); });
+$('denied-signout-btn').addEventListener('click', function() {
+  logInfo('Signing out from denied screen…');
+  auth.signOut();
+});
+$('signout-btn').addEventListener('click', function() {
+  logInfo('User signed out');
+  auth.signOut();
+});
 
 var currentUser      = null;
 var isSuperAdmin     = false;
 var activeListeners  = [];   // { ref, handler } pairs to detach on sign-out
 
 function detachListeners() {
+  if (activeListeners.length) {
+    logInfo('Detaching ' + activeListeners.length + ' real-time listener(s)');
+  }
   activeListeners.forEach(function(l) { l.ref.off('value', l.handler); });
   activeListeners = [];
 }
 
 auth.onAuthStateChanged(function(user) {
-  // Detach previous real-time listeners
   detachListeners();
 
   if (!user) {
     currentUser  = null;
     isSuperAdmin = false;
+    logInfo('Auth: signed out — showing login screen');
     showScreen('login');
     return;
   }
@@ -890,36 +1389,47 @@ auth.onAuthStateChanged(function(user) {
   currentUser  = user;
   isSuperAdmin = (user.email === SUPERADMIN);
 
+  console.log('%c 🔐 Auth ', LOG.badge, 'Signed in as', user.email,
+    isSuperAdmin ? '(superadmin)' : '(regular admin?)');
+
   if (isSuperAdmin) {
+    logOk('Superadmin confirmed — skipping whitelist check');
     // Ensure superadmin record exists
     var key = emailToKey(user.email);
     db.ref(ADMINS_PATH + '/' + key).once('value').then(function(snap) {
       if (!snap.exists()) {
+        logInfo('Creating superadmin record in Firebase…');
         return db.ref(ADMINS_PATH + '/' + key).set({
           email:        user.email,
           addedBy:      'system',
           addedAt:      new Date().toISOString(),
           isSuperAdmin: true
-        });
+        }).then(function() { logOk('Superadmin record created'); });
+      } else {
+        logInfo('Superadmin record already exists');
       }
     });
     grantAccess(user);
     return;
   }
 
-  // Non-superadmin: check whitelist
+  logInfo('Checking whitelist for: ' + user.email);
   db.ref(ADMINS_PATH + '/' + emailToKey(user.email)).once('value').then(function(snap) {
     if (snap.exists()) {
+      logOk('Whitelist check passed');
       grantAccess(user);
     } else {
+      logWarn('Whitelist check FAILED for: ' + user.email);
       $('denied-email').textContent = user.email;
       showScreen('denied');
     }
+  }).catch(function(err) {
+    logErr('Whitelist check error: ' + err.message);
+    console.error('[Admin] Whitelist check failed:', err);
   });
 });
 
 function grantAccess(user) {
-  // Populate sidebar user info
   var avatar = $('user-avatar');
   if (user.photoURL) {
     avatar.src = user.photoURL;
@@ -930,6 +1440,8 @@ function grantAccess(user) {
   $('user-name').textContent = user.displayName || user.email;
 
   showScreen('dash');
+  logOk('Dashboard ready for ' + (user.displayName || user.email));
+  logSep();
   initDashboard();
 }
 
@@ -943,25 +1455,39 @@ document.querySelectorAll('.nav-btn[data-panel]').forEach(function(btn) {
     btn.classList.add('active');
     $(('panel-' + btn.dataset.panel)).classList.add('active');
 
-    if (btn.dataset.panel === 'month')  loadMonthData();
-    if (btn.dataset.panel === 'year')   loadYearData();
-    if (btn.dataset.panel === 'admins') loadAdmins();
+    logInfo('Panel → ' + btn.dataset.panel);
+
+    if (btn.dataset.panel === 'month')    loadMonthData();
+    if (btn.dataset.panel === 'year')     loadYearData();
+    if (btn.dataset.panel === 'admins')   loadAdmins();
+    if (btn.dataset.panel === 'sessions') loadSessions();
+    if (btn.dataset.panel === 'custom')   initCustomPanel();
+
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth <= 640) closeSidebar();
   });
 });
 
 // ================================================================
-// DASHBOARD
+// DASHBOARD INIT
 // ================================================================
-var monthChartInst = null;
-var yearChartInst  = null;
+var monthChartInst  = null;
+var yearChartInst   = null;
+var customChartInst = null;
+
+// Snapshot cache for CSV exports
+var _todaySnap    = null;
+var _monthSnap    = null;
+var _yearSnap     = null;
+var _sessionsSnap = null;
+var _customSnap   = null;
 
 function initDashboard() {
   var now   = new Date();
-  var today = now.toISOString().slice(0, 10);   // YYYY-MM-DD
-  var month = now.toISOString().slice(0, 7);    // YYYY-MM
-  var year  = String(now.getFullYear());
+  var today = todayStr();
+  var month = monthStr();
+  var year  = yearStr();
 
-  // Date labels
   $('today-date-label').textContent = now.toLocaleDateString('zh-TW', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
@@ -970,33 +1496,43 @@ function initDashboard() {
   });
   $('year-label').textContent = year + ' 年';
 
-  // ── Today: real-time listener (visits + unique visitors) ──────
+  console.groupCollapsed('%c 📡 Loading today\'s data ', LOG.badge);
+  logInfo('Attaching real-time listener → ' + USAGE_PATH + '/daily/' + today);
+
+  // ── Today visits (real-time) ─────────────────────────────
   var todayRef = db.ref(USAGE_PATH + '/daily/' + today);
   var todayHandler = todayRef.on('value', function(snap) {
-    var d       = snap.val() || {};
-    var visits  = d.visits         || 0;
-    var unique  = d.uniqueVisitors || 0;
+    var d      = snap.val() || {};
+    var visits = d.visits         || 0;
+    var unique = d.uniqueVisitors || 0;
     setMetric('today-unique', unique);
     setMetric('today-visits', visits);
+    _todaySnap = { date: today, visits: visits, unique: unique };
+    logData('today visits', visits + ' sessions, ' + unique + ' unique visitors');
+  }, function(err) {
+    logErr('today listener error: ' + err.message);
   });
   activeListeners.push({ ref: todayRef, handler: todayHandler });
 
-  // Today duration: aggregate from individual session records (live)
+  // Today duration from sessions (real-time)
   var todaySessRef = db.ref(USAGE_PATH + '/sessions')
     .orderByChild('date').equalTo(today);
   var todaySessHandler = todaySessRef.on('value', function(snap) {
     var totalMs = 0, count = 0;
-    snap.forEach(function(c) {
-      totalMs += c.val().durationMs || 0;
-      count++;
-    });
+    snap.forEach(function(c) { totalMs += c.val().durationMs || 0; count++; });
     var avgMs = count > 0 ? totalMs / count : 0;
     setMetric('today-total-dur', fmt(minsFromMs(totalMs)));
     setMetric('today-avg-dur',   fmt(minsFromMs(avgMs)));
+    logData('today duration', fmt(minsFromMs(totalMs)) + ' min total, ' + count + ' sessions');
+  }, function(err) {
+    logErr('today sessions listener error: ' + err.message);
   });
   activeListeners.push({ ref: todaySessRef, handler: todaySessHandler });
+  console.groupEnd();
 
-  // ── Month summary (real-time) ──────────────────────────────
+  // ── Month summary (real-time) ─────────────────────────────
+  console.groupCollapsed('%c 📡 Loading month summary ', LOG.badge);
+  logInfo('Attaching real-time listener → ' + USAGE_PATH + '/monthly/' + month);
   var monthRef = db.ref(USAGE_PATH + '/monthly/' + month);
   var monthHandler = monthRef.on('value', function(snap) {
     var d      = snap.val() || {};
@@ -1004,24 +1540,28 @@ function initDashboard() {
     var unique = d.uniqueVisitors || 0;
     setMetric('month-unique', unique);
     setMetric('month-visits', visits);
+    logData('month summary', visits + ' sessions, ' + unique + ' unique visitors');
+  }, function(err) {
+    logErr('month listener error: ' + err.message);
   });
   activeListeners.push({ ref: monthRef, handler: monthHandler });
 
-  // Month duration: one-time read of sessions for this month
   db.ref(USAGE_PATH + '/sessions')
     .orderByChild('month').equalTo(month)
     .once('value', function(snap) {
       var totalMs = 0, count = 0;
-      snap.forEach(function(c) {
-        totalMs += c.val().durationMs || 0;
-        count++;
-      });
+      snap.forEach(function(c) { totalMs += c.val().durationMs || 0; count++; });
       var avgMs = count > 0 ? totalMs / count : 0;
       setMetric('month-total-dur', fmt(minsFromMs(totalMs)));
       setMetric('month-avg-dur',   fmt(minsFromMs(avgMs)));
+      logData('month duration', fmt(minsFromMs(totalMs)) + ' min total');
+      _monthSnap = { month: month, totalMs: totalMs, count: count };
     });
+  console.groupEnd();
 
-  // ── Year summary (real-time) ───────────────────────────────
+  // ── Year summary (real-time) ──────────────────────────────
+  console.groupCollapsed('%c 📡 Loading year summary ', LOG.badge);
+  logInfo('Attaching real-time listener → ' + USAGE_PATH + '/yearly/' + year);
   var yearRef = db.ref(USAGE_PATH + '/yearly/' + year);
   var yearHandler = yearRef.on('value', function(snap) {
     var d      = snap.val() || {};
@@ -1029,23 +1569,87 @@ function initDashboard() {
     var unique = d.uniqueVisitors || 0;
     setMetric('year-unique', unique);
     setMetric('year-visits', visits);
+    logData('year summary', visits + ' sessions, ' + unique + ' unique visitors');
+  }, function(err) {
+    logErr('year listener error: ' + err.message);
   });
   activeListeners.push({ ref: yearRef, handler: yearHandler });
 
-  // Year duration: one-time read of sessions for this year
   db.ref(USAGE_PATH + '/sessions')
     .orderByChild('year').equalTo(year)
     .once('value', function(snap) {
       var totalMs = 0, count = 0;
-      snap.forEach(function(c) {
-        totalMs += c.val().durationMs || 0;
-        count++;
-      });
+      snap.forEach(function(c) { totalMs += c.val().durationMs || 0; count++; });
       var avgMs = count > 0 ? totalMs / count : 0;
       setMetric('year-total-dur', fmt(minsFromMs(totalMs)));
       setMetric('year-avg-dur',   fmt(minsFromMs(avgMs)));
+      logData('year duration', fmt(minsFromMs(totalMs)) + ' min total');
     });
+  console.groupEnd();
 }
+
+// ── Today refresh ──────────────────────────────────────────
+$('today-refresh-btn').addEventListener('click', function() {
+  var btn = this;
+  btn.classList.add('spinning');
+  logInfo('Manual refresh triggered for today\'s data');
+  setTimeout(function() { btn.classList.remove('spinning'); }, 800);
+  // Real-time listeners already push updates; just visual feedback
+});
+
+// ── Today CSV export ───────────────────────────────────────
+$('today-export-btn').addEventListener('click', function() {
+  logInfo('Exporting today CSV…');
+  var rows = [
+    ['日期', '訪問次數', '不重複訪客'],
+    [_todaySnap ? _todaySnap.date : todayStr(),
+     _todaySnap ? _todaySnap.visits : $('today-visits').textContent,
+     _todaySnap ? _todaySnap.unique : $('today-unique').textContent]
+  ];
+  downloadCsv('today_' + todayStr() + '.csv', rows);
+  logOk('Today CSV exported');
+});
+
+// ── Month CSV export ───────────────────────────────────────
+$('month-export-btn').addEventListener('click', function() {
+  logInfo('Exporting month CSV…');
+  var now   = new Date();
+  var year  = now.getFullYear();
+  var mon   = String(now.getMonth() + 1).padStart(2, '0');
+  var prefix = year + '-' + mon;
+  var days   = new Date(year, now.getMonth() + 1, 0).getDate();
+
+  db.ref(USAGE_PATH + '/daily')
+    .orderByKey().startAt(prefix + '-01').endAt(prefix + '-31')
+    .once('value', function(snap) {
+      var data = snap.val() || {};
+      var rows = [['日期', '訪問次數', '不重複訪客']];
+      for (var d = 1; d <= days; d++) {
+        var key = prefix + '-' + String(d).padStart(2, '0');
+        rows.push([key, (data[key] && data[key].visits) || 0, (data[key] && data[key].uniqueVisitors) || 0]);
+      }
+      downloadCsv('month_' + prefix + '.csv', rows);
+      logOk('Month CSV exported (' + rows.length + ' rows)');
+    });
+});
+
+// ── Year CSV export ────────────────────────────────────────
+$('year-export-btn').addEventListener('click', function() {
+  logInfo('Exporting year CSV…');
+  var year = yearStr();
+  db.ref(USAGE_PATH + '/monthly')
+    .orderByKey().startAt(year + '-01').endAt(year + '-12')
+    .once('value', function(snap) {
+      var data = snap.val() || {};
+      var rows = [['月份', '訪問次數', '不重複訪客']];
+      for (var m = 1; m <= 12; m++) {
+        var key = year + '-' + String(m).padStart(2, '0');
+        rows.push([key, (data[key] && data[key].visits) || 0, (data[key] && data[key].uniqueVisitors) || 0]);
+      }
+      downloadCsv('year_' + year + '.csv', rows);
+      logOk('Year CSV exported (' + rows.length + ' rows)');
+    });
+});
 
 // ================================================================
 // CHART HELPERS
@@ -1100,11 +1704,13 @@ function chartOptions(yLabel) {
 // MONTH CHART
 // ================================================================
 function loadMonthData() {
-  var now   = new Date();
-  var year  = now.getFullYear();
-  var mon   = String(now.getMonth() + 1).padStart(2, '0');
+  var now    = new Date();
+  var year   = now.getFullYear();
+  var mon    = String(now.getMonth() + 1).padStart(2, '0');
   var prefix = year + '-' + mon;
   var days   = new Date(year, now.getMonth() + 1, 0).getDate();
+
+  logInfo('Loading month chart data for ' + prefix + ' (' + days + ' days)');
 
   db.ref(USAGE_PATH + '/daily')
     .orderByKey()
@@ -1120,6 +1726,8 @@ function loadMonthData() {
         visits.push((data[key] && data[key].visits)         || 0);
         unique.push((data[key] && data[key].uniqueVisitors) || 0);
       }
+
+      logOk('Month chart data loaded — ' + Object.keys(data).length + ' day(s) with data');
 
       if (monthChartInst) monthChartInst.destroy();
       var ctx = $('month-chart').getContext('2d');
@@ -1148,6 +1756,9 @@ function loadMonthData() {
         },
         options: chartOptions('次數 / 人數')
       });
+      logOk('Month chart rendered');
+    }, function(err) {
+      logErr('Month chart load failed: ' + err.message);
     });
 }
 
@@ -1155,7 +1766,8 @@ function loadMonthData() {
 // YEAR CHART
 // ================================================================
 function loadYearData() {
-  var year = String(new Date().getFullYear());
+  var year = yearStr();
+  logInfo('Loading year chart data for ' + year);
 
   db.ref(USAGE_PATH + '/monthly')
     .orderByKey()
@@ -1172,6 +1784,8 @@ function loadYearData() {
         visits.push((data[key] && data[key].visits)         || 0);
         unique.push((data[key] && data[key].uniqueVisitors) || 0);
       }
+
+      logOk('Year chart data loaded — ' + Object.keys(data).length + ' month(s) with data');
 
       if (yearChartInst) yearChartInst.destroy();
       var ctx = $('year-chart').getContext('2d');
@@ -1198,25 +1812,261 @@ function loadYearData() {
         },
         options: chartOptions('次數 / 人數')
       });
+      logOk('Year chart rendered');
+    }, function(err) {
+      logErr('Year chart load failed: ' + err.message);
     });
+}
+
+// ================================================================
+// RECENT SESSIONS
+// ================================================================
+function loadSessions() {
+  logInfo('Loading recent sessions (last 50)…');
+  var tbody = $('sessions-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:1.5rem">載入中…</td></tr>';
+
+  db.ref(USAGE_PATH + '/sessions')
+    .orderByChild('startEpochMs')
+    .limitToLast(50)
+    .once('value', function(snap) {
+      var rows = [];
+      snap.forEach(function(c) { rows.push(c.val()); });
+      rows.reverse();   // newest first
+      _sessionsSnap = rows;
+      logOk('Sessions loaded — ' + rows.length + ' record(s)');
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:1.5rem">（無工作階段紀錄）</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      rows.forEach(function(r) {
+        var ts   = r.startEpochMs ? new Date(r.startEpochMs) : null;
+        var date = ts ? ts.toLocaleDateString('zh-TW') : (r.date || '—');
+        var time = ts ? ts.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) : '—';
+        var path = r.path || '/';
+        var dur  = r.durationMs != null ? fmtDuration(r.durationMs) : '—';
+        var vid  = r.visitorId ? r.visitorId.slice(0, 8) + '…' : '—';
+
+        var tr = document.createElement('tr');
+        // Use textContent for user-supplied fields to prevent XSS
+        var tdDate = document.createElement('td');
+        tdDate.textContent = date;
+        var tdTime = document.createElement('td');
+        tdTime.textContent = time;
+        var tdPath = document.createElement('td');
+        tdPath.className = 'path-cell';
+        tdPath.title = path;
+        tdPath.textContent = path;
+        var tdDur = document.createElement('td');
+        tdDur.innerHTML = '<span class="dur-pill">' + escHtml(dur) + '</span>';
+        var tdVid = document.createElement('td');
+        tdVid.style.cssText = 'font-family:monospace;font-size:.75rem;color:var(--text-muted)';
+        tdVid.textContent = vid;
+        tr.appendChild(tdDate); tr.appendChild(tdTime); tr.appendChild(tdPath);
+        tr.appendChild(tdDur);  tr.appendChild(tdVid);
+        tbody.appendChild(tr);
+      });
+    }, function(err) {
+      logErr('Sessions load failed: ' + err.message);
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--red);padding:1.5rem">載入失敗：' + err.message + '</td></tr>';
+    });
+}
+
+$('sessions-refresh-btn').addEventListener('click', function() {
+  var btn = this;
+  btn.classList.add('spinning');
+  logInfo('Manual refresh triggered for sessions');
+  loadSessions();
+  setTimeout(function() { btn.classList.remove('spinning'); }, 800);
+});
+
+$('sessions-export-btn').addEventListener('click', function() {
+  if (!_sessionsSnap || !_sessionsSnap.length) {
+    logWarn('No session data to export');
+    alert('尚無工作階段資料可匯出，請先重新整理。');
+    return;
+  }
+  logInfo('Exporting sessions CSV…');
+  var rows = [['日期', '時間', '頁面路徑', '時長(ms)', '訪客ID']];
+  _sessionsSnap.forEach(function(r) {
+    var ts   = r.startEpochMs ? new Date(r.startEpochMs) : null;
+    var date = ts ? ts.toLocaleDateString('zh-TW') : (r.date || '');
+    var time = ts ? ts.toLocaleTimeString('zh-TW') : '';
+    rows.push([date, time, r.path || '/', r.durationMs || 0, r.visitorId || '']);
+  });
+  downloadCsv('sessions_' + todayStr() + '.csv', rows);
+  logOk('Sessions CSV exported (' + rows.length + ' rows)');
+});
+
+// ================================================================
+// CUSTOM DATE RANGE
+// ================================================================
+function initCustomPanel() {
+  // Set default dates (past 7 days)
+  var end   = new Date();
+  var start = new Date(end);
+  start.setDate(start.getDate() - 6);
+  $('custom-end').value   = end.toISOString().slice(0, 10);
+  $('custom-start').value = start.toISOString().slice(0, 10);
+  logInfo('Custom date panel ready (defaults: last 7 days)');
+}
+
+$('custom-query-btn').addEventListener('click', function() {
+  var startVal = $('custom-start').value;
+  var endVal   = $('custom-end').value;
+  var feedback = $('custom-feedback');
+
+  if (!startVal || !endVal) {
+    feedback.textContent = '請選擇開始與結束日期。';
+    feedback.className = 'feedback err';
+    return;
+  }
+  if (startVal > endVal) {
+    feedback.textContent = '開始日期不能晚於結束日期。';
+    feedback.className = 'feedback err';
+    return;
+  }
+
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  logInfo('Querying custom range: ' + startVal + ' → ' + endVal);
+
+  db.ref(USAGE_PATH + '/daily')
+    .orderByKey()
+    .startAt(startVal)
+    .endAt(endVal)
+    .once('value', function(snap) {
+      var data   = snap.val() || {};
+      var labels = [], fullDates = [], visits = [], unique = [];
+      var totalVisits = 0, sumUnique = 0, activeDays = 0;
+
+      // enumerate every calendar day in range
+      var cur = new Date(startVal + 'T00:00:00');
+      var fin = new Date(endVal   + 'T00:00:00');
+      while (cur <= fin) {
+        var key = cur.toISOString().slice(0, 10);
+        var v   = (data[key] && data[key].visits)         || 0;
+        var u   = (data[key] && data[key].uniqueVisitors) || 0;
+        labels.push(key.slice(5));   // MM-DD for chart
+        fullDates.push(key);         // YYYY-MM-DD for CSV (handles multi-year ranges)
+        visits.push(v);
+        unique.push(u);
+        totalVisits += v;
+        sumUnique   += u;            // sum of daily uniques (may over-count returning visitors)
+        if (v > 0) activeDays++;
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      // Note: sumUnique overestimates true unique visitors across the range
+      // (a visitor present on 3 days would be counted 3×), but it is the best
+      // approximation available from aggregated daily data.
+      _customSnap = { startVal: startVal, endVal: endVal, labels: labels, fullDates: fullDates, visits: visits, unique: unique };
+
+      var days = labels.length;
+      var avgPerDay = activeDays > 0 ? (totalVisits / activeDays) : 0;
+
+      setMetric('custom-visits', totalVisits);
+      setMetric('custom-unique', '≈' + sumUnique);
+      setMetric('custom-days',   activeDays);
+      setMetric('custom-avg',    fmt(avgPerDay, 1));
+
+      $('custom-result').style.display = 'block';
+      $('custom-export-btn').style.display = '';
+
+      if (customChartInst) customChartInst.destroy();
+      var ctx = $('custom-chart').getContext('2d');
+      customChartInst = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '訪問次數',
+              data: visits,
+              backgroundColor: COLORS.primaryAlpha,
+              borderColor: COLORS.primary,
+              borderWidth: 1, borderRadius: 3
+            },
+            {
+              label: '訪問人數',
+              data: unique,
+              backgroundColor: COLORS.greenFill,
+              borderColor: COLORS.green,
+              borderWidth: 1, borderRadius: 3
+            }
+          ]
+        },
+        options: chartOptions('次數 / 人數')
+      });
+
+      logOk('Custom range data loaded — ' + activeDays + '/' + days + ' active day(s), ' + totalVisits + ' total visits');
+    }, function(err) {
+      logErr('Custom range query failed: ' + err.message);
+      feedback.textContent = '查詢失敗：' + err.message;
+      feedback.className = 'feedback err';
+    });
+});
+
+$('custom-export-btn').addEventListener('click', function() {
+  if (!_customSnap) {
+    logWarn('No custom data to export');
+    alert('尚無查詢資料可匯出，請先點擊「查詢」。');
+    return;
+  }
+  logInfo('Exporting custom range CSV…');
+  var rows = [['日期', '訪問次數', '不重複訪客']];
+  _customSnap.fullDates.forEach(function(date, i) {
+    rows.push([date, _customSnap.visits[i], _customSnap.unique[i]]);
+  });
+  downloadCsv('custom_' + _customSnap.startVal + '_to_' + _customSnap.endVal + '.csv', rows);
+  logOk('Custom CSV exported (' + rows.length + ' rows)');
+});
+
+// ================================================================
+// CSV EXPORT HELPER
+// ================================================================
+function downloadCsv(filename, rows) {
+  var csv = rows.map(function(row) {
+    return row.map(function(cell) {
+      var s = String(cell);
+      if (s.indexOf(',') >= 0 || s.indexOf('"') >= 0 || s.indexOf('\n') >= 0) {
+        s = '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }).join(',');
+  }).join('\r\n');
+  var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
 }
 
 // ================================================================
 // ADMIN MANAGEMENT
 // ================================================================
 function loadAdmins() {
-  // Show add-form only for superadmin
   $('add-admin-section').style.display = isSuperAdmin ? 'block' : 'none';
 
   var list = $('admins-list');
   list.innerHTML = '<li style="font-size:.84rem;color:var(--text-muted);padding:.5rem">載入中…</li>';
 
+  logInfo('Loading admin list…');
+
   db.ref(ADMINS_PATH).once('value').then(function(snap) {
-    var admins = snap.val() || {};
+    var admins  = snap.val() || {};
     var entries = Object.entries(admins);
     entries.sort(function(a, b) {
       return (a[1].email || '').localeCompare(b[1].email || '');
     });
+
+    logOk('Admins loaded — ' + entries.length + ' record(s)');
 
     if (!entries.length) {
       list.innerHTML = '<li style="font-size:.84rem;color:var(--text-muted);padding:.5rem">（無管理員記錄）</li>';
@@ -1227,7 +2077,7 @@ function loadAdmins() {
     entries.forEach(function(pair) {
       var key  = pair[0];
       var info = pair[1];
-      var isSuper = info.isSuperAdmin || info.email === SUPERADMIN;
+      var isSuper   = info.isSuperAdmin || info.email === SUPERADMIN;
       var canRemove = isSuperAdmin && !isSuper;
 
       var li = document.createElement('li');
@@ -1264,6 +2114,8 @@ function loadAdmins() {
 
       list.appendChild(li);
     });
+  }).catch(function(err) {
+    logErr('loadAdmins failed: ' + err.message);
   });
 }
 
@@ -1284,13 +2136,16 @@ function addAdmin() {
     return;
   }
 
+  logInfo('Checking if ' + email + ' is already an admin…');
   var key = emailToKey(email);
   db.ref(ADMINS_PATH + '/' + key).once('value').then(function(snap) {
     if (snap.exists()) {
       feedback.textContent = email + ' 已是管理員。';
       feedback.className = 'feedback err';
+      logWarn(email + ' already exists in admin list');
       return;
     }
+    logInfo('Adding admin: ' + email);
     return db.ref(ADMINS_PATH + '/' + key).set({
       email:        email,
       addedBy:      currentUser.email,
@@ -1300,20 +2155,25 @@ function addAdmin() {
       feedback.textContent = '✓ 已成功新增 ' + email + ' 為管理員。';
       feedback.className = 'feedback ok';
       input.value = '';
+      logOk('Admin added: ' + email);
       loadAdmins();
     });
   }).catch(function(err) {
     feedback.textContent = '新增失敗：' + err.message;
     feedback.className = 'feedback err';
+    logErr('addAdmin failed: ' + err.message);
   });
 }
 
 function removeAdmin(key, email) {
   if (!isSuperAdmin) return;
   if (!confirm('確定要移除 ' + email + ' 的管理員權限嗎？')) return;
+  logInfo('Removing admin: ' + email);
   db.ref(ADMINS_PATH + '/' + key).remove().then(function() {
+    logOk('Admin removed: ' + email);
     loadAdmins();
   }).catch(function(err) {
+    logErr('removeAdmin failed: ' + err.message);
     alert('移除失敗：' + err.message);
   });
 }
