@@ -102,7 +102,7 @@
       ".write": true
     },
     "schoolUsage": {
-      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com' || (root.child('schoolUsageAdminUIDs').child(auth.uid).exists() && root.child('schoolUsageAdmins').child(root.child('schoolUsageAdminUIDs').child(auth.uid).val()).exists()))",
       "sessions": {
         ".write": true,
         "$sessionKey": {
@@ -126,6 +126,12 @@
     "schoolUsageAdmins": {
       ".read": "auth != null",
       ".write": "auth != null && (auth.token.email === 'hugow1107@gmail.com' || auth.token.email === 'samwng528@gmail.com')"
+    },
+    "schoolUsageAdminUIDs": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid && (!newData.exists() || root.child('schoolUsageAdmins').child(newData.val()).child('email').val() === auth.token.email)"
+      }
     }
   }
 }
