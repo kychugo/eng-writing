@@ -3519,17 +3519,21 @@ function showPanel(panelId) {
 
     /* ── Console branding ───────────────────────────────────── */
     const C = {
-      title: 'color:#b8965a;font-size:15px;font-weight:bold;font-family:Georgia,serif',
-      sep:   'color:#5a4e3a;font-size:10px',
-      faint: 'color:#8c7f6a;font-size:11px;font-style:italic',
-      ok:    'color:#5a6b4a;font-weight:bold',
-      warn:  'color:#8b4a2f',
-      info:  'color:#5a4e3a;font-size:11px',
+      banner: 'color:#fff;background:linear-gradient(90deg,#4f46e5,#7c3aed);font-size:15px;font-weight:bold;padding:8px 22px;border-radius:8px;font-family:"Segoe UI",system-ui,sans-serif;letter-spacing:1.5px',
+      title:  'color:#7c3aed;font-size:12px;font-weight:600;font-family:"Segoe UI",system-ui,sans-serif',
+      sep:    'color:#c4b5fd;font-size:9px',
+      faint:  'color:#a78bfa;font-size:11px;font-style:italic',
+      ok:     'color:#10b981;font-weight:bold;font-size:12px',
+      warn:   'color:#f59e0b;font-weight:bold;font-size:11px',
+      err:    'color:#ef4444;font-weight:bold;font-size:11px',
+      info:   'color:#6366f1;font-size:11px',
+      badge:  'color:#fff;background:#6d28d9;padding:1px 8px;border-radius:4px;font-size:10px;font-weight:bold',
     };
-    console.log('%c[nib]  Writer\'s Desk — Debug Console', C.title);
-    console.log('%c' + '─'.repeat(44), C.sep);
-    console.log('%cModel info will appear here during generation.', C.faint);
-    console.log('%c' + '─'.repeat(44), C.sep);
+    console.log('%c ✍️  Writer\'s Desk ', C.banner);
+    console.log('%c' + '━'.repeat(44), C.sep);
+    console.log('%c🤖 AI engine ready  %c MODELS ', C.title, C.badge);
+    console.log('%cModel status will appear below each generation.', C.faint);
+    console.log('%c' + '━'.repeat(44), C.sep);
 
     /* ── State ──────────────────────────────────────────────── */
     let questionBank   = [];
@@ -3867,7 +3871,7 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         throw new Error('All AI models failed. Please try again later.');
       }
       const model = MODELS[modelIndex];
-      console.log(`%c  ⟳  Trying [${modelIndex + 1}/${MODELS.length}] ${model}`, C.faint);
+      console.log(`%c  ⟳  Trying [${modelIndex + 1}/${MODELS.length}] ${model}`, C.info);
       try {
         const resp = await fetch(API_URL, {
           method: 'POST',
@@ -3886,24 +3890,24 @@ Write ONE original, engaging writing prompt of the type "${textType}".
         });
         if (!resp.ok) {
           const errText = await resp.text().catch(() => '');
-          console.warn(`%c  [x] ${model} failed (${resp.status})`, C.warn, errText);
+          console.warn(`%c  ✗  ${model} failed (${resp.status})`, C.warn, errText);
           return callAI(messages, modelIndex + 1);
         }
         const data = await resp.json();
         const content = data?.choices?.[0]?.message?.content;
         if (!content || content.trim() === '') {
-          console.warn(`%c  [x] ${model} returned empty content`, C.warn);
+          console.warn(`%c  ✗  ${model} returned empty content`, C.warn);
           return callAI(messages, modelIndex + 1);
         }
-        console.log(`%c  [ok] Success — ${model}`, C.ok);
-        console.log('%c' + '─'.repeat(44), C.sep);
+        console.log(`%c  ✓  Success — ${model}`, C.ok);
+        console.log('%c' + '━'.repeat(44), C.sep);
         return { content: content.trim(), model };
       } catch (err) {
         if (err.name === 'AbortError') {
-          console.info('%c  [x] Request cancelled by user', C.faint);
+          console.info('%c  ✗  Request cancelled by user', C.faint);
           throw err;
         }
-        console.warn(`%c  [x] ${model} error: ${err.message}`, C.warn);
+        console.warn(`%c  ✗  ${model} error: ${err.message}`, C.warn);
         return callAI(messages, modelIndex + 1);
       }
     }
@@ -4112,8 +4116,8 @@ The "example" for each selected pattern must be a NEW sentence directly related 
         { role: 'user', content: buildPrompt(textType, topic, samples) },
       ];
 
-      console.log('%c' + '─'.repeat(44), C.sep);
-      console.log(`%c  [gen] Generating "${textType}"${topic ? ' · ' + topic : ''}`, C.info);
+      console.log('%c' + '━'.repeat(44), C.sep);
+      console.log(`%c  📝 Generating "${textType}"${topic ? ' · ' + topic : ''}`, C.info);
 
       try {
         const { content, model } = await callAI(messages);
@@ -5639,6 +5643,16 @@ function switchTab(name, fromGen) {
 //       so only legitimate clients can write to those paths.
 // ============================================================
 (function initFirebase() {
+  // ── Console styles for Firebase status reporting ──────────
+  var FB = {
+    hdr:  'color:#fff;background:#f59e0b;font-weight:bold;font-size:12px;padding:3px 10px;border-radius:5px',
+    ok:   'color:#10b981;font-weight:bold;font-size:11px',
+    warn: 'color:#f59e0b;font-weight:bold;font-size:11px',
+    err:  'color:#ef4444;font-weight:bold;font-size:11px',
+    sep:  'color:#fcd34d;font-size:9px',
+    info: 'color:#94a3b8;font-size:10px',
+  };
+
   var firebaseConfig = {
     apiKey:            "AIzaSyCS4mHPTa3DZ3CVO11fdKLce5_wMKuHIOk",
     authDomain:        "login-system-2-b511c.firebaseapp.com",
@@ -5669,6 +5683,9 @@ function switchTab(name, fromGen) {
   var now      = Date.now();
   var isoStamp = new Date(now).toISOString();
 
+  console.groupCollapsed('%c 📡 Firebase Admin Panel Upload ', FB.hdr);
+  console.log('%c' + '━'.repeat(42), FB.sep);
+
   // 1. Append an individual visit record
   db.ref('visits').push({
     timestamp: isoStamp,
@@ -5677,18 +5694,29 @@ function switchTab(name, fromGen) {
     language:  navigator.language || 'unknown',
     referrer:  document.referrer  || 'direct',
     path:      location.pathname
+  }).then(function(ref) {
+    console.log('%c  ✓  visit record saved   %ckey: ' + ref.key, FB.ok, FB.info);
   }).catch(function(err) {
-    console.warn('[Firebase] visit record write failed:', err.message);
+    console.warn('%c  ✗  visit record failed: ' + err.message, FB.err);
   });
 
   // 2. Atomically increment the total-visit counter
   db.ref('stats/totalVisits').set(firebase.database.ServerValue.increment(1))
-    .catch(function(err) { console.warn('[Firebase] totalVisits increment failed:', err.message); });
+    .then(function() {
+      console.log('%c  ✓  totalVisits counter incremented', FB.ok);
+    })
+    .catch(function(err) {
+      console.warn('%c  ✗  totalVisits increment failed: ' + err.message, FB.err);
+    });
 
   // 3. Update the "last seen" timestamp
-  db.ref('stats/lastVisit').set(isoStamp).catch(function(err) {
-    console.warn('[Firebase] lastVisit write failed:', err.message);
-  });
+  db.ref('stats/lastVisit').set(isoStamp)
+    .then(function() {
+      console.log('%c  ✓  lastVisit timestamp updated', FB.ok);
+    })
+    .catch(function(err) {
+      console.warn('%c  ✗  lastVisit update failed: ' + err.message, FB.err);
+    });
 
   // ── School Usage Analytics ──────────────────────────────────
   // Persistent visitor ID (approximates unique visitors without login)
@@ -5715,16 +5743,26 @@ function switchTab(name, fromGen) {
     path: location.pathname
   });
   var schoolSessionKey = null;
-  sessionPushRef.then(function(ref) { schoolSessionKey = ref.key; })
-    .catch(function(err) { console.warn('[Firebase] schoolUsage session push failed:', err.message); });
+  sessionPushRef.then(function(ref) {
+    schoolSessionKey = ref.key;
+    console.log('%c  ✓  schoolUsage session created   %ckey: ' + ref.key, FB.ok, FB.info);
+  }).catch(function(err) {
+    console.warn('%c  ✗  schoolUsage session failed: ' + err.message, FB.err);
+  });
 
   // Increment visit counters (one per session, reliable)
   function incr(path) {
-    db.ref(path).set(firebase.database.ServerValue.increment(1));
+    return db.ref(path).set(firebase.database.ServerValue.increment(1));
   }
-  incr('schoolUsage/daily/'   + dateStr  + '/visits');
-  incr('schoolUsage/monthly/' + monthStr + '/visits');
-  incr('schoolUsage/yearly/'  + yearStr  + '/visits');
+  Promise.all([
+    incr('schoolUsage/daily/'   + dateStr  + '/visits'),
+    incr('schoolUsage/monthly/' + monthStr + '/visits'),
+    incr('schoolUsage/yearly/'  + yearStr  + '/visits'),
+  ]).then(function() {
+    console.log('%c  ✓  daily / monthly / yearly visit counters updated', FB.ok);
+  }).catch(function(err) {
+    console.warn('%c  ✗  visit counter update failed: ' + err.message, FB.err);
+  });
 
   // Track unique visitor per day — atomic transaction prevents double-counting
   // if the same visitor opens multiple tabs simultaneously
@@ -5735,11 +5773,25 @@ function switchTab(name, fromGen) {
       return current === null ? true : undefined;
     },
     function(err, committed) {
-      if (committed) {
-        incr('schoolUsage/daily/'   + dateStr  + '/uniqueVisitors');
-        incr('schoolUsage/monthly/' + monthStr + '/uniqueVisitors');
-        incr('schoolUsage/yearly/'  + yearStr  + '/uniqueVisitors');
+      if (err) {
+        console.warn('%c  ✗  unique-visitor transaction failed: ' + err.message, FB.err);
+        return;
       }
+      if (committed) {
+        Promise.all([
+          incr('schoolUsage/daily/'   + dateStr  + '/uniqueVisitors'),
+          incr('schoolUsage/monthly/' + monthStr + '/uniqueVisitors'),
+          incr('schoolUsage/yearly/'  + yearStr  + '/uniqueVisitors'),
+        ]).then(function() {
+          console.log('%c  ✓  new unique visitor counted for ' + dateStr, FB.ok);
+        }).catch(function(e) {
+          console.warn('%c  ✗  uniqueVisitors counter failed: ' + e.message, FB.err);
+        });
+      } else {
+        console.log('%c  ℹ  returning visitor — unique count unchanged', FB.info);
+      }
+      console.log('%c' + '━'.repeat(42), FB.sep);
+      console.groupEnd();
     }
   );
 
