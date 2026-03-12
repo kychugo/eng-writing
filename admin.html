@@ -1440,9 +1440,22 @@ function grantAccess(user) {
   $('user-name').textContent = user.displayName || user.email;
 
   showScreen('dash');
-  logOk('Dashboard ready for ' + (user.displayName || user.email));
-  logSep();
-  initDashboard();
+
+  // Register UID → emailKey mapping so Firebase security rules can grant
+  // this admin read access to schoolUsage/* paths for any listed admin,
+  // not just the hardcoded superadmin emails.
+  db.ref('schoolUsageAdminUIDs/' + user.uid).set(emailToKey(user.email))
+    .then(function() {
+      logOk('Dashboard ready for ' + (user.displayName || user.email));
+      logSep();
+      initDashboard();
+    })
+    .catch(function(err) {
+      logWarn('UID registration failed — some data may be inaccessible. Please sign out and sign in again, or contact a superadmin: ' + err.message);
+      logOk('Dashboard ready for ' + (user.displayName || user.email));
+      logSep();
+      initDashboard();
+    });
 }
 
 // ================================================================
