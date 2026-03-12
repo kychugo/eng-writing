@@ -5682,12 +5682,8 @@ function switchTab(name, fromGen) {
   });
 
   // 2. Atomically increment the total-visit counter
-  db.ref('stats/totalVisits').transaction(
-    function(current) { return (current || 0) + 1; },
-    function(err) {
-      if (err) console.warn('[Firebase] totalVisits transaction failed:', err.message);
-    }
-  );
+  db.ref('stats/totalVisits').set(firebase.database.ServerValue.increment(1))
+    .catch(function(err) { console.warn('[Firebase] totalVisits increment failed:', err.message); });
 
   // 3. Update the "last seen" timestamp
   db.ref('stats/lastVisit').set(isoStamp).catch(function(err) {
@@ -5724,7 +5720,7 @@ function switchTab(name, fromGen) {
 
   // Increment visit counters (one per session, reliable)
   function incr(path) {
-    db.ref(path).transaction(function(v) { return (v || 0) + 1; });
+    db.ref(path).set(firebase.database.ServerValue.increment(1));
   }
   incr('schoolUsage/daily/'   + dateStr  + '/visits');
   incr('schoolUsage/monthly/' + monthStr + '/visits');

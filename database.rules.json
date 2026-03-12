@@ -119,6 +119,7 @@
         ".write": true
       },
       "dailyVisitors": {
+        ".read": true,
         ".write": true
       }
     },

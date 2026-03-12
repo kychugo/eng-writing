@@ -36,3 +36,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deploy Firebase Database Rules
+        run: npx --yes firebase-tools deploy --only database --project login-system-2-b511c
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
