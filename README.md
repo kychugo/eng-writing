@@ -132,6 +132,84 @@ To deploy a fork, enable GitHub Pages in the repository settings and point it at
 
 ---
 
+## GitHub Actions Setup Guide
+
+The repository uses a single GitHub Actions workflow (`.github/workflows/deploy.yml`) that does two things on every push to `main`:
+
+1. **Deploys the static site to GitHub Pages** (no configuration needed once Pages is enabled).
+2. **Deploys the Firebase Realtime Database security rules** from `database.rules.json`.
+
+### One-time setup for a fork or new repository
+
+#### Step 1 — Enable GitHub Pages
+
+1. Go to your repository on GitHub.
+2. Click **Settings → Pages**.
+3. Under *Source*, choose **GitHub Actions**.
+4. Save. GitHub will create the necessary `GITHUB_TOKEN` permissions automatically.
+
+#### Step 2 — Get a Firebase CI token
+
+The workflow uses `firebase-tools` via `npx` to push database rules. It authenticates with a long-lived CI token stored as a GitHub Actions secret.
+
+Run this command locally (Node.js required):
+
+```bash
+npx firebase-tools login:ci
+```
+
+Follow the browser prompt to sign in with the Google account that owns the Firebase project. The command prints a token that looks like:
+
+```
+✔  Success! Use this token to login on a CI server:
+
+1//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Copy the entire token string.
+
+#### Step 3 — Add the token as a GitHub Actions secret
+
+1. Go to your repository on GitHub.
+2. Click **Settings → Secrets and variables → Actions**.
+3. Click **New repository secret**.
+4. Set the name to `FIREBASE_TOKEN` and paste the token as the value.
+5. Click **Add secret**.
+
+#### Step 4 — Update the Firebase project ID (if forking)
+
+Open `.github/workflows/deploy.yml` and update the `--project` flag to match your own Firebase project ID:
+
+```yaml
+- name: Deploy Firebase Database Rules
+  run: npx --yes firebase-tools deploy --only database --project YOUR_PROJECT_ID
+  env:
+    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+```
+
+Also update `.firebaserc` with your project ID:
+
+```json
+{
+  "projects": {
+    "default": "YOUR_PROJECT_ID"
+  }
+}
+```
+
+#### Step 5 — Push to `main`
+
+Once the secret is in place, push any commit to `main`. The **Actions** tab will show two steps running:
+
+| Step | What it does |
+|------|-------------|
+| Deploy to GitHub Pages | Builds and publishes the static site |
+| Deploy Firebase Database Rules | Runs `firebase deploy --only database` to push `database.rules.json` |
+
+Both steps must show a green ✓ for the deployment to be complete. If the Firebase step fails, check that `FIREBASE_TOKEN` is set correctly and that the service account has the **Firebase Realtime Database Admin** role in the Firebase console.
+
+---
+
 ## Question Bank
 
 `qlist.json` contains 99 HKDSE writing questions covering:
